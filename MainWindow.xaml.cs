@@ -33,6 +33,7 @@ namespace Zitulmyth
 		private bool flagDamaged = false;
 
 		private Vector playerSize =  new Vector(32, 64);
+		public static int playerImageZindex = 5;
 		private bool direction = true;	//f:left t:right
 		private int weight = 2;
 		public static int speed = 2;
@@ -110,7 +111,11 @@ namespace Zitulmyth
 			BalloonMessage.GenerateBalloon(Canvas);
 			stpPlayerStatus = Canvas.FindName("PlayerStatus")as StackPanel;
 			stpPlayerStatus.Visibility = Visibility.Hidden;
-		
+
+			StageData.imgScenery = new Image { Source = ImageData.cbEmpty,Width=1024,Height=768, };
+			this.Canvas.Children.Add(StageData.imgScenery);
+			Canvas.SetLeft(StageData.imgScenery, 0);
+			Canvas.SetTop(StageData.imgScenery, 0);
 		}
 
 		private void TitleOpen()
@@ -610,7 +615,11 @@ namespace Zitulmyth
 
 							if (popOn)
 							{
+								if(GameTransition.numKillEnemy < 10)
+								{
 									SpawnEnemy.SpawnSelect(Canvas, name);
+								}
+									
 							}
 						}
 

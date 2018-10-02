@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
@@ -32,30 +33,85 @@ namespace Zitulmyth
 		}
 
 		//block set
-		public static void InitIndicateStage(Canvas canvas)
+		public static void StageBlockSet(Canvas canvas)
 		{ 
 
 			for (int i = 0; i < 24; i++)
 			{
 				for (int j = 0; j < 32; j++)
 				{
-					if (StageData.indicateStage[i, j] == BlockType.GreenGround)
+					switch (StageData.indicateStage[i, j])
 					{
-						var _imgBlock = new Image()
-						{
-							Source = new BitmapImage(new Uri("/Assets/block01.png", UriKind.Relative)),
-							Width = 32,
-							Height = 32,
-							Name = "Block_" + i + j,
-						};
+						case BlockType.GreenGround:
 
-						StageData.imgBlock[i,j] = _imgBlock;
-						canvas.Children.Add(StageData.imgBlock[i,j]);
-						Canvas.SetTop(StageData.imgBlock[i,j], i * 32);
-						Canvas.SetLeft(StageData.imgBlock[i,j], j * 32);
+							var _imgBlock = new Image
+							{
+								Source = ImageData.cbBlocks[0, 1],
+								Width = 32,	Height = 32,
+							};
+
+							StageData.imgBlock[i, j] = _imgBlock;
+
+							break;
 					}
+
+
+					if(StageData.indicateStage[i,j] != BlockType.None &&
+						StageData.indicateStage[i,j] != BlockType.InvisibleBlock)
+					{
+						canvas.Children.Add(StageData.imgBlock[i, j]);
+						Canvas.SetTop(StageData.imgBlock[i, j], i * 32);
+						Canvas.SetLeft(StageData.imgBlock[i, j], j * 32);
+					}
+						
 				}
 			}
+		}
+
+		public static void StageBlockRemove(Canvas canvas)
+		{
+			for (int i = 0; i < 24; i++)
+			{
+				for (int j = 0; j < 32; j++)
+				{
+					
+					if (StageData.indicateStage[i, j] != BlockType.None)
+					{
+						canvas.Children.Remove(StageData.imgBlock[i, j]);
+
+					}
+
+				}
+			}
+
+		}
+
+		public static void StageObjectsRemove(Canvas canvas)
+		{
+			for(int i = 0; i < StageData.npcPosition.Count; i++)
+			{
+				canvas.Children.Remove(StageData.imgNpc[i]);
+			}
+
+			for (int i = 0; i < StageData.interiorPosition.Count; i++)
+			{
+				canvas.Children.Remove(StageData.imgInterior[i]);
+			}
+
+			for (int i = 0; i < StageData.furniturePosition.Count; i++)
+			{
+				canvas.Children.Remove(StageData.imgFurniture[i]);
+			}
+
+			StageData.npcPosition.Clear();
+			StageData.interiorPosition.Clear();
+			StageData.furniturePosition.Clear();
+
+			StageData.imgNpc.Clear();
+			StageData.imgInterior.Clear();
+			StageData.imgFurniture.Clear();
+
+			StageData.refCbFurniture.Clear();
 		}
 
 		public static void InitPlayer(Canvas canvas)
@@ -75,13 +131,15 @@ namespace Zitulmyth
 
 				Width = 32,
 				Height = 64,
+			
 			};
-
+			
 			ImageData.imgPlayer = _imgPlayer;
 			canvas.Children.Add(_imgPlayer);
 
-			Canvas.SetTop(ImageData.imgPlayer, 671);
 			Canvas.SetLeft(ImageData.imgPlayer, 300);
+			Canvas.SetTop(ImageData.imgPlayer, 671);
+			Canvas.SetZIndex(ImageData.imgPlayer, MainWindow.playerImageZindex);
 
 
 		}

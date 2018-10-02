@@ -18,6 +18,11 @@ namespace Zitulmyth.Data
 		public static List<Vector> interiorPosition = new List<Vector>();
 		public static List<Vector> furniturePosition = new List<Vector>();
 
+		public static Image imgScenery = new Image();
+		public static List<Image> imgInterior = new List<Image>();
+		public static List<Image> imgFurniture = new List<Image>();
+		public static List<Image> imgNpc = new List<Image>();
+
 		//StageBlockData
 		public static BlockType[,] indicateStage = new BlockType[24, 32];
 		public static Image[,] imgBlock = new Image[24, 32];
@@ -32,15 +37,11 @@ namespace Zitulmyth.Data
 		public static void SetData()
 		{
 
-			StageData.furniturePosition.Clear();
-			StageData.refCbFurniture.Clear();
-			StageData.npcPosition.Clear();
-
 			switch (StageManager.stageNum)
 			{
 				case 0:
 
-					StageData.startPlayerPosition = new Vector(671, 300);
+					StageData.startPlayerPosition = new Vector(300, 671);
 
 					for (int i = 0; i < 32; i++)
 					{
@@ -62,6 +63,7 @@ namespace Zitulmyth.Data
 
 					StageData.npcPosition.Add(new Vector(352, 480));		//opsa 352,480
 					StageData.interiorPosition.Add(new Vector(160, 192));	//house 160,192
+
 					StageData.furniturePosition.Add(new Vector(384,480));	//chair 384,480
 					StageData.furniturePosition.Add(new Vector(448, 512));	//table 448,512
 					StageData.furniturePosition.Add(new Vector(576, 512));  //huton 576,512
@@ -69,6 +71,11 @@ namespace Zitulmyth.Data
 					StageData.refCbFurniture.Add(ImageData.cbFurniture[1]);
 					StageData.refCbFurniture.Add(ImageData.cbFurniture[2]);
 
+					StageData.imgNpc.Add(null);
+					StageData.imgInterior.Add(null);
+					StageData.imgFurniture.Add(null);
+					StageData.imgFurniture.Add(null);
+					StageData.imgFurniture.Add(null);
 					break;
 			}
 			

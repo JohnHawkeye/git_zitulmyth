@@ -21,7 +21,7 @@ namespace Zitulmyth.Checking
 
 			if (bkX >= 0)
 			{
-				if (StageData.indicateStage[bkY + 2, bkX] == 0)
+				if (StageData.indicateStage[bkY + 2, bkX] == BlockType.None)
 				{
 					return true;
 				}
@@ -47,7 +47,7 @@ namespace Zitulmyth.Checking
 			if (bkX < 31)
 			{
 
-				if (StageData.indicateStage[bkY + 2, bkX + 1] == 0)
+				if (StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.None)
 				{
 					return true;
 				}
@@ -73,7 +73,7 @@ namespace Zitulmyth.Checking
 
 			if (bkY >= 0)
 			{
-				if (StageData.indicateStage[bkY, bkX] == 0)
+				if (StageData.indicateStage[bkY, bkX] == BlockType.None)
 				{
 					return true;
 				}
@@ -99,8 +99,8 @@ namespace Zitulmyth.Checking
 			if (bkY < 23)
 			{
 
-				if (StageData.indicateStage[bkY + 1, bkX] == 0 &&
-					StageData.indicateStage[bkY + 1, bkX+1] == 0)
+				if (StageData.indicateStage[bkY + 1, bkX] == BlockType.None &&
+					StageData.indicateStage[bkY + 1, bkX+1] == BlockType.None)
 				{
 					return true;
 				}

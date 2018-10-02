@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Timers;
 using Zitulmyth.Data;
+using Zitulmyth.Enums;
 
 namespace Zitulmyth
 {
@@ -101,13 +102,27 @@ namespace Zitulmyth
 
 				case GameTransitionType.StageInit:
 
-					StageInit.InitIndicateStage(canvas);
+					if (StageManager.stageNum == 0)	//Run once
+					{
+						StageInit.InitPlayer(canvas);
+						StageInit.InitPlayerStatus(caLife, caMana);
+					}
+					else
+					{
+						ImageData.ImageLoadAfterSecond();
+					}
 
-					StageInit.InitPlayer(canvas);
-					StageInit.InitPlayerStatus(caLife,caMana);
+
+
+					StageInit.InitBlockData();
+					StageDataSetting.SetData();
+
+					StageInit.StageBlockSet(canvas);
+					StageManager.StageObjectsSetting(canvas);
 
 					GameTransition.gameTransition = GameTransitionType.StageStart;
 					Console.WriteLine("StageInit");
+
 					break;
 
 				case GameTransitionType.StageStart:
@@ -129,7 +144,7 @@ namespace Zitulmyth
 					if (numKillEnemy >= 10)
 					{
 						gameTransition = GameTransitionType.StageEnd;
-						eventNum++;
+						
 					}
 
 					break;
@@ -151,8 +166,10 @@ namespace Zitulmyth
 
 					StageManager.stageNum++;
 
-					StageInit.InitBlockData();
-					StageDataSetting.SetData();
+					StageInit.StageBlockRemove(canvas);
+					StageInit.StageObjectsRemove(canvas);
+
+					GameTransition.gameTransition = GameTransitionType.StageInit;
 
 					break;
 			}
@@ -164,7 +181,7 @@ namespace Zitulmyth
 
 			if(eventCount != EventData.listEvent.Count)
 			{
-				if (!eventWaiting && !screenFadeStart)
+				if (!eventWaiting && !screenFadeStart && !charaMoveStart)
 				{
 					switch (EventData.listEvent[eventCount].eventType)
 					{
@@ -252,12 +269,24 @@ namespace Zitulmyth
 
 							MainWindow.canScreenFade.Width = 1024;
 							MainWindow.canScreenFade.Height = 768;
-							MainWindow.canScreenFade.Background = new SolidColorBrush(Colors.White);
+
+							switch (EventData.listEvent[eventCount].color)
+							{
+								case ColorEnum.White:
+									MainWindow.canScreenFade.Background = new SolidColorBrush(Colors.White);
+									break;
+								case ColorEnum.Black:
+									MainWindow.canScreenFade.Background = new SolidColorBrush(Colors.Black);
+									break;
+
+							}
+							
 							MainWindow.canScreenFade.Opacity = 0;
 
 							canvas.Children.Add(MainWindow.canScreenFade);
 							Canvas.SetLeft(MainWindow.canScreenFade, 0);
 							Canvas.SetTop(MainWindow.canScreenFade, 0);
+							Canvas.SetZIndex(MainWindow.canScreenFade,10);
 
 							screenFadeTotal = 0;
 							screenFadeIndex = eventCount;
@@ -291,7 +320,9 @@ namespace Zitulmyth
 							{
 								gameTransition = GameTransitionType.StageNext;
 							}
-							
+
+							eventNum++;
+
 							Console.WriteLine("end");
 							
 							break;
