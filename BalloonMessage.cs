@@ -33,6 +33,7 @@ namespace Zitulmyth
 			canvas.Children.Add(spnBalloon);
 			Canvas.SetTop(spnBalloon, 500);
 			Canvas.SetLeft(spnBalloon,300);
+			Canvas.SetZIndex(spnBalloon, 15);
 
 			int imgWidth=16,imgHeight=16;
 			int txtPosX = 0,txtPosY = 0;
@@ -62,7 +63,7 @@ namespace Zitulmyth
 
 				spnBalloon.Children.Add(canBalloon);
 				canBalloon.Children.Add(imgBalloon[i]);
-
+	
 				txtPosX = txtPosY = 0;
 				if (i == 1) { txtPosX = 16; }
 				if (i == 2) { txtPosX = 176; }
@@ -77,7 +78,7 @@ namespace Zitulmyth
 
 				Canvas.SetLeft(imgBalloon[i],txtPosX);
 				Canvas.SetTop(imgBalloon[i],txtPosY);
-				
+
 			}
 
 			txtBalloon = new TextBlock
@@ -103,10 +104,13 @@ namespace Zitulmyth
 
 		}
 
-		public static void OpenBalloon(int index,Canvas canvas,Vector blpos,String blstring)
+		public static void OpenBalloon(int index,Canvas canvas,Vector blpos,Image target, String blstring)
 		{
-			Canvas.SetLeft(spnBalloon, blpos.X);
-			Canvas.SetTop(spnBalloon,blpos.Y-96);
+			double tempX = Canvas.GetLeft(target);
+			double tempY = Canvas.GetTop(target);
+
+			Canvas.SetLeft(spnBalloon, tempX);
+			Canvas.SetTop(spnBalloon, tempY-96);
 			txtBalloon.Text = blstring;
 			spnBalloon.Visibility = Visibility.Visible;
 		}

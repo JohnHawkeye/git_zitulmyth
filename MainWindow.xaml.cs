@@ -38,7 +38,7 @@ namespace Zitulmyth
 		private int weight = 2;
 		public static int speed = 2;
 		private int jumpPower = 8;
-		private int jumpTimes = 1;
+		//private int jumpTimes = 1;
 		public static int jumpCount = 0;
 		public  int jumpMaxHeight = 64;
 		public int jumpTotalLength = 0;
@@ -111,11 +111,6 @@ namespace Zitulmyth
 			BalloonMessage.GenerateBalloon(Canvas);
 			stpPlayerStatus = Canvas.FindName("PlayerStatus")as StackPanel;
 			stpPlayerStatus.Visibility = Visibility.Hidden;
-
-			StageData.imgScenery = new Image { Source = ImageData.cbEmpty,Width=1024,Height=768, };
-			this.Canvas.Children.Add(StageData.imgScenery);
-			Canvas.SetLeft(StageData.imgScenery, 0);
-			Canvas.SetTop(StageData.imgScenery, 0);
 		}
 
 		private void TitleOpen()

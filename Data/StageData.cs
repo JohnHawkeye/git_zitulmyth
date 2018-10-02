@@ -15,19 +15,17 @@ namespace Zitulmyth.Data
 		public static Vector startPlayerPosition;
 
 		public static List<Vector> npcPosition = new List<Vector>();
-		public static List<Vector> interiorPosition = new List<Vector>();
-		public static List<Vector> furniturePosition = new List<Vector>();
+		public static List<Vector> objectPosition = new List<Vector>();
 
 		public static Image imgScenery = new Image();
-		public static List<Image> imgInterior = new List<Image>();
-		public static List<Image> imgFurniture = new List<Image>();
+		public static List<Image> imgObject = new List<Image>();
 		public static List<Image> imgNpc = new List<Image>();
 
 		//StageBlockData
 		public static BlockType[,] indicateStage = new BlockType[24, 32];
 		public static Image[,] imgBlock = new Image[24, 32];
 
-		public static List<CroppedBitmap> refCbFurniture = new List<CroppedBitmap>();
+		public static List<CroppedBitmap> refCbObject = new List<CroppedBitmap>();
 
 	}
 
@@ -52,8 +50,6 @@ namespace Zitulmyth.Data
 
 				case 1:
 
-
-
 					StageData.startPlayerPosition = new Vector(592, 480);
 
 					for (int i = 0; i < 32; i++)
@@ -62,20 +58,54 @@ namespace Zitulmyth.Data
 					}
 
 					StageData.npcPosition.Add(new Vector(352, 480));		//opsa 352,480
-					StageData.interiorPosition.Add(new Vector(160, 192));	//house 160,192
-
-					StageData.furniturePosition.Add(new Vector(384,480));	//chair 384,480
-					StageData.furniturePosition.Add(new Vector(448, 512));	//table 448,512
-					StageData.furniturePosition.Add(new Vector(576, 512));  //huton 576,512
-					StageData.refCbFurniture.Add(ImageData.cbFurniture[0]);
-					StageData.refCbFurniture.Add(ImageData.cbFurniture[1]);
-					StageData.refCbFurniture.Add(ImageData.cbFurniture[2]);
+					StageData.objectPosition.Add(new Vector(384,480));	//chair 384,480
+					StageData.objectPosition.Add(new Vector(448, 512));	//table 448,512
+					StageData.objectPosition.Add(new Vector(576, 512));  //huton 576,512
+					StageData.refCbObject.Add(ImageData.cbObject[0]);
+					StageData.refCbObject.Add(ImageData.cbObject[1]);
+					StageData.refCbObject.Add(ImageData.cbObject[2]);
 
 					StageData.imgNpc.Add(null);
-					StageData.imgInterior.Add(null);
-					StageData.imgFurniture.Add(null);
-					StageData.imgFurniture.Add(null);
-					StageData.imgFurniture.Add(null);
+					StageData.imgObject.Add(null);
+					StageData.imgObject.Add(null);
+					StageData.imgObject.Add(null);
+					break;
+
+				case 2:
+
+					for (int i = 0; i < 32; i++){StageData.indicateStage[23, i] = BlockType.GreenGround;}
+
+					StageData.indicateStage[18, 8] = StageData.indicateStage[18, 9] = StageData.indicateStage[18, 10] =
+					StageData.indicateStage[18, 11] = StageData.indicateStage[18, 12] =
+					BlockType.InvisibleBlock;
+
+					StageData.indicateStage[21, 4] = StageData.indicateStage[21, 5] = StageData.indicateStage[21, 6] =
+					BlockType.InvisiblePlat;
+
+					StageData.indicateStage[17, 13] = StageData.indicateStage[17, 14] = StageData.indicateStage[17, 15] =
+					BlockType.InvisiblePlat;
+
+					StageData.indicateStage[15, 20] = StageData.indicateStage[15, 21] = StageData.indicateStage[15, 22] =
+					BlockType.InvisiblePlat;
+
+					StageData.indicateStage[15, 14] = StageData.indicateStage[15, 15] =	StageData.indicateStage[15, 16] =
+					StageData.indicateStage[15, 17] =
+					BlockType.WoodPlatform;
+
+					StageData.indicateStage[15, 18] = BlockType.LadderTop;
+					for(int i=0; i < 6; i++){StageData.indicateStage[16+i, 18] = BlockType.LadderMid;}
+					StageData.indicateStage[22, 18] = BlockType.LadderBottom;
+
+
+					StageData.startPlayerPosition = new Vector(64, 672);
+
+					StageData.npcPosition.Add(new Vector(928, 672));        //opsa 352,480
+					StageData.objectPosition.Add(new Vector(864, 672));
+					StageData.refCbObject.Add(ImageData.cbObject[2]);
+
+					StageData.imgNpc.Add(null);
+					StageData.imgObject.Add(null);
+
 					break;
 			}
 			

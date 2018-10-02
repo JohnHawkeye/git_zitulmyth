@@ -11,18 +11,6 @@ using Zitulmyth.Data;
 
 namespace Zitulmyth
 {
-
-	public enum BlockType
-	{
-		None = 0,
-		InvisibleBlock = 1,
-		GreenGround =2,
-		WoodPlatform = 10,
-		LadderTop=15,
-		LadderMid=16,
-		LadderBottom=17,
-	}
-
 	public class StageInit
 	{
 
@@ -44,24 +32,44 @@ namespace Zitulmyth
 					{
 						case BlockType.GreenGround:
 
-							var _imgBlock = new Image
-							{
-								Source = ImageData.cbBlocks[0, 1],
-								Width = 32,	Height = 32,
-							};
-
+							var _imgBlock = new Image { Source = ImageData.cbBlocks[0, 1], Width = 32, Height = 32,};
 							StageData.imgBlock[i, j] = _imgBlock;
+							break;
 
+						case BlockType.WoodPlatform:
+
+							var _imgWoodPlat = new Image{Source = ImageData.cbPlatform[1],Width = 32,Height = 32,};
+							StageData.imgBlock[i, j] = _imgWoodPlat;
+							break;
+
+						case BlockType.LadderTop:
+
+							var _imgLadderTop = new Image{Source = ImageData.cbLadder[0],Width = 32,Height = 32,};
+							StageData.imgBlock[i, j] = _imgLadderTop;
+							break;
+
+						case BlockType.LadderMid:
+
+							var _imgLadderMid = new Image{Source = ImageData.cbLadder[1],Width = 32,Height = 32,};
+							StageData.imgBlock[i, j] = _imgLadderMid;
+							break;
+
+						case BlockType.LadderBottom:
+
+							var _imgLadderBottom = new Image { Source = ImageData.cbLadder[2], Width = 32, Height = 32, };
+							StageData.imgBlock[i, j] = _imgLadderBottom;
 							break;
 					}
 
 
 					if(StageData.indicateStage[i,j] != BlockType.None &&
-						StageData.indicateStage[i,j] != BlockType.InvisibleBlock)
+						StageData.indicateStage[i,j] != BlockType.InvisibleBlock &&
+						StageData.indicateStage[i,j] != BlockType.InvisiblePlat)
 					{
 						canvas.Children.Add(StageData.imgBlock[i, j]);
 						Canvas.SetTop(StageData.imgBlock[i, j], i * 32);
 						Canvas.SetLeft(StageData.imgBlock[i, j], j * 32);
+						Canvas.SetZIndex(StageData.imgBlock[i, j],2);
 					}
 						
 				}
@@ -93,25 +101,21 @@ namespace Zitulmyth
 				canvas.Children.Remove(StageData.imgNpc[i]);
 			}
 
-			for (int i = 0; i < StageData.interiorPosition.Count; i++)
-			{
-				canvas.Children.Remove(StageData.imgInterior[i]);
-			}
+			canvas.Children.Remove(StageData.imgScenery);
 
-			for (int i = 0; i < StageData.furniturePosition.Count; i++)
+
+			for (int i = 0; i < StageData.objectPosition.Count; i++)
 			{
-				canvas.Children.Remove(StageData.imgFurniture[i]);
+				canvas.Children.Remove(StageData.imgObject[i]);
 			}
 
 			StageData.npcPosition.Clear();
-			StageData.interiorPosition.Clear();
-			StageData.furniturePosition.Clear();
+			StageData.objectPosition.Clear();
 
 			StageData.imgNpc.Clear();
-			StageData.imgInterior.Clear();
-			StageData.imgFurniture.Clear();
+			StageData.imgObject.Clear();
 
-			StageData.refCbFurniture.Clear();
+			StageData.refCbObject.Clear();
 		}
 
 		public static void InitPlayer(Canvas canvas)

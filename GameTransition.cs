@@ -195,8 +195,18 @@ namespace Zitulmyth
 
 							Vector blpos = EventData.listEvent[eventCount].balloonPos;
 							String blstring = EventData.listEvent[eventCount].balloonMsg;
-
-							BalloonMessage.OpenBalloon(eventCount,canvas,blpos,blstring);
+							
+							try
+							{
+								Image blTarget = EventData.listEvent[eventCount].imgTarget;
+								BalloonMessage.OpenBalloon(eventCount, canvas, blpos, blTarget, blstring);
+							}
+							catch(IndexOutOfRangeException)
+							{
+								BalloonMessage.OpenBalloon(eventCount, canvas, blpos, ImageData.imgPlayer, blstring);
+								Console.WriteLine("インデックスがおかしい");
+							}
+							
 							eventBalloonIsOpen = true;
 
 							break;
@@ -262,7 +272,6 @@ namespace Zitulmyth
 								EnemyData.lstSpawnEnemy[0].imgEnemy.Source = EventData.listEvent[eventCount].imgSource;
 							}
 							
-
 							break;
 
 						case EventCommandEnum.ScreenFadeIn:
@@ -314,7 +323,15 @@ namespace Zitulmyth
 
 							if(gameTransition == GameTransitionType.StageStart)
 							{
-								gameTransition = GameTransitionType.StageDuring;
+								if (!EventData.listEvent[eventCount].eventOnly)
+								{
+									gameTransition = GameTransitionType.StageDuring;
+								}
+								else
+								{
+									gameTransition = GameTransitionType.StageNext;
+								}
+								
 							}
 							else if(gameTransition == GameTransitionType.StageEnd)
 							{

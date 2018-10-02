@@ -26,48 +26,33 @@ namespace Zitulmyth
 			Canvas.SetLeft(ImageData.imgPlayer,StageData.startPlayerPosition.X);
 			Canvas.SetTop(ImageData.imgPlayer, StageData.startPlayerPosition.Y);
 
-			for(int i=0;i<StageData.interiorPosition.Count;i++)
+			StageData.imgScenery = new Image { Source = ImageData.cbScenery, Width = 1024, Height = 768, };
+			canvas.Children.Add(StageData.imgScenery);
+			Canvas.SetLeft(StageData.imgScenery, 0);
+			Canvas.SetTop(StageData.imgScenery, 0);
+			Canvas.SetZIndex(StageData.imgScenery, 1);
+
+
+			for (int i = 0; i < StageData.objectPosition.Count; i++)
 			{
 
 				int width, height;
 
-				width = ImageData.cbInterior[i].SourceRect.Width;
-				height = ImageData.cbInterior[i].SourceRect.Height;
+				width = ImageData.cbObject[i].SourceRect.Width;
+				height = ImageData.cbObject[i].SourceRect.Height;
 
-				var _imgInterior = new Image
+				var _imgObject = new Image
 				{
-					Source = ImageData.cbInterior[i],
+					Source = ImageData.cbObject[i],
 					Width = width,
 					Height = height,
 				};
 
-				StageData.imgInterior[i] = _imgInterior;
-				canvas.Children.Add(StageData.imgInterior[i]);
-				Canvas.SetLeft(StageData.imgInterior[i], StageData.interiorPosition[i].X);
-				Canvas.SetTop(StageData.imgInterior[i], StageData.interiorPosition[i].Y);
-				Canvas.SetZIndex(StageData.imgInterior[i],interiorZindex);
-			}
-
-			for (int i = 0; i < StageData.furniturePosition.Count; i++)
-			{
-
-				int width, height;
-
-				width = ImageData.cbFurniture[i].SourceRect.Width;
-				height = ImageData.cbFurniture[i].SourceRect.Height;
-
-				var _imgFurniture = new Image
-				{
-					Source = ImageData.cbFurniture[i],
-					Width = width,
-					Height = height,
-				};
-
-				StageData.imgFurniture[i] = _imgFurniture;
-				canvas.Children.Add(StageData.imgFurniture[i]);
-				Canvas.SetLeft(StageData.imgFurniture[i], StageData.furniturePosition[i].X);
-				Canvas.SetTop(StageData.imgFurniture[i], StageData.furniturePosition[i].Y);
-				Canvas.SetZIndex(StageData.imgFurniture[i], furnitureZindex);
+				StageData.imgObject[i] = _imgObject;
+				canvas.Children.Add(StageData.imgObject[i]);
+				Canvas.SetLeft(StageData.imgObject[i], StageData.objectPosition[i].X);
+				Canvas.SetTop(StageData.imgObject[i], StageData.objectPosition[i].Y);
+				Canvas.SetZIndex(StageData.imgObject[i], furnitureZindex);
 			}
 
 			for (int i = 0; i < StageData.npcPosition.Count; i++)

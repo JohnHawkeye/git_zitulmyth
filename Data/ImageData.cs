@@ -37,10 +37,9 @@ namespace Zitulmyth.Data
 		public static BitmapImage bmPlayerStatus;
 		public static BitmapImage bmEmpty;
 		public static BitmapImage bmNpc;
-		public static BitmapImage bmInterior;
-		public static BitmapImage bmFurniture;
-		public static BitmapImage bmStageParts;
 		public static BitmapImage bmScenery;
+		public static BitmapImage bmObject;
+		public static BitmapImage bmStageParts;
 
 		public static CroppedBitmap[] cbTitle = new CroppedBitmap[2];
 		public static CroppedBitmap[] cbPlayer = new CroppedBitmap[6];
@@ -51,12 +50,12 @@ namespace Zitulmyth.Data
 		public static CroppedBitmap cbSubWeapon = new CroppedBitmap();
 		public static CroppedBitmap[] cbLife = new CroppedBitmap[2];
 		public static CroppedBitmap[] cbMana = new CroppedBitmap[2];
-		public static CroppedBitmap[] cbInterior = new CroppedBitmap[2];
-		public static CroppedBitmap[] cbFurniture = new CroppedBitmap[3];
+		public static CroppedBitmap cbScenery = new CroppedBitmap();
+		public static CroppedBitmap[] cbObject = new CroppedBitmap[3];
 		public static CroppedBitmap[,] cbBlocks = new CroppedBitmap[3,3];
 		public static CroppedBitmap[] cbPlatform = new CroppedBitmap[3];
 		public static CroppedBitmap[] cbLadder = new CroppedBitmap[3];
-		public static CroppedBitmap cbScenery = new CroppedBitmap();
+		
 
 		public static void ImageLoadFirst()
 		{
@@ -127,13 +126,13 @@ namespace Zitulmyth.Data
 			{
 				case 1:
 
-					bmFurniture = new BitmapImage(new Uri("furniture.png", UriKind.Relative));
-					cbFurniture[0] = new CroppedBitmap(bmFurniture, new Int32Rect(0, 0, 32, 64));	//chair
-					cbFurniture[1] = new CroppedBitmap(bmFurniture, new Int32Rect(32, 32, 64, 32));	//table
-					cbFurniture[2] = new CroppedBitmap(bmFurniture, new Int32Rect(96, 32, 64, 32)); //huton
+					bmObject = new BitmapImage(new Uri("furniture.png", UriKind.Relative));
+					cbObject[0] = new CroppedBitmap(bmObject, new Int32Rect(0, 0, 32, 64)); //chair
+					cbObject[1] = new CroppedBitmap(bmObject, new Int32Rect(32, 32, 64, 32));   //table
+					cbObject[2] = new CroppedBitmap(bmObject, new Int32Rect(96, 32, 64, 32)); //huton
 
-					bmInterior = new BitmapImage(new Uri("interior_opsa.png", UriKind.Relative));
-					cbInterior[0] = new CroppedBitmap(bmInterior, new Int32Rect(0, 0, 704, 384));
+					bmScenery = new BitmapImage(new Uri("scenery_2.png", UriKind.Relative));
+					cbScenery = new CroppedBitmap(bmScenery, new Int32Rect(0, 0, 1024, 768));
 
 					bmNpc = new BitmapImage(new Uri("npc.png", UriKind.Relative));
 
@@ -149,10 +148,10 @@ namespace Zitulmyth.Data
 					cbNpc[0] = new CroppedBitmap(bmNpc, new Int32Rect(0, 64, 32, 64));
 					cbNpc[1] = new CroppedBitmap(bmNpc, new Int32Rect(32, 64, 32, 64));
 
-					bmFurniture = new BitmapImage(new Uri("object_3.png", UriKind.Relative));
-					cbFurniture[0] = new CroppedBitmap(bmFurniture, new Int32Rect(32, 0, 32, 32));
-					cbFurniture[1] = new CroppedBitmap(bmFurniture, new Int32Rect(64, 0, 64, 32));
-					cbFurniture[2] = new CroppedBitmap(bmFurniture, new Int32Rect(0, 32, 96, 64));
+					bmObject = new BitmapImage(new Uri("object_3.png", UriKind.Relative));
+					cbObject[0] = new CroppedBitmap(bmObject, new Int32Rect(32, 0, 32, 32));
+					cbObject[1] = new CroppedBitmap(bmObject, new Int32Rect(64, 0, 64, 32));
+					cbObject[2] = new CroppedBitmap(bmObject, new Int32Rect(0, 32, 96, 64));
 					break;
 			}
 		}
