@@ -5,6 +5,8 @@ GameGenre:2DActionGame
   
 ## Update Log ---  
   
+###  2018/10/05  
+    >Organize the source code.  
 ###  2018/10/03  
     >changed variable name  
      furniture       => object  
