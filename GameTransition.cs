@@ -47,7 +47,6 @@ namespace Zitulmyth
 		public static GameTransitionType gameTransition = GameTransitionType.Title;
 
 		public static bool duringTransition = false;
-		public static int stageNum = 1;
 		public static int eventNum = 1;
 		public static int eventCount = 0;
 
@@ -102,17 +101,10 @@ namespace Zitulmyth
 
 				case GameTransitionType.StageInit:
 
-					if (StageManager.stageNum == 0)	//Run once
-					{
-						StageInit.InitPlayer(canvas);
-						StageInit.InitPlayerStatus(caLife, caMana);
-					}
-					else
+					if (StageManager.stageNum >= 1)
 					{
 						ImageData.ImageLoadAfterSecond();
 					}
-
-
 
 					StageInit.InitBlockData();
 					StageDataSetting.SetData();
@@ -224,7 +216,7 @@ namespace Zitulmyth
 							break;
 
 						case EventCommandEnum.KeyLock:
-							MainWindow.keyControlLocking = EventData.listEvent[eventCount].flagKeyLock;
+							KeyController.keyControlLocking = EventData.listEvent[eventCount].flagKeyLock;
 							Console.WriteLine("keylock");
 							break;
 
@@ -312,7 +304,7 @@ namespace Zitulmyth
 
 						case EventCommandEnum.GenerateEnemy:
 
-							MainWindow.GenerateEnemy(canvas,EventData.listEvent[eventCount].setPosition);
+							SpawnEnemy.GenerateEnemy(canvas,EventData.listEvent[eventCount].setPosition);
 
 							break;
 
@@ -445,7 +437,7 @@ namespace Zitulmyth
 				double dis = 0;
 				double ac = EventData.listEvent[charaMoveIndex].moveSpeed;
 
-				dis = (double)MainWindow.speed * MainWindow.elapsedTime * 0.01 * ac;
+				dis = (double)PlayerStatus.speed * MainWindow.elapsedTime * 0.01 * ac;
 
 				if (EventData.listEvent[charaMoveIndex].moveDistance.X >= 0)
 				{

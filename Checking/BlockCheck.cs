@@ -21,7 +21,11 @@ namespace Zitulmyth.Checking
 
 			if (bkX >= 0)
 			{
-				if (StageData.indicateStage[bkY + 2, bkX] == BlockType.None)
+				if (StageData.indicateStage[bkY + 2, bkX] == BlockType.None||
+					StageData.indicateStage[bkY + 2, bkX] == BlockType.InvisiblePlat ||
+					StageData.indicateStage[bkY + 2, bkX] == BlockType.WoodPlatform||
+					StageData.indicateStage[bkY + 2, bkX] == BlockType.LadderMid||
+					StageData.indicateStage[bkY + 2, bkX] == BlockType.LadderBottom)
 				{
 					return true;
 				}
@@ -47,7 +51,11 @@ namespace Zitulmyth.Checking
 			if (bkX < 31)
 			{
 
-				if (StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.None)
+				if (StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.None ||
+					StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.InvisiblePlat||
+					StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.WoodPlatform||
+					StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.LadderMid||
+					StageData.indicateStage[bkY + 2, bkX + 1] == BlockType.LadderBottom)
 				{
 					return true;
 				}
@@ -99,14 +107,13 @@ namespace Zitulmyth.Checking
 			if (bkY < 23)
 			{
 
-				if (StageData.indicateStage[bkY + 1, bkX] == BlockType.None &&
-					StageData.indicateStage[bkY + 1, bkX+1] == BlockType.None)
+				if (StageData.indicateStage[bkY + 1, bkX] == BlockType.None)
 				{
 					return true;
 				}
 				else
 				{
-					MainWindow.jumpCount = 0;
+					PlayerStatus.jumpCount = 0;
 					return false;
 				}
 

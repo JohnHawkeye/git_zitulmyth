@@ -89,8 +89,8 @@ namespace Zitulmyth.Data
 			cbPlayer[1] = new CroppedBitmap(bmPlayer, new Int32Rect(32, 0, 32, 64));
 			cbPlayer[2] = new CroppedBitmap(bmPlayer, new Int32Rect(0, 64, 32, 64));
 			cbPlayer[3] = new CroppedBitmap(bmPlayer, new Int32Rect(32, 64, 32, 64));
-			cbPlayer[4] = new CroppedBitmap(bmPlayer, new Int32Rect(0, 160, 32, 32));
-			cbPlayer[5] = new CroppedBitmap(bmPlayer, new Int32Rect(32, 160, 32, 32));
+			cbPlayer[4] = new CroppedBitmap(bmPlayer, new Int32Rect(0, 128, 32, 64));
+			cbPlayer[5] = new CroppedBitmap(bmPlayer, new Int32Rect(32, 128, 32, 64));
 
 			bmEnemy = new BitmapImage(new Uri("zigitu01.png", UriKind.Relative));
 			cbEnemy[0] = new CroppedBitmap(bmEnemy, new Int32Rect(0, 0, 32, 64));
@@ -145,6 +145,7 @@ namespace Zitulmyth.Data
 					bmScenery = new BitmapImage(new Uri("scenery_3.png", UriKind.Relative));
 					cbScenery = new CroppedBitmap(bmScenery, new Int32Rect(0, 0, 1024, 768));
 
+					bmNpc = new BitmapImage(new Uri("npc.png", UriKind.Relative));
 					cbNpc[0] = new CroppedBitmap(bmNpc, new Int32Rect(0, 64, 32, 64));
 					cbNpc[1] = new CroppedBitmap(bmNpc, new Int32Rect(32, 64, 32, 64));
 

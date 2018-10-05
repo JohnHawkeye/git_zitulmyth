@@ -120,8 +120,8 @@ namespace Zitulmyth
 
 		public static void InitPlayer(Canvas canvas)
 		{
-			MainWindow.playerNowHp = MainWindow.playerMaxHp;
-			MainWindow.playerNowMana = MainWindow.playerMaxMana;
+			PlayerStatus.playerNowHp = PlayerStatus.playerMaxHp;
+			PlayerStatus.playerNowMana = PlayerStatus.playerMaxMana;
 
 			if (ImageData.imgPlayer != null)
 			{
@@ -143,14 +143,14 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(ImageData.imgPlayer, 300);
 			Canvas.SetTop(ImageData.imgPlayer, 671);
-			Canvas.SetZIndex(ImageData.imgPlayer, MainWindow.playerImageZindex);
+			Canvas.SetZIndex(ImageData.imgPlayer, PlayerStatus.playerImageZindex);
 
 
 		}
 
 		public static void InitPlayerStatus(Canvas caLife ,Canvas caMana)
 		{
-			for (int i = 0; i < MainWindow.playerMaxHp; i++)
+			for (int i = 0; i < PlayerStatus.playerMaxHp; i++)
 			{
 				var _imgLife = new Image()
 				{
@@ -166,7 +166,7 @@ namespace Zitulmyth
 
 			}
 
-			for (int i = 0; i < MainWindow.playerMaxMana; i++)
+			for (int i = 0; i < PlayerStatus.playerMaxMana; i++)
 			{
 				var _imgMana = new Image()
 				{

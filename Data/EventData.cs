@@ -87,7 +87,7 @@ namespace Zitulmyth.Data
 			listEvent.Add(new EventList {eventType = EventCommandEnum.Move, moveDistance = new Vector(64, 0),
 				moveTotal = new Vector(0, 0), moveSpeed = 2, imgTarget = ImageData.imgPlayer });
 
-			listEvent.Add(new EventList { eventType = EventCommandEnum.SePlay, bgm = MainWindow.seFog });
+			listEvent.Add(new EventList { eventType = EventCommandEnum.SePlay, bgm = Sound.seFog });
 			listEvent.Add(new EventList { eventType = EventCommandEnum.GenerateEnemy, setPosition = new Vector(500, 671) });
 			listEvent.Add(new EventList { eventType = EventCommandEnum.Wait, eventValue = 600 });
 
@@ -132,7 +132,7 @@ namespace Zitulmyth.Data
 			});
 
 			listEvent.Add(new EventList { eventType = EventCommandEnum.Wait, eventValue = 600 });
-			listEvent.Add(new EventList { eventType = EventCommandEnum.BgmPlay, bgm = MainWindow.bgmDarkness });
+			listEvent.Add(new EventList { eventType = EventCommandEnum.BgmPlay, bgm = Sound.bgmDarkness });
 
 			listEvent.Add(new EventList { eventType = EventCommandEnum.KeyLock, flagKeyLock = false });
 			listEvent.Add(new EventList { eventType = EventCommandEnum.UiVisibility, uiVisible = true });
@@ -230,6 +230,7 @@ namespace Zitulmyth.Data
 
 			listEvent.Add(new EventList { eventType = EventCommandEnum.Balloon, balloonEnterClose = true,
 				balloonPos = new Vector(0, 0),imgTarget = ImageData.imgPlayer,balloonMsg= "オババ様に話すべきかも\nしれないけれど・・・"});
+			listEvent.Add(new EventList { eventType = EventCommandEnum.Wait, eventValue = 400 });
 			listEvent.Add(new EventList { eventType = EventCommandEnum.Balloon, balloonEnterClose = true,
 				balloonPos = new Vector(0, 0),imgTarget = ImageData.imgPlayer,balloonMsg= "ちょっと苦手なんだよな・・・"});
 			listEvent.Add(new EventList { eventType = EventCommandEnum.Wait, eventValue = 1000 });

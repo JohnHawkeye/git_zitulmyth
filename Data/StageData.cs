@@ -97,7 +97,7 @@ namespace Zitulmyth.Data
 					StageData.indicateStage[22, 18] = BlockType.LadderBottom;
 
 
-					StageData.startPlayerPosition = new Vector(64, 672);
+					StageData.startPlayerPosition = new Vector(64, 665);
 
 					StageData.npcPosition.Add(new Vector(928, 672));        //opsa 352,480
 					StageData.objectPosition.Add(new Vector(864, 672));

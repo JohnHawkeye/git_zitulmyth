@@ -7,6 +7,7 @@ using System.Windows;
 
 namespace Zitulmyth.Checking
 {
+
 	public class CollisionCheck
 	{
 		public static bool Collision(Vector p1,Vector p2,Vector size1,Vector size2)
@@ -61,5 +62,6 @@ namespace Zitulmyth.Checking
 			}
 
 		}
+
 	}
 }
