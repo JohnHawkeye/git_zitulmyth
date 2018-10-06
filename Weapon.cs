@@ -30,6 +30,43 @@ namespace Zitulmyth
 		public static int subWeaponRange = 320;
 		public static int subWeaponTotalDistance = 0;
 		public static bool subWeaponDirection;
+		public static int subWeaponZindex = 10;
+
+
+		public static void SubWeaponGenerate(Canvas canvas, double posX,double posY)
+		{
+			if (ImageData.imgSubWeapon.Count == 0)
+			{
+				var _imgSubWeapon = new Image()
+				{
+					Source = ImageData.cbSubWeapon,
+					Width = 32,
+					Height = 32,
+					Name = "sw0",
+				};
+
+				ImageData.imgSubWeapon.Add(_imgSubWeapon);
+				canvas.Children.Add(ImageData.imgSubWeapon[0]);
+
+				if (!PlayerStatus.playerDirection)
+				{
+					RotateTransform rt = new RotateTransform(180);
+					rt.CenterX = 16;
+					rt.CenterY = 16;
+					ImageData.imgSubWeapon[0].RenderTransform = rt;
+
+					subWeaponDirection = false;
+				}
+				else
+				{
+					subWeaponDirection = true;
+				}
+
+				Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
+				Canvas.SetTop(ImageData.imgSubWeapon[0], posY);
+				Canvas.SetZIndex(ImageData.imgSubWeapon[0], subWeaponZindex);
+			}
+		}
 
 		public static void SubWeaponPosUpdate(Canvas canvas)
 		{
@@ -51,6 +88,7 @@ namespace Zitulmyth
 
 					subWeaponTotalDistance += subWeaponSpeed;
 					Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
+					Canvas.SetZIndex(ImageData.imgSubWeapon[0], subWeaponZindex);
 				}
 				else
 				{

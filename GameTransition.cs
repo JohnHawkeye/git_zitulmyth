@@ -136,7 +136,7 @@ namespace Zitulmyth
 					if (numKillEnemy >= 10)
 					{
 						gameTransition = GameTransitionType.StageEnd;
-						
+						numKillEnemy = 0;
 					}
 
 					break;
@@ -161,7 +161,7 @@ namespace Zitulmyth
 					StageInit.StageBlockRemove(canvas);
 					StageInit.StageObjectsRemove(canvas);
 
-					GameTransition.gameTransition = GameTransitionType.StageInit;
+					gameTransition = GameTransitionType.StageInit;
 
 					break;
 			}

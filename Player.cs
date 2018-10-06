@@ -66,7 +66,7 @@ namespace Zitulmyth
 		{
 			double posX = Canvas.GetLeft(ImageData.imgPlayer);
 			double posY = Canvas.GetTop(ImageData.imgPlayer);
-
+			
 			if (KeyController.keyLeft)
 			{
 				if (BlockCheck.BlockCheckLeft(posX, posY, PlayerStatus.speed))
@@ -96,11 +96,51 @@ namespace Zitulmyth
 
 			}
 
+			
+			if (KeyController.keyUp)
+			{
+				if (BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed))
+				{
+					if (posY - PlayerStatus.speed > 0)
+					{
+						posY -= PlayerStatus.speed;
+					}
+				}
+			}
+
+			if (KeyController.keyDown)
+			{
+				//ladder
+				if ((BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed)||
+					BlockCheck.BlockCheckTopLadder(posX, posY, PlayerStatus.weight))&&
+					!BlockCheck.BlockCheckGround(posX, posY, PlayerStatus.weight))
+				{
+					if (posY + PlayerStatus.speed <768)
+					{
+						posY += PlayerStatus.speed;
+					}
+				}
+
+				if (BlockCheck.BlockCheckOnPlat(posX, posY, PlayerStatus.weight))
+				{
+					if (posY + PlayerStatus.speed < 768)
+					{
+						posY += PlayerStatus.speed;
+					}
+				}
+				
+			}
+			else
+			{
+
+			}
+
 			//jump
 
 			if (KeyController.keySpace && PlayerStatus.jumpCount == 0)
 			{
-				if (BlockCheck.BlockCheckTop(posX, posY, PlayerStatus.jumpPower))
+				if (BlockCheck.BlockCheckTop(posX, posY, PlayerStatus.jumpPower)&&
+					!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed))
 				{
 					if (posY - PlayerStatus.jumpPower > 0)
 					{
@@ -139,45 +179,16 @@ namespace Zitulmyth
 			}
 
 
-			Canvas.SetLeft(ImageData.imgPlayer, posX);
-			Canvas.SetTop(ImageData.imgPlayer, posY);
-
 			//Attack
 			if (KeyController.keyD)
 			{
 
-				if (ImageData.imgSubWeapon.Count == 0)
-				{
-					var _imgSubWeapon = new Image()
-					{
-						Source = ImageData.cbSubWeapon,
-						Width = 32,
-						Height = 32,
-						Name = "sw0",
-					};
-
-					ImageData.imgSubWeapon.Add(_imgSubWeapon);
-					canvas.Children.Add(ImageData.imgSubWeapon[0]);
-
-					if (!PlayerStatus.playerDirection)
-					{
-						RotateTransform rt = new RotateTransform(180);
-						rt.CenterX = 16;
-						rt.CenterY = 16;
-						ImageData.imgSubWeapon[0].RenderTransform = rt;
-
-						SubWeapon.subWeaponDirection = false;
-					}
-					else
-					{
-						SubWeapon.subWeaponDirection = true;
-					}
-
-					Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
-					Canvas.SetTop(ImageData.imgSubWeapon[0], posY);
-				}
+				SubWeapon.SubWeaponGenerate(canvas, posX, posY);
 
 			}
+
+			Canvas.SetLeft(ImageData.imgPlayer, posX);
+			Canvas.SetTop(ImageData.imgPlayer, posY);
 		}
 
 		public static void FallingPlayer()
