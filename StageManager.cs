@@ -77,6 +77,8 @@ namespace Zitulmyth
 				Canvas.SetZIndex(StageData.imgNpc[i], npcZindex);
 
 			}
+
+			Item.ItemGenerate(canvas);
 		}
 	}
 }

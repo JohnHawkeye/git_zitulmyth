@@ -70,6 +70,7 @@ namespace Zitulmyth
 
 			StageDataSetting.SetData();
 			ImageData.ImageLoadFirst();
+			Sound.SoundEffectLoad(Canvas);
 
 			this.TitleOpen();
 
@@ -172,6 +173,7 @@ namespace Zitulmyth
 					{
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
+						Item.FallingItems();
 						//this.MoveEnemy();
 						//this.FallingEnemy();
 						SubWeapon.SubWeaponPosUpdate(Canvas);

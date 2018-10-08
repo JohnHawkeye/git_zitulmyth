@@ -26,6 +26,8 @@ namespace Zitulmyth
 		public static bool keyUp = false;
 		public static bool keyDown = false;
 		public static bool keySpace = false;
+		public static bool keyA = false;
+		public static bool keyS = false;
 		public static bool keyD = false;
 		public static bool keyControlLocking = true;
 		public static bool keyReturn = false;
@@ -58,7 +60,16 @@ namespace Zitulmyth
 				if (e.Key == Key.Space)
 				{
 					keySpace = true;
+				}
 
+				if (e.Key == Key.A)
+				{
+					keyA = true;
+				}
+
+				if (e.Key == Key.S)
+				{
+					keyS = true;
 				}
 
 				if (e.Key == Key.D)
@@ -97,6 +108,16 @@ namespace Zitulmyth
 			if (e.Key == Key.Space)
 			{
 				keySpace = false;
+			}
+
+			if (e.Key == Key.A)
+			{
+				keyA = false;
+			}
+
+			if (e.Key == Key.S)
+			{
+				keyS = false;
 			}
 
 			if (e.Key == Key.D)

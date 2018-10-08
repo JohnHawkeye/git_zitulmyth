@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,10 +26,28 @@ namespace Zitulmyth
 		public static System.Media.SoundPlayer seFog = new System.Media.SoundPlayer("fog.wav");
 		public static System.Media.SoundPlayer bgmDarkness = new System.Media.SoundPlayer("darkness.wav");
 
-		public static MediaPlayer mp = new MediaPlayer();
+		public static MediaElement bgm = new MediaElement();
+		public static MediaElement seChannelA = new MediaElement();
+
+		
 
 		public static int sePlayTime = 0;
 		public static bool seStop;
+
+		public static void SoundEffectLoad(Canvas canvas)
+		{
+
+			string dirpath = Directory.GetCurrentDirectory();
+
+			canvas.Children.Add(seChannelA);
+			seChannelA.Source = new Uri(dirpath + "\\itemget.wav", UriKind.Absolute);
+			seChannelA.LoadedBehavior = MediaState.Manual;
+
+			canvas.Children.Add(bgm);
+			bgm.Source = new Uri(dirpath + "\\darkness.wav", UriKind.Absolute);
+			bgm.LoadedBehavior = MediaState.Manual;
+			//bgm.Play();
+		}
 
 
 	}

@@ -62,7 +62,7 @@ namespace Zitulmyth
 			double posY = Canvas.GetTop(EnemyData.lstSpawnEnemy[0].imgEnemy);
 
 
-			if (BlockCheck.BlockCheckBottom(posX, posY, PlayerStatus.weight))
+			if (BlockCheck.BlockCheckBottom(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight))
 			{
 				if (posY + 32 < 23 * 32)
 				{
