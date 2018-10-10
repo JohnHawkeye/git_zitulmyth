@@ -33,49 +33,26 @@ namespace Zitulmyth
 			Canvas.SetZIndex(StageData.imgScenery, 1);
 
 
-			for (int i = 0; i < StageData.objectPosition.Count; i++)
+			for (int i = 0; i < Object.lstObject.Count; i++)
 			{
 
 				int width, height;
 
-				width = ImageData.cbObject[i].SourceRect.Width;
-				height = ImageData.cbObject[i].SourceRect.Height;
+				width = Object.lstObject[i].cbSource.SourceRect.Width;
+				height = Object.lstObject[i].cbSource.SourceRect.Height;
 
 				var _imgObject = new Image
 				{
-					Source = ImageData.cbObject[i],
+					Source = Object.lstObject[i].cbSource,
 					Width = width,
 					Height = height,
 				};
 
-				StageData.imgObject[i] = _imgObject;
-				canvas.Children.Add(StageData.imgObject[i]);
-				Canvas.SetLeft(StageData.imgObject[i], StageData.objectPosition[i].X);
-				Canvas.SetTop(StageData.imgObject[i], StageData.objectPosition[i].Y);
-				Canvas.SetZIndex(StageData.imgObject[i], furnitureZindex);
-			}
-
-			for (int i = 0; i < StageData.npcPosition.Count; i++)
-			{
-
-				int width, height;
-
-				width = ImageData.cbNpc[i].SourceRect.Width;
-				height = ImageData.cbNpc[i].SourceRect.Height;
-
-				var _imgNpc = new Image
-				{
-					Source = ImageData.cbNpc[i],
-					Width = width,
-					Height = height,
-				};
-
-				StageData.imgNpc[i] = _imgNpc;
-				canvas.Children.Add(StageData.imgNpc[i]);
-				Canvas.SetLeft(StageData.imgNpc[i], StageData.npcPosition[i].X);
-				Canvas.SetTop(StageData.imgNpc[i], StageData.npcPosition[i].Y);
-				Canvas.SetZIndex(StageData.imgNpc[i], npcZindex);
-
+				Object.lstObject[i].imgObject = _imgObject;
+				canvas.Children.Add(Object.lstObject[i].imgObject);
+				Canvas.SetLeft(Object.lstObject[i].imgObject, Object.lstObject[i].position.X);
+				Canvas.SetTop(Object.lstObject[i].imgObject, Object.lstObject[i].position.Y);
+				Canvas.SetZIndex(Object.lstObject[i].imgObject, Object.lstObject[i].zindex);
 			}
 
 			Item.ItemGenerate(canvas);

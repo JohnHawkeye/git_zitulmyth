@@ -36,7 +36,10 @@ namespace Zitulmyth
 		public static int playerImageZindex = 7;
 		public static bool playerDirection = true;  //f:left t:right
 		public static int weight = 6;
-		public static int speed = 2;
+		public static int moveSpeed = 2;
+		public static int meleeSpeed = 2;
+		public static bool isMainAttack = false;
+
 		public static int jumpPower = 12;
 		public static int jumpCount = 0;
 		public static int jumpMaxHeight = 96;
@@ -76,11 +79,11 @@ namespace Zitulmyth
 			
 			if (KeyController.keyLeft)
 			{
-				if (BlockCheck.BlockCheckLeft(posX, posY, PlayerStatus.speed))
+				if (BlockCheck.BlockCheckLeft(posX, posY, PlayerStatus.moveSpeed))
 				{
-					if (posX - PlayerStatus.speed > 0)
+					if (posX - PlayerStatus.moveSpeed > 0)
 					{
-						posX -= PlayerStatus.speed;
+						posX -= PlayerStatus.moveSpeed;
 					}
 					PlayerStatus.playerDirection = false;
 				}
@@ -90,12 +93,12 @@ namespace Zitulmyth
 
 			if (KeyController.keyRight)
 			{
-				if (BlockCheck.BlockCheckRight(posX, posY, PlayerStatus.speed))
+				if (BlockCheck.BlockCheckRight(posX, posY, PlayerStatus.moveSpeed))
 				{
 
-					if (posX + PlayerStatus.speed < 992)
+					if (posX + PlayerStatus.moveSpeed < 992)
 					{
-						posX += PlayerStatus.speed;
+						posX += PlayerStatus.moveSpeed;
 					}
 					PlayerStatus.playerDirection = true;
 
@@ -106,11 +109,11 @@ namespace Zitulmyth
 			
 			if (KeyController.keyUp)
 			{
-				if (BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed))
+				if (BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed))
 				{
-					if (posY - PlayerStatus.speed > 0)
+					if (posY - PlayerStatus.moveSpeed > 0)
 					{
-						posY -= PlayerStatus.speed;
+						posY -= PlayerStatus.moveSpeed;
 					}
 				}
 
@@ -119,21 +122,21 @@ namespace Zitulmyth
 			if (KeyController.keyDown)
 			{
 				//ladder
-				if ((BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed)||
+				if ((BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed) ||
 					BlockCheck.BlockCheckTopLadder(posX, posY, PlayerStatus.weight))&&
 					!BlockCheck.BlockCheckGround(posX, posY, PlayerStatus.weight))
 				{
-					if (posY + PlayerStatus.speed <768)
+					if (posY + PlayerStatus.moveSpeed < 768)
 					{
-						posY += PlayerStatus.speed;
+						posY += PlayerStatus.moveSpeed;
 					}
 				}
 
 				if (BlockCheck.BlockCheckOnPlat(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight))
 				{
-					if (posY + PlayerStatus.speed < 768)
+					if (posY + PlayerStatus.moveSpeed < 768)
 					{
-						posY += PlayerStatus.speed;
+						posY += PlayerStatus.moveSpeed;
 					}
 				}
 
@@ -152,7 +155,7 @@ namespace Zitulmyth
 			}
 
 			//laddercheck
-			if(!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed)){
+			if(!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed)){
 				PlayerStatus.isLadder = false;
 				
 			}
@@ -168,14 +171,13 @@ namespace Zitulmyth
 			if (KeyController.keySpace && PlayerStatus.jumpCount == 0)
 			{
 				if (BlockCheck.BlockCheckTop(posX, posY, PlayerStatus.jumpPower)&&
-					!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.speed))
+					!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed))
 				{
 					if (posY - PlayerStatus.jumpPower > 0)
 					{
 						PlayerStatus.jumpCount++;
 
 						PlayerStatus.jumping = true;
-
 					}
 				}
 			}
@@ -219,7 +221,7 @@ namespace Zitulmyth
 					}
 				}
 
-				if (PlayerStatus.isLadder)
+				if (PlayerStatus.isLadder && (KeyController.keyUp || KeyController.keyDown))
 				{
 					ImageData.imgPlayer.Source = ImageData.cbPlayer[6];
 				}
@@ -238,6 +240,15 @@ namespace Zitulmyth
 
 				SubWeapon.SubWeaponGenerate(canvas, posX, posY);
 
+			}
+
+			if (KeyController.keyD)
+			{
+				if(!PlayerStatus.isMainAttack)
+				{
+					MainWeapon.imgMainWeapon.Visibility = Visibility.Visible;
+					PlayerStatus.isMainAttack = true;
+				}
 			}
 
 			Canvas.SetLeft(ImageData.imgPlayer, posX);
@@ -365,7 +376,10 @@ namespace Zitulmyth
 							Sound.seStop = true;
 						}
 
-
+						if(Item.lstItemData[i].itemName == ItemName.TreeBranch)
+						{
+							MainWeapon.SetMainWeapon();
+						}
 
 						canvas.Children.Remove(Item.lstItemData[i].imgItem);
 						Item.lstItemData.RemoveAt(i);

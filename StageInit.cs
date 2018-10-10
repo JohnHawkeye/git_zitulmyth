@@ -96,26 +96,16 @@ namespace Zitulmyth
 
 		public static void StageObjectsRemove(Canvas canvas)
 		{
-			for(int i = 0; i < StageData.npcPosition.Count; i++)
+			for(int i = 0; i < Object.lstObject.Count; i++)
 			{
-				canvas.Children.Remove(StageData.imgNpc[i]);
+				canvas.Children.Remove(Object.lstObject[i].imgObject);
 			}
 
 			canvas.Children.Remove(StageData.imgScenery);
 
+			Object.lstObject.Clear();
+			
 
-			for (int i = 0; i < StageData.objectPosition.Count; i++)
-			{
-				canvas.Children.Remove(StageData.imgObject[i]);
-			}
-
-			StageData.npcPosition.Clear();
-			StageData.objectPosition.Clear();
-
-			StageData.imgNpc.Clear();
-			StageData.imgObject.Clear();
-
-			StageData.refCbObject.Clear();
 		}
 
 		public static void InitPlayer(Canvas canvas)

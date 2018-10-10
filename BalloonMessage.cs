@@ -41,7 +41,7 @@ namespace Zitulmyth
 
 			for (int i = 0; i < imgBalloon.Length; i++)
 			{
-				imgWidth = imgHeight = 16;
+				imgWidth = imgHeight = 17;
 				if (i == 1) { imgWidth = 160; }
 				if (i == 3) { imgHeight = 48; }
 				if (i == 4) { imgWidth = 160; imgHeight = 48; }

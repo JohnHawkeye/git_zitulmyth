@@ -437,7 +437,7 @@ namespace Zitulmyth
 				double dis = 0;
 				double ac = EventData.listEvent[charaMoveIndex].moveSpeed;
 
-				dis = (double)PlayerStatus.speed * MainWindow.elapsedTime * 0.01 * ac;
+				dis = (double)PlayerStatus.moveSpeed * MainWindow.elapsedTime * 0.01 * ac;
 
 				if (EventData.listEvent[charaMoveIndex].moveDistance.X >= 0)
 				{

@@ -74,6 +74,10 @@ namespace Zitulmyth
 
 			this.TitleOpen();
 
+			//objects maked
+
+			MainWeapon.InitMainWeapon(Canvas);
+
 			BalloonMessage.GenerateBalloon(Canvas);
 			stpPlayerStatus = Canvas.FindName("spPlayerStatus")as StackPanel;
 			stpPlayerStatus.Visibility = Visibility.Hidden;
@@ -117,7 +121,7 @@ namespace Zitulmyth
 					this.GetNowTime();
 					elapsedTime = nowTime - lastTime;
 
-					NowTimeLabel.Content = nowTime.ToString();
+					NowTimeLabel.Content = elapsedTime.ToString();
 
 					if (elapsedTime < 0)
 					{
@@ -177,6 +181,7 @@ namespace Zitulmyth
 						//this.MoveEnemy();
 						//this.FallingEnemy();
 						SubWeapon.SubWeaponPosUpdate(Canvas);
+						MainWeapon.MainWeaponAttack(Canvas);
 
 						PlayerBehavior.CollisionPtoE();
 						SubWeapon.CollisionSubWeapon(Canvas);
