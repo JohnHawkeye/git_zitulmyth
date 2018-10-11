@@ -36,16 +36,12 @@ namespace Zitulmyth
 			for (int i = 0; i < Object.lstObject.Count; i++)
 			{
 
-				int width, height;
-
-				width = Object.lstObject[i].cbSource.SourceRect.Width;
-				height = Object.lstObject[i].cbSource.SourceRect.Height;
-
 				var _imgObject = new Image
 				{
 					Source = Object.lstObject[i].cbSource,
-					Width = width,
-					Height = height,
+					Width = Object.lstObject[i].width * 32,
+					Height = Object.lstObject[i].height * 32,
+					Stretch = Stretch.Fill,
 				};
 
 				Object.lstObject[i].imgObject = _imgObject;

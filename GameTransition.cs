@@ -187,17 +187,15 @@ namespace Zitulmyth
 
 							Vector blpos = EventData.listEvent[eventCount].balloonPos;
 							String blstring = EventData.listEvent[eventCount].balloonMsg;
-							
-							try
+
+							if (EventData.listEvent[eventCount].targetType == TargetType.Object)
 							{
-								Image blTarget = EventData.listEvent[eventCount].imgTarget;
-								BalloonMessage.OpenBalloon(eventCount, canvas, blpos, blTarget, blstring);
+								SelectObjectImage();
 							}
-							catch(IndexOutOfRangeException)
-							{
-								BalloonMessage.OpenBalloon(eventCount, canvas, blpos, ImageData.imgPlayer, blstring);
-								Console.WriteLine("インデックスがおかしい");
-							}
+
+							Image blTarget = EventData.listEvent[eventCount].imgTarget;
+							BalloonMessage.OpenBalloon(eventCount, canvas, blpos, blTarget, blstring);
+
 							
 							eventBalloonIsOpen = true;
 
@@ -221,6 +219,11 @@ namespace Zitulmyth
 							break;
 
 						case EventCommandEnum.Move:
+
+							if(EventData.listEvent[eventCount].targetType == TargetType.Object)
+							{
+								SelectObjectImage();
+							}
 
 							charaMoveIndex = eventCount;
 							charaMoveStart = true;
@@ -255,13 +258,21 @@ namespace Zitulmyth
 
 						case EventCommandEnum.CharaImageChange:
 
-							if(EventData.listEvent[eventCount].targetType != 1)
+							switch (EventData.listEvent[eventCount].targetType)
 							{
-								EventData.listEvent[eventCount].imgTarget.Source = EventData.listEvent[eventCount].imgSource;
-							}
-							else
-							{
-								EnemyData.lstSpawnEnemy[0].imgEnemy.Source = EventData.listEvent[eventCount].imgSource;
+								case TargetType.Player:
+									EventData.listEvent[eventCount].imgTarget.Source = EventData.listEvent[eventCount].imgSource;
+									break;
+								case TargetType.Enemy:
+									EnemyData.lstSpawnEnemy[0].imgEnemy.Source = EventData.listEvent[eventCount].imgSource;
+									break;
+								case TargetType.Object:
+
+									SelectObjectImage();
+
+									break;
+								case TargetType.Item:
+									break;
 							}
 							
 							break;
@@ -459,9 +470,57 @@ namespace Zitulmyth
 				charaMoveStart = false;
 			}
 
-
 		}
 
+		public static void SelectObjectImage()
+		{
+			switch (EventData.listEvent[eventCount].eventType)
+			{
+				case EventCommandEnum.CharaImageChange:
+
+					for (int i = 0; i < Object.lstObject.Count; i++)
+					{
+						if (Object.lstObject[i].objName == EventData.listEvent[eventCount].objectName)
+						{
+							Object.lstObject[i].imgObject.Source = EventData.listEvent[eventCount].imgSource;
+							break;
+						}
+					}
+
+					break;
+
+				case EventCommandEnum.Move:
+
+					for (int i = 0; i < Object.lstObject.Count; i++)
+					{
+						if (Object.lstObject[i].objName == EventData.listEvent[eventCount].objectName)
+						{
+							EventData.listEvent[eventCount].imgTarget = Object.lstObject[i].imgObject;
+							
+							break;
+						}
+					}
+
+					break;
+
+				case EventCommandEnum.Balloon:
+
+					for (int i = 0; i < Object.lstObject.Count; i++)
+					{
+						if (Object.lstObject[i].objName == EventData.listEvent[eventCount].objectName)
+						{
+							EventData.listEvent[eventCount].imgTarget = Object.lstObject[i].imgObject;
+
+							break;
+						}
+					}
+
+					break;
+			}
+
+
+
+		}
 
 	}
 

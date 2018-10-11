@@ -83,6 +83,18 @@ namespace Zitulmyth
 			stpPlayerStatus.Visibility = Visibility.Hidden;
 			Canvas.SetZIndex(spPlayerStatus, 2);
 
+			var _popcantalk = new Image
+			{
+				Source = ImageData.cbSystem,
+				Width = 64,Height=32,
+			};
+
+			ImageData.imgPopCanTalk = _popcantalk;
+			ImageData.imgPopCanTalk.Visibility = Visibility.Hidden;
+			Canvas.Children.Add(ImageData.imgPopCanTalk);
+			Canvas.SetZIndex(ImageData.imgPopCanTalk, 15);
+
+
 			StageInit.InitPlayer(Canvas);
 			StageInit.InitPlayerStatus(CaLife, CaMana);
 		}
@@ -175,6 +187,8 @@ namespace Zitulmyth
 
 					if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 					{
+						Animator.AnimationObject();
+
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
 						Item.FallingItems();
@@ -183,6 +197,7 @@ namespace Zitulmyth
 						SubWeapon.SubWeaponPosUpdate(Canvas);
 						MainWeapon.MainWeaponAttack(Canvas);
 
+						Object.CollisionPtoActionCollider();
 						PlayerBehavior.CollisionPtoE();
 						SubWeapon.CollisionSubWeapon(Canvas);
 

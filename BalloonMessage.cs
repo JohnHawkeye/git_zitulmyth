@@ -42,11 +42,11 @@ namespace Zitulmyth
 			for (int i = 0; i < imgBalloon.Length; i++)
 			{
 				imgWidth = imgHeight = 17;
-				if (i == 1) { imgWidth = 160; }
+				if (i == 1) { imgWidth = 161; }
 				if (i == 3) { imgHeight = 48; }
-				if (i == 4) { imgWidth = 160; imgHeight = 48; }
+				if (i == 4) { imgWidth = 161; imgHeight = 48; }
 				if (i == 5) { imgHeight = 48;}
-				if (i == 7) { imgWidth = 160; }
+				if (i == 7) { imgWidth = 161; }
 				
 					
 				imgBalloon[i] = new Image

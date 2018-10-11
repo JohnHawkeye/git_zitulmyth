@@ -225,6 +225,7 @@ namespace Zitulmyth
 				{
 					ImageData.imgPlayer.Source = ImageData.cbPlayer[6];
 				}
+
 				
 			}
 
@@ -364,7 +365,7 @@ namespace Zitulmyth
 					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
 
 					Vector p2 = new Vector(Canvas.GetLeft(Item.lstItemData[i].imgItem),Canvas.GetTop(Item.lstItemData[i].imgItem));
-					Vector size2 = new Vector(Item.lstItemData[i].width, Item.lstItemData[i].height);
+					Vector size2 = new Vector(Item.lstItemData[i].width*32, Item.lstItemData[i].height*32);
 
 					if (CollisionCheck.Collision(p1, p2, size1, size2))
 					{
