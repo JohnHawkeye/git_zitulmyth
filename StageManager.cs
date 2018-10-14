@@ -33,22 +33,22 @@ namespace Zitulmyth
 			Canvas.SetZIndex(StageData.imgScenery, 1);
 
 
-			for (int i = 0; i < Object.lstObject.Count; i++)
+			for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 			{
 
 				var _imgObject = new Image
 				{
-					Source = Object.lstObject[i].cbSource,
-					Width = Object.lstObject[i].width * 32,
-					Height = Object.lstObject[i].height * 32,
+					Source = ObjectChecker.lstObject[i].cbSource,
+					Width = ObjectChecker.lstObject[i].width * 32,
+					Height = ObjectChecker.lstObject[i].height * 32,
 					Stretch = Stretch.Fill,
 				};
 
-				Object.lstObject[i].imgObject = _imgObject;
-				canvas.Children.Add(Object.lstObject[i].imgObject);
-				Canvas.SetLeft(Object.lstObject[i].imgObject, Object.lstObject[i].position.X);
-				Canvas.SetTop(Object.lstObject[i].imgObject, Object.lstObject[i].position.Y);
-				Canvas.SetZIndex(Object.lstObject[i].imgObject, Object.lstObject[i].zindex);
+				ObjectChecker.lstObject[i].imgObject = _imgObject;
+				canvas.Children.Add(ObjectChecker.lstObject[i].imgObject);
+				Canvas.SetLeft(ObjectChecker.lstObject[i].imgObject, ObjectChecker.lstObject[i].position.X);
+				Canvas.SetTop(ObjectChecker.lstObject[i].imgObject, ObjectChecker.lstObject[i].position.Y);
+				Canvas.SetZIndex(ObjectChecker.lstObject[i].imgObject, ObjectChecker.lstObject[i].zindex);
 			}
 
 			Item.ItemGenerate(canvas);

@@ -37,7 +37,10 @@ namespace Zitulmyth
 		public static bool playerDirection = true;  //f:left t:right
 		public static int weight = 6;
 		public static int moveSpeed = 2;
+		public static bool isMove = false;
+		public static bool isGround = false;
 		public static int meleeSpeed = 2;
+		public static bool meleeDirection = false;
 		public static bool isMainAttack = false;
 
 		public static int jumpPower = 12;
@@ -76,10 +79,10 @@ namespace Zitulmyth
 		{
 			double posX = Canvas.GetLeft(ImageData.imgPlayer);
 			double posY = Canvas.GetTop(ImageData.imgPlayer);
-			
+
 			if (KeyController.keyLeft)
 			{
-				if (BlockCheck.BlockCheckLeft(posX, posY, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckLeft(posX, posY, PlayerStatus.moveSpeed))
 				{
 					if (posX - PlayerStatus.moveSpeed > 0)
 					{
@@ -89,11 +92,10 @@ namespace Zitulmyth
 				}
 
 			}
-			else
 
 			if (KeyController.keyRight)
 			{
-				if (BlockCheck.BlockCheckRight(posX, posY, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckRight(posX, posY, PlayerStatus.moveSpeed))
 				{
 
 					if (posX + PlayerStatus.moveSpeed < 992)
@@ -104,6 +106,15 @@ namespace Zitulmyth
 
 				}
 
+			}
+
+			if(KeyController.keyLeft || KeyController.keyRight)
+			{
+				PlayerStatus.isMove = true;
+			}
+			else
+			{
+				PlayerStatus.isMove = false;
 			}
 
 			
@@ -144,8 +155,6 @@ namespace Zitulmyth
 				{
 					PlayerStatus.isSquat = true;
 
-			
-
 				}
 
 			}
@@ -153,6 +162,7 @@ namespace Zitulmyth
 			{
 				PlayerStatus.isSquat = false;
 			}
+
 
 			//laddercheck
 			if(!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed)){
@@ -167,11 +177,9 @@ namespace Zitulmyth
 
 
 			//jump
-
 			if (KeyController.keySpace && PlayerStatus.jumpCount == 0)
 			{
-				if (BlockCheck.BlockCheckTop(posX, posY, PlayerStatus.jumpPower)&&
-					!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckTop(posX, posY, PlayerStatus.jumpPower))
 				{
 					if (posY - PlayerStatus.jumpPower > 0)
 					{
@@ -197,6 +205,40 @@ namespace Zitulmyth
 				}
 			}
 
+
+			//itemget
+			if (KeyController.keyA)
+			{
+				PlayerItemGetting(canvas);
+			}
+
+			//Attack
+			if (KeyController.keyS)
+			{
+
+				SubWeapon.SubWeaponGenerate(canvas, posX, posY);
+
+			}
+
+			if (KeyController.keyD)
+			{
+				if(!PlayerStatus.isMainAttack)
+				{
+					MainWeapon.imgMainWeapon.Visibility = Visibility.Visible;
+					PlayerStatus.meleeDirection = PlayerStatus.playerDirection;
+					PlayerStatus.isMainAttack = true;
+				}
+			}
+
+			if (KeyController.keyE)
+			{
+				if (ObjectChecker.isTrigger)
+				{
+					ObjectBehavior.OnTriggerEvent();
+				}
+			}
+
+	//image change
 			if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 			{
 
@@ -225,31 +267,6 @@ namespace Zitulmyth
 				{
 					ImageData.imgPlayer.Source = ImageData.cbPlayer[6];
 				}
-
-				
-			}
-
-			//itemget
-			if (KeyController.keyA)
-			{
-				PlayerItemGetting(canvas);
-			}
-
-			//Attack
-			if (KeyController.keyS)
-			{
-
-				SubWeapon.SubWeaponGenerate(canvas, posX, posY);
-
-			}
-
-			if (KeyController.keyD)
-			{
-				if(!PlayerStatus.isMainAttack)
-				{
-					MainWeapon.imgMainWeapon.Visibility = Visibility.Visible;
-					PlayerStatus.isMainAttack = true;
-				}
 			}
 
 			Canvas.SetLeft(ImageData.imgPlayer, posX);
@@ -263,7 +280,7 @@ namespace Zitulmyth
 
 			if (!PlayerStatus.isLadder && !BlockCheck.BlockCheckTopLadder(posX,posY,PlayerStatus.weight))
 			{
-				if (BlockCheck.BlockCheckBottom(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight)&&
+				if ((!BlockCheck.BlockCheckBottom(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight))&&
 					!BlockCheck.BlockCheckOnPlat(posX, posY, PlayerStatus.weight, PlayerStatus.playerHeight))
 				{
 					if (posY + 32 < 23 * 32)
@@ -276,6 +293,7 @@ namespace Zitulmyth
 						PlayerStatus.fallingStartPoint = posY;
 					}
 					PlayerStatus.fallingStart = true;
+					PlayerStatus.isGround = false;
 				}
 				else
 				{
@@ -291,6 +309,7 @@ namespace Zitulmyth
 						}
 					}
 					PlayerStatus.fallingStart = false;
+					PlayerStatus.isGround = true;
 					PlayerStatus.jumpCount = 0;
 				}
 

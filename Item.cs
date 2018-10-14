@@ -104,13 +104,12 @@ namespace Zitulmyth
 				double posX = Canvas.GetLeft(lstItemData[i].imgItem);
 				double posY = Canvas.GetTop(lstItemData[i].imgItem);
 
-				if (BlockCheck.BlockCheckBottom(posX, posY, lstItemData[i].weight, lstItemData[i].height))
+				if (!BlockCheck.BlockCheckBottom(posX, posY, lstItemData[i].weight,lstItemData[i].height)&&
+					!BlockCheck.BlockCheckOnPlat(posX,posY, lstItemData[i].weight,lstItemData[i].height))
 				{
-					if (posY + 32 < 23 * 32)
-					{
-						posY += lstItemData[i].weight;
-					}
 					
+					posY += lstItemData[i].weight;
+				
 				}
 
 				Canvas.SetTop(lstItemData[i].imgItem, posY);

@@ -49,43 +49,78 @@ namespace Zitulmyth
 		public bool triggerAction;
 	}
 
-	 public class Object
+	 public class ObjectChecker
 	{
 		public static List<ObjectData> lstObject = new List<ObjectData>();
+		public static int activeObject; //store index
+		public static bool isTrigger;
 
-		private static Vector triggerTargetPosition;
+		public static Vector triggerTargetPosition;
 
 		public static void CollisionPtoActionCollider()
 		{
-			for (int i = 0; i < lstObject.Count; i++)
+			if (!isTrigger)
 			{
-
-				Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
-				Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
-
-				Vector p2 = new Vector(Canvas.GetLeft(lstObject[i].imgObject), Canvas.GetTop(lstObject[i].imgObject));
-				Vector size2 = new Vector(lstObject[i].width * 32, lstObject[i].height * 32);
-
-				if (CollisionCheck.Collision(p1, p2, size1, size2) && lstObject[i].triggerAction)
+				for (int i = 0; i < lstObject.Count; i++)
 				{
 
-					GetTriggerTargetPosition(i);
+					Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
+					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
 
-					Canvas.SetLeft(ImageData.imgPopCanTalk, triggerTargetPosition.X-16);
-					Canvas.SetTop(ImageData.imgPopCanTalk, triggerTargetPosition.Y-32);
-					ImageData.imgPopCanTalk.Visibility = Visibility.Visible;
+					Vector p2 = new Vector(Canvas.GetLeft(lstObject[i].imgObject), Canvas.GetTop(lstObject[i].imgObject));
+					Vector size2 = new Vector(lstObject[i].width * 32, lstObject[i].height * 32);
 
-					break;
+					if (CollisionCheck.Collision(p1, p2, size1, size2) && lstObject[i].triggerAction)
+					{
+
+						GetTriggerTargetPosition(i);
+
+						activeObject = i;
+						isTrigger = true;
+
+						Canvas.SetLeft(ImageData.imgPopCanTalk, triggerTargetPosition.X - 16);
+						Canvas.SetTop(ImageData.imgPopCanTalk, triggerTargetPosition.Y - 32);
+						ImageData.imgPopCanTalk.Visibility = Visibility.Visible;
+
+						break;
+					}
+					else
+					{
+						ImageData.imgPopCanTalk.Visibility = Visibility.Hidden;
+					}
+
 				}
-				else
+			}
+			else
+			{
+				if (!TriggerExitCheck())
 				{
-					ImageData.imgPopCanTalk.Visibility = Visibility.Hidden;
+					isTrigger = false;
 				}
-
 			}
 		}
 
-		private static void GetTriggerTargetPosition(int index)
+		private static bool TriggerExitCheck()
+		{
+			Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
+			Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
+
+			Vector p2 = new Vector(Canvas.GetLeft(lstObject[activeObject].imgObject), 
+									Canvas.GetTop(lstObject[activeObject].imgObject));
+			Vector size2 = new Vector(lstObject[activeObject].width * 32, lstObject[activeObject].height * 32);
+
+			if (CollisionCheck.Collision(p1, p2, size1, size2))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+				
+		}
+
+		public static void GetTriggerTargetPosition(int index)
 		{
 			for(int i = 0; i < lstObject.Count; i++)
 			{
@@ -104,6 +139,16 @@ namespace Zitulmyth
 
 	public class ObjectBehavior
 	{
+		public static void OnTriggerEvent()
+		{
+			if (!TalkCommander.isTalk)
+			{
+				TalkCommander.TalkDataInit();
+				TalkCommander.isTalk = true;
+				KeyController.keyControlLocking = true;
+			}
+
+		}
 
 	}
 }

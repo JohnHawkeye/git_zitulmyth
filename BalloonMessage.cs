@@ -104,10 +104,20 @@ namespace Zitulmyth
 
 		}
 
-		public static void OpenBalloon(int index,Canvas canvas,Vector blpos,Image target, String blstring)
+		public static void OpenBalloon(int index,Canvas canvas,Vector blpos,Image target, String blstring,bool usepos)
 		{
 			double tempX = Canvas.GetLeft(target);
 			double tempY = Canvas.GetTop(target);
+
+			if (usepos)
+			{
+				tempX = blpos.X;	tempY = blpos.Y;
+
+			}
+			else
+			{
+	
+			}
 
 			Canvas.SetLeft(spnBalloon, tempX);
 			Canvas.SetTop(spnBalloon, tempY-96);

@@ -96,14 +96,14 @@ namespace Zitulmyth
 
 		public static void StageObjectsRemove(Canvas canvas)
 		{
-			for(int i = 0; i < Object.lstObject.Count; i++)
+			for(int i = 0; i < ObjectChecker.lstObject.Count; i++)
 			{
-				canvas.Children.Remove(Object.lstObject[i].imgObject);
+				canvas.Children.Remove(ObjectChecker.lstObject[i].imgObject);
 			}
 
 			canvas.Children.Remove(StageData.imgScenery);
 
-			Object.lstObject.Clear();
+			ObjectChecker.lstObject.Clear();
 			
 
 		}

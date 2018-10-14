@@ -123,7 +123,7 @@ namespace Zitulmyth
 					{
 						duringTransition = true;
 
-						EventData.InitEvent();
+						StageEvent.InitEvent();
 						eventCount = 0;
 						eventStart = true;
 					}
@@ -147,7 +147,7 @@ namespace Zitulmyth
 					{
 						duringTransition = true;
 
-						EventData.InitEvent();
+						StageEvent.InitEvent();
 						eventCount = 0;
 						eventStart = true;
 					}
@@ -171,30 +171,30 @@ namespace Zitulmyth
 		public static void EventController(Canvas canvas)
 		{
 
-			if(eventCount != EventData.listEvent.Count)
+			if(eventCount != StageEvent.listEvent.Count)
 			{
 				if (!eventWaiting && !screenFadeStart && !charaMoveStart)
 				{
-					switch (EventData.listEvent[eventCount].eventType)
+					switch (StageEvent.listEvent[eventCount].eventType)
 					{
 						case EventCommandEnum.Wait:
 							eventWaiting = true;
-							EventWaiting(EventData.listEvent[eventCount].eventValue);
+							EventWaiting(StageEvent.listEvent[eventCount].eventValue);
 							Console.WriteLine("wait");
 							break;
 
 						case EventCommandEnum.Balloon:
 
-							Vector blpos = EventData.listEvent[eventCount].balloonPos;
-							String blstring = EventData.listEvent[eventCount].balloonMsg;
+							Vector blpos = StageEvent.listEvent[eventCount].balloonPos;
+							String blstring = StageEvent.listEvent[eventCount].balloonMsg;
 
-							if (EventData.listEvent[eventCount].targetType == TargetType.Object)
+							if (StageEvent.listEvent[eventCount].targetType == TargetType.Object)
 							{
 								SelectObjectImage();
 							}
 
-							Image blTarget = EventData.listEvent[eventCount].imgTarget;
-							BalloonMessage.OpenBalloon(eventCount, canvas, blpos, blTarget, blstring);
+							Image blTarget = StageEvent.listEvent[eventCount].imgTarget;
+							BalloonMessage.OpenBalloon(eventCount, canvas, blpos, blTarget, blstring,false);
 
 							
 							eventBalloonIsOpen = true;
@@ -203,7 +203,7 @@ namespace Zitulmyth
 
 						case EventCommandEnum.UiVisibility:
 
-							if (!EventData.listEvent[eventCount].uiVisible)
+							if (!StageEvent.listEvent[eventCount].uiVisible)
 							{
 								MainWindow.stpPlayerStatus.Visibility = Visibility.Hidden;
 							}
@@ -214,13 +214,13 @@ namespace Zitulmyth
 							break;
 
 						case EventCommandEnum.KeyLock:
-							KeyController.keyControlLocking = EventData.listEvent[eventCount].flagKeyLock;
+							KeyController.keyControlLocking = StageEvent.listEvent[eventCount].flagKeyLock;
 							Console.WriteLine("keylock");
 							break;
 
 						case EventCommandEnum.Move:
 
-							if(EventData.listEvent[eventCount].targetType == TargetType.Object)
+							if(StageEvent.listEvent[eventCount].targetType == TargetType.Object)
 							{
 								SelectObjectImage();
 							}
@@ -231,23 +231,23 @@ namespace Zitulmyth
 							break;
 
 						case EventCommandEnum.BgmPlay:
-							if(EventData.listEvent[eventCount].bgm != null)
-								EventData.listEvent[eventCount].bgm.PlayLooping();
+							if(StageEvent.listEvent[eventCount].bgm != null)
+								StageEvent.listEvent[eventCount].bgm.PlayLooping();
 							Console.WriteLine("bgm");
 							break;
 
 						case EventCommandEnum.SePlay:
-							if (EventData.listEvent[eventCount].bgm != null)
-								EventData.listEvent[eventCount].bgm.Play();
+							if (StageEvent.listEvent[eventCount].bgm != null)
+								StageEvent.listEvent[eventCount].bgm.Play();
 							Console.WriteLine("se");
 							break;
 
 						case EventCommandEnum.CharaFadeIn:
 
-							EventData.listEvent[eventCount].imgTarget.Opacity = 0;
-							EventData.listEvent[eventCount].imgTarget.Source = ImageData.cbPlayer[0];
-							EventData.listEvent[eventCount].imgTarget.Width = 32;
-							EventData.listEvent[eventCount].imgTarget.Height = 64;
+							StageEvent.listEvent[eventCount].imgTarget.Opacity = 0;
+							StageEvent.listEvent[eventCount].imgTarget.Source = ImageData.cbPlayer[0];
+							StageEvent.listEvent[eventCount].imgTarget.Width = 32;
+							StageEvent.listEvent[eventCount].imgTarget.Height = 64;
 
 							renderRateTotal = 0;
 
@@ -258,13 +258,13 @@ namespace Zitulmyth
 
 						case EventCommandEnum.CharaImageChange:
 
-							switch (EventData.listEvent[eventCount].targetType)
+							switch (StageEvent.listEvent[eventCount].targetType)
 							{
 								case TargetType.Player:
-									EventData.listEvent[eventCount].imgTarget.Source = EventData.listEvent[eventCount].imgSource;
+									StageEvent.listEvent[eventCount].imgTarget.Source = StageEvent.listEvent[eventCount].imgSource;
 									break;
 								case TargetType.Enemy:
-									EnemyData.lstSpawnEnemy[0].imgEnemy.Source = EventData.listEvent[eventCount].imgSource;
+									EnemyData.lstSpawnEnemy[0].imgEnemy.Source = StageEvent.listEvent[eventCount].imgSource;
 									break;
 								case TargetType.Object:
 
@@ -282,7 +282,7 @@ namespace Zitulmyth
 							MainWindow.canScreenFade.Width = 1024;
 							MainWindow.canScreenFade.Height = 768;
 
-							switch (EventData.listEvent[eventCount].color)
+							switch (StageEvent.listEvent[eventCount].color)
 							{
 								case ColorEnum.White:
 									MainWindow.canScreenFade.Background = new SolidColorBrush(Colors.White);
@@ -315,7 +315,7 @@ namespace Zitulmyth
 
 						case EventCommandEnum.GenerateEnemy:
 
-							SpawnEnemy.GenerateEnemy(canvas,EventData.listEvent[eventCount].setPosition);
+							SpawnEnemy.GenerateEnemy(canvas,StageEvent.listEvent[eventCount].setPosition);
 
 							break;
 
@@ -326,7 +326,7 @@ namespace Zitulmyth
 
 							if(gameTransition == GameTransitionType.StageStart)
 							{
-								if (!EventData.listEvent[eventCount].eventOnly)
+								if (!StageEvent.listEvent[eventCount].eventOnly)
 								{
 									gameTransition = GameTransitionType.StageDuring;
 								}
@@ -384,15 +384,15 @@ namespace Zitulmyth
 		{
 			if (renderRateTotal < 1)
 			{
-				double temp = (double)MainWindow.elapsedTime/ EventData.listEvent[charaRenderIndex].eventValue;
+				double temp = (double)MainWindow.elapsedTime/ StageEvent.listEvent[charaRenderIndex].eventValue;
 				renderRateTotal += Math.Round(temp,2);
 
-				EventData.listEvent[charaRenderIndex].imgTarget.Opacity = renderRateTotal;
+				StageEvent.listEvent[charaRenderIndex].imgTarget.Opacity = renderRateTotal;
 
 			}
 			else
 			{
-				EventData.listEvent[charaRenderIndex].imgTarget.Opacity = 1;
+				StageEvent.listEvent[charaRenderIndex].imgTarget.Opacity = 1;
 				charaRenderStart = false;
 			}
 		}
@@ -400,11 +400,11 @@ namespace Zitulmyth
 		public static void ScreenFade(Canvas canvas)
 		{
 
-			if (EventData.listEvent[screenFadeIndex].fadeType)
+			if (StageEvent.listEvent[screenFadeIndex].fadeType)
 			{
 				if (screenFadeTotal < 1)
 				{
-					double temp = (double)MainWindow.elapsedTime / EventData.listEvent[screenFadeIndex].eventValue;
+					double temp = (double)MainWindow.elapsedTime / StageEvent.listEvent[screenFadeIndex].eventValue;
 					screenFadeTotal += Math.Round(temp, 2);
 
 					MainWindow.canScreenFade.Opacity = screenFadeTotal;
@@ -421,7 +421,7 @@ namespace Zitulmyth
 			{
 				if (screenFadeTotal > 0)
 				{
-					double temp = (double)MainWindow.elapsedTime / EventData.listEvent[screenFadeIndex].eventValue;
+					double temp = (double)MainWindow.elapsedTime / StageEvent.listEvent[screenFadeIndex].eventValue;
 					screenFadeTotal -= Math.Round(temp, 2);
 
 					MainWindow.canScreenFade.Opacity = screenFadeTotal;
@@ -441,28 +441,25 @@ namespace Zitulmyth
 
 		public static void CharaMove()
 		{
-			if(EventData.listEvent[charaMoveIndex].moveTotal.X < EventData.listEvent[charaMoveIndex].moveDistance.X)
+			if(StageEvent.listEvent[charaMoveIndex].moveTotal.X < StageEvent.listEvent[charaMoveIndex].moveDistance.X)
 			{
 
-				double x = Canvas.GetLeft(EventData.listEvent[charaMoveIndex].imgTarget);
+				double x = Canvas.GetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget);
 				double dis = 0;
-				double ac = EventData.listEvent[charaMoveIndex].moveSpeed;
+				double ac = StageEvent.listEvent[charaMoveIndex].moveSpeed;
 
 				dis = (double)PlayerStatus.moveSpeed * MainWindow.elapsedTime * 0.01 * ac;
 
-				if (EventData.listEvent[charaMoveIndex].moveDistance.X >= 0)
+				if (StageEvent.listEvent[charaMoveIndex].moveDistance.X >= 0)
 				{
-					Canvas.SetLeft(EventData.listEvent[charaMoveIndex].imgTarget, x + dis);
+					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x + dis);
 				}
 				else
 				{
-					Canvas.SetLeft(EventData.listEvent[charaMoveIndex].imgTarget, x - dis);
+					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x - dis);
 				}
 
-				EventList el = EventData.listEvent[charaMoveIndex];
-				el.moveTotal.X += dis;
-
-				EventData.listEvent[charaMoveIndex] = el;
+				StageEvent.listEvent[charaMoveIndex].moveTotal.X += dis;
 
 			}
 			else
@@ -474,15 +471,15 @@ namespace Zitulmyth
 
 		public static void SelectObjectImage()
 		{
-			switch (EventData.listEvent[eventCount].eventType)
+			switch (StageEvent.listEvent[eventCount].eventType)
 			{
 				case EventCommandEnum.CharaImageChange:
 
-					for (int i = 0; i < Object.lstObject.Count; i++)
+					for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 					{
-						if (Object.lstObject[i].objName == EventData.listEvent[eventCount].objectName)
+						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
 						{
-							Object.lstObject[i].imgObject.Source = EventData.listEvent[eventCount].imgSource;
+							ObjectChecker.lstObject[i].imgObject.Source = StageEvent.listEvent[eventCount].imgSource;
 							break;
 						}
 					}
@@ -491,11 +488,11 @@ namespace Zitulmyth
 
 				case EventCommandEnum.Move:
 
-					for (int i = 0; i < Object.lstObject.Count; i++)
+					for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 					{
-						if (Object.lstObject[i].objName == EventData.listEvent[eventCount].objectName)
+						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
 						{
-							EventData.listEvent[eventCount].imgTarget = Object.lstObject[i].imgObject;
+							StageEvent.listEvent[eventCount].imgTarget = ObjectChecker.lstObject[i].imgObject;
 							
 							break;
 						}
@@ -505,11 +502,11 @@ namespace Zitulmyth
 
 				case EventCommandEnum.Balloon:
 
-					for (int i = 0; i < Object.lstObject.Count; i++)
+					for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 					{
-						if (Object.lstObject[i].objName == EventData.listEvent[eventCount].objectName)
+						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
 						{
-							EventData.listEvent[eventCount].imgTarget = Object.lstObject[i].imgObject;
+							StageEvent.listEvent[eventCount].imgTarget = ObjectChecker.lstObject[i].imgObject;
 
 							break;
 						}

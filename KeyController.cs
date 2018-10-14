@@ -29,8 +29,11 @@ namespace Zitulmyth
 		public static bool keyA = false;
 		public static bool keyS = false;
 		public static bool keyD = false;
+		public static bool keyE = false;
 		public static bool keyControlLocking = true;
 		public static bool keyReturn = false;
+		public static bool keyReturnInterval = false;
+		public static int totalInterval=0;
 
 		//input key
 		public static void InputKeyDown(object sender, KeyEventArgs e)
@@ -76,7 +79,11 @@ namespace Zitulmyth
 				{
 					keyD = true;
 				}
+			}
 
+			if (e.Key == Key.E)
+			{
+				keyE = true;
 			}
 
 			if (e.Key == Key.Return)
@@ -125,9 +132,32 @@ namespace Zitulmyth
 				keyD = false;
 			}
 
+			if (e.Key == Key.E)
+			{
+				keyE = false;
+			}
+
 			if (e.Key == Key.Return)
 			{
 				keyReturn = false;
+			}
+		}
+
+		public static void KeyInterval()
+		{
+			if (keyReturnInterval)
+			{
+				if(totalInterval + MainWindow.elapsedTime < 600)
+				{
+					totalInterval += MainWindow.elapsedTime;
+				}
+				else
+				{
+					keyReturnInterval = false;
+					totalInterval = 0;
+					
+				}
+				
 			}
 		}
 	}

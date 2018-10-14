@@ -99,37 +99,76 @@ namespace Zitulmyth
 				Canvas.SetLeft(imgMainWeapon, posx);
 				Canvas.SetTop(imgMainWeapon, posy);
 
-				if (rtMainWeapon.Angle < 360)
+				if (PlayerStatus.meleeDirection)
 				{
+					if (rtMainWeapon.Angle < 360)
+					{
 
-					double temp =  PlayerStatus.meleeSpeed;
-					
-
-					rtMainWeapon.Angle += Math.Round(temp,0);
-
-					double radian = rtMainWeapon.Angle * Math.PI /180;
+						double temp = PlayerStatus.meleeSpeed;
 
 
-					mainWeaponCollider[0] = new Vector(posx + 32 * Math.Cos(radian),
-														posy + 32 * Math.Sin(radian));
-					mainWeaponCollider[1] = new Vector(posx + 64 * Math.Cos(radian),
-														posy + 64 * Math.Sin(radian));
+						rtMainWeapon.Angle += Math.Round(temp, 0);
 
-					Canvas.SetLeft(imgColliderCheck[0], mainWeaponCollider[0].X);
-					Canvas.SetTop(imgColliderCheck[0], mainWeaponCollider[0].Y);
-					Canvas.SetLeft(imgColliderCheck[1], mainWeaponCollider[1].X);
-					Canvas.SetTop(imgColliderCheck[1], mainWeaponCollider[1].Y);
+						double radian = rtMainWeapon.Angle * Math.PI / 180;
 
+
+						mainWeaponCollider[0] = new Vector(posx + 32 * Math.Cos(radian),
+															posy + 32 * Math.Sin(radian));
+						mainWeaponCollider[1] = new Vector(posx + 64 * Math.Cos(radian),
+															posy + 64 * Math.Sin(radian));
+
+						Canvas.SetLeft(imgColliderCheck[0], mainWeaponCollider[0].X);
+						Canvas.SetTop(imgColliderCheck[0], mainWeaponCollider[0].Y);
+						Canvas.SetLeft(imgColliderCheck[1], mainWeaponCollider[1].X);
+						Canvas.SetTop(imgColliderCheck[1], mainWeaponCollider[1].Y);
+
+					}
+					else
+					{
+
+						rtMainWeapon.Angle = 270;
+						imgMainWeapon.Visibility = Visibility.Hidden;
+						PlayerStatus.isMainAttack = false;
+
+
+					}
 				}
 				else
 				{
+					if (rtMainWeapon.Angle >= 180)
+					{
 
-					rtMainWeapon.Angle = 270;
-					imgMainWeapon.Visibility = Visibility.Hidden;
-					PlayerStatus.isMainAttack = false;
+						double temp = PlayerStatus.meleeSpeed;
 
 
+						rtMainWeapon.Angle -= Math.Round(temp, 0);
+
+						double radian = rtMainWeapon.Angle * Math.PI / 180;
+
+
+						mainWeaponCollider[0] = new Vector(posx + 32 * Math.Cos(radian),
+															posy + 32 * Math.Sin(radian));
+						mainWeaponCollider[1] = new Vector(posx + 64 * Math.Cos(radian),
+															posy + 64 * Math.Sin(radian));
+
+						Canvas.SetLeft(imgColliderCheck[0], mainWeaponCollider[0].X);
+						Canvas.SetTop(imgColliderCheck[0], mainWeaponCollider[0].Y);
+						Canvas.SetLeft(imgColliderCheck[1], mainWeaponCollider[1].X);
+						Canvas.SetTop(imgColliderCheck[1], mainWeaponCollider[1].Y);
+
+					}
+					else
+					{
+
+						rtMainWeapon.Angle = 270;
+						imgMainWeapon.Visibility = Visibility.Hidden;
+						PlayerStatus.isMainAttack = false;
+
+
+					}
 				}
+
+				
 
 			}
 

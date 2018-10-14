@@ -29,18 +29,18 @@ namespace Zitulmyth
 
 		public static void AnimationObject()
 		{
-			for(int i = 0; i< Object.lstObject.Count; i++)
+			for(int i = 0; i< ObjectChecker.lstObject.Count; i++)
 			{
 
-				if(Object.lstObject[i].totalAnimTime < keyFlameTime)
+				if(ObjectChecker.lstObject[i].totalAnimTime < keyFlameTime)
 				{
 
-					Object.lstObject[i].totalAnimTime += MainWindow.elapsedTime;
+					ObjectChecker.lstObject[i].totalAnimTime += MainWindow.elapsedTime;
 
 				}
 				else
 				{
-					switch (Object.lstObject[i].objName)
+					switch (ObjectChecker.lstObject[i].objName)
 					{
 						case ObjectName.Obj_CampFire:
 
@@ -64,32 +64,32 @@ namespace Zitulmyth
 							break;
 					}
 
-					switch (Object.lstObject[i].keyFlame)
+					switch (ObjectChecker.lstObject[i].keyFlame)
 					{
 						case 0:
-							Object.lstObject[i].imgObject.Source = cbAnimCell[0];
+							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[0];
 							break;
 						case 1:
-							Object.lstObject[i].imgObject.Source = cbAnimCell[1];
+							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[1];
 							break;
 						case 2:
-							Object.lstObject[i].imgObject.Source = cbAnimCell[2];
+							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[2];
 							break;
 						case 3:
-							Object.lstObject[i].imgObject.Source = cbAnimCell[3];
+							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[3];
 							break;
 					}
 
-					if (Object.lstObject[i].keyFlame != 3)
+					if (ObjectChecker.lstObject[i].keyFlame != 3)
 					{
-						Object.lstObject[i].keyFlame++;
+						ObjectChecker.lstObject[i].keyFlame++;
 					}
 					else
 					{
-						Object.lstObject[i].keyFlame = 0;
+						ObjectChecker.lstObject[i].keyFlame = 0;
 					}
-					
-					Object.lstObject[i].totalAnimTime = 0;
+
+					ObjectChecker.lstObject[i].totalAnimTime = 0;
 
 
 				}

@@ -133,12 +133,16 @@ namespace Zitulmyth
 					this.GetNowTime();
 					elapsedTime = nowTime - lastTime;
 
-					NowTimeLabel.Content = elapsedTime.ToString();
+
+					NowTimeLabel.Content = PlayerStatus.isLadder.ToString();
 
 					if (elapsedTime < 0)
 					{
 						elapsedTime += 59999;
 					}
+
+
+					KeyController.KeyInterval();
 
 					//GameTransition
 					if (!GameTransition.duringTransition)
@@ -166,7 +170,7 @@ namespace Zitulmyth
 
 						if (!GameTransition.eventBalloonIsOpen)
 						{
-							if (GameTransition.eventCount < EventData.listEvent.Count)
+							if (GameTransition.eventCount < StageEvent.listEvent.Count)
 							{
 								GameTransition.EventController(Canvas);
 							}
@@ -189,6 +193,12 @@ namespace Zitulmyth
 					{
 						Animator.AnimationObject();
 
+						if (TalkCommander.isTalk && !TalkCommander.isTalkOpenBalloon)
+						{
+							TalkCommander.TalkWithNpc(Canvas);
+						}
+						
+
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
 						Item.FallingItems();
@@ -197,7 +207,7 @@ namespace Zitulmyth
 						SubWeapon.SubWeaponPosUpdate(Canvas);
 						MainWeapon.MainWeaponAttack(Canvas);
 
-						Object.CollisionPtoActionCollider();
+						ObjectChecker.CollisionPtoActionCollider();
 						PlayerBehavior.CollisionPtoE();
 						SubWeapon.CollisionSubWeapon(Canvas);
 
@@ -245,17 +255,41 @@ namespace Zitulmyth
 
 				case GameTransitionType.StageStart:
 
-					BalloonMessage.spnBalloon.Visibility = Visibility.Hidden;
-					BalloonMessage.txtBalloon.Text = "";
-					GameTransition.eventBalloonIsOpen = false;
+					if (!KeyController.keyReturnInterval)
+					{
+						BalloonMessage.spnBalloon.Visibility = Visibility.Hidden;
+						BalloonMessage.txtBalloon.Text = "";
+						GameTransition.eventBalloonIsOpen = false;
+
+						KeyController.keyReturnInterval = true;
+					}
+
+					break;
+
+				case GameTransitionType.StageDuring:
+
+					if (!KeyController.keyReturnInterval)
+					{
+						BalloonMessage.spnBalloon.Visibility = Visibility.Hidden;
+						BalloonMessage.txtBalloon.Text = "";
+						TalkCommander.isTalkOpenBalloon = false;
+
+						KeyController.keyReturnInterval = true;
+					}
+
 
 					break;
 
 				case GameTransitionType.StageEnd:
 
-					BalloonMessage.spnBalloon.Visibility = Visibility.Hidden;
-					BalloonMessage.txtBalloon.Text = "";
-					GameTransition.eventBalloonIsOpen = false;
+					if (!KeyController.keyReturnInterval)
+					{
+						BalloonMessage.spnBalloon.Visibility = Visibility.Hidden;
+						BalloonMessage.txtBalloon.Text = "";
+						GameTransition.eventBalloonIsOpen = false;
+
+						KeyController.keyReturnInterval = true;
+					}
 
 					break;
 			}
