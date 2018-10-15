@@ -131,6 +131,5 @@ namespace Zitulmyth
 		public int expirationTime;
 		public int totalTime;
 
-
 	}
 }

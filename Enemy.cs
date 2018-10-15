@@ -10,6 +10,15 @@ using System.Windows.Controls;
 
 namespace Zitulmyth
 {
+	public enum EnemyState
+	{
+		Spawn,
+		Idle,
+		Active,
+		Damage,
+		Death,
+	}
+
 	public class EnemyBehavior
 	{
 		private int enemyJumpCount = 0;
@@ -18,60 +27,160 @@ namespace Zitulmyth
 		private int jumpTotalLength = 0;
 		private int jumpMaxHeight = 64;
 
-		private void MoveEnemy()
+
+		public static void EnemyAction()
 		{
-			double posX = Canvas.GetLeft(EnemyData.lstSpawnEnemy[0].imgEnemy);
-			double posY = Canvas.GetTop(EnemyData.lstSpawnEnemy[0].imgEnemy);
 
-			if (enemyJumpCount == 0)
+			for(int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{
-				if (BlockCheck.BlockCheckTop(posX, posY, enemyJumpPower))
+				switch (SpawnEnemy.lstEnemyData[i].state)
 				{
-					if (posY - enemyJumpPower > 0)
-					{
-						enemyJumpCount++;
+					case EnemyState.Spawn:
+						SpawnEnemy.lstEnemyData[i].state = EnemyState.Idle;
+						break;
 
-						enemyJumping = true;
+					case EnemyState.Idle:
 
-					}
+						break;
+					case EnemyState.Active:
+						break;
+					case EnemyState.Damage:
+						break;
+					case EnemyState.Death:
+						break;
 				}
+
+
+				Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.X);
+				Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.Y);
 			}
 
-			if (enemyJumping)
+		}
+
+		private void EnemyHorizontalMove(int index, bool direction,Vector pos,int blockW,int speed,Vector target)
+		{
+			if (target.X < SpawnEnemy.lstEnemyData[index].totalDistance.X)
 			{
-				if (jumpTotalLength < jumpMaxHeight)
+
+				if (!direction)
 				{
-					posY -= enemyJumpPower;
-					jumpTotalLength += enemyJumpPower;
+					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y, speed))
+					{
+						if (pos.X - speed > 0)
+						{
+							pos.X -= speed;
+						}
+						else
+						{
+							SpawnEnemy.lstEnemyData[index].targetDistance = new Vector(0, SpawnEnemy.lstEnemyData[index].targetDistance.Y);
+							SpawnEnemy.lstEnemyData[index].direction = true;
+						}
+
+						SpawnEnemy.lstEnemyData[index].direction = false;
+					}
+
 				}
 				else
 				{
-					enemyJumping = false;
-					jumpTotalLength = 0;
+
+					if (!BlockCheck.BlockCheckRight(pos.X + blockW * 32, pos.Y, speed))
+					{
+
+						if (pos.X + speed < 992)
+						{
+							pos.X += speed;
+						}
+						else
+						{
+							SpawnEnemy.lstEnemyData[index].targetDistance = new Vector(0, SpawnEnemy.lstEnemyData[index].targetDistance.Y);
+							SpawnEnemy.lstEnemyData[index].direction = false;
+						}
+
+						SpawnEnemy.lstEnemyData[index].direction = true;
+
+					}
+
 				}
+
+				SpawnEnemy.lstEnemyData[index].position.X = pos.X;
+				SpawnEnemy.lstEnemyData[index].totalDistance.X += pos.X;
+			}
+			else
+			{
+				SpawnEnemy.lstEnemyData[index].targetDistance = new Vector(0, SpawnEnemy.lstEnemyData[index].targetDistance.Y);
 			}
 
-			Canvas.SetLeft(EnemyData.lstSpawnEnemy[0].imgEnemy, posX);
-			Canvas.SetTop(EnemyData.lstSpawnEnemy[0].imgEnemy, posY);
 		}
 
-		private void FallingEnemy()
+		public void EnemyJumping(int index, bool direction, Vector pos, int blockW, int speed, Vector target)
 		{
 
-			double posX = Canvas.GetLeft(EnemyData.lstSpawnEnemy[0].imgEnemy);
-			double posY = Canvas.GetTop(EnemyData.lstSpawnEnemy[0].imgEnemy);
-
-
-			if (!BlockCheck.BlockCheckBottom(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight))
+			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].jumpPower))
 			{
-				if (posY + 32 < 23 * 32)
+				if (pos.Y - SpawnEnemy.lstEnemyData[index].jumpPower > 0)
 				{
-					posY += PlayerStatus.weight;
+					SpawnEnemy.lstEnemyData[index].jumpCount++;
+
+					SpawnEnemy.lstEnemyData[index].isJumping = true;
+				}
+			}
+
+
+			if (SpawnEnemy.lstEnemyData[index].isJumping)
+			{
+				if (SpawnEnemy.lstEnemyData[index].jumpTotalLength < SpawnEnemy.lstEnemyData[index].jumpMaxHeight)
+				{
+					pos.Y -= SpawnEnemy.lstEnemyData[index].jumpPower;
+
+					SpawnEnemy.lstEnemyData[index].jumpTotalLength += SpawnEnemy.lstEnemyData[index].jumpPower;
+				}
+				else
+				{
+					SpawnEnemy.lstEnemyData[index].isJumping = false;
+					SpawnEnemy.lstEnemyData[index].jumpTotalLength = 0;
+				}
+			}
+
+		}
+
+		private void EnemyFalling(int index, bool direction, Vector pos, int blockW,int blockH, int speed, Vector target)
+		{
+
+			if (!SpawnEnemy.lstEnemyData[index].isLadder && !BlockCheck.BlockCheckTopLadder(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].weight))
+			{
+				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].weight,blockH)) &&
+					!BlockCheck.BlockCheckOnPlat(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].weight, blockH))
+				{
+					pos.Y += SpawnEnemy.lstEnemyData[index].weight;
+					
+					if (!PlayerStatus.fallingStart)
+					{
+						PlayerStatus.fallingStartPoint = pos.Y;
+					}
+					PlayerStatus.fallingStart = true;
+
+				}
+				else
+				{
+					if (PlayerStatus.fallingStart)
+					{
+						int block = 0;
+
+						block = (int)(pos.Y - PlayerStatus.fallingStartPoint) / 32;
+
+						if (block > PlayerStatus.fallingEndure)
+						{
+							Sound.seDamage.Play();
+						}
+					}
+
+					PlayerStatus.fallingStart = false;
+					PlayerStatus.isGround = true;
+					PlayerStatus.jumpCount = 0;
 				}
 
 			}
 
-			Canvas.SetTop(EnemyData.lstSpawnEnemy[0].imgEnemy, posY);
 		}
 
 	}
@@ -79,7 +188,9 @@ namespace Zitulmyth
 
 	public class SpawnEnemy
 	{
-		
+
+		public static List<EnemyData> lstEnemyData = new List<EnemyData>();
+
 		public static void SpawnSelect(Canvas canvas,EnemyName name){
 
 			int seed = Environment.TickCount;
@@ -118,35 +229,53 @@ namespace Zitulmyth
 		//Generaters
 		public static void GenerateEnemy(Canvas canvas, Vector setpos)
 		{
-			var _imgEnemy = new Image()
+
+			lstEnemyData.Add(SetEnemyData(EnemyName.Zigytu01,setpos,false));
+
+			int index = lstEnemyData.Count - 1;
+
+			canvas.Children.Add(lstEnemyData[index].imgEnemy);
+
+			Canvas.SetLeft(lstEnemyData[index].imgEnemy, lstEnemyData[index].position.X);
+			Canvas.SetTop(lstEnemyData[index].imgEnemy, lstEnemyData[index].position.Y);
+		}
+
+		public static EnemyData SetEnemyData(EnemyName name, Vector setpos,bool dir)
+		{
+			var enemy = new EnemyData();
+			
+			switch (name)
 			{
-				Source = ImageData.cbEnemy[1],
-				Width = 32,
-				Height = 64,
-			};
+				case EnemyName.Zigytu01:
 
-			var enemy = new SpawnEnemyList
-			{
-				enemyName = EnemyName.Zigytu01,
-				enemyHp = 1,
-				enemySize = new Vector(32, 64),
-				enemyStartPos = setpos,
-				enemyOfePower = 0,
-				enemyDefPower = 0,
-				enemySpeed = 0,
-				enemyWeight = 1,
-				imgEnemy = _imgEnemy,
-				deathEffect = EnemyDeathEffect.Pop,
-			};
+					enemy = new EnemyData
+					{
+						name = EnemyName.Zigytu01,
+						speed = 4, life = 2, ofepower = 1, defpower = 0, weight = 6, direction = dir,
+						state = EnemyState.Spawn,
+						pixSize = new Vector(32, 64), position = setpos, triggerArea = new Vector(32, 64), widthblock = 1,heightblock = 2,
+						imgEnemy = new Image(){ Source = ImageData.cbEnemy[1],Width = 32,Height = 64},
+						deathEvent = EnemyDeathEvent.Pop,
+					};
 
-			EnemyData.lstSpawnEnemy.Add(enemy);
+					break;
 
-			int index = EnemyData.lstSpawnEnemy.Count - 1;
+				case EnemyName.Boar:
 
-			canvas.Children.Add(EnemyData.lstSpawnEnemy[index].imgEnemy);
+					enemy = new EnemyData
+					{
+						name = EnemyName.Zigytu01,
+						speed = 4, life = 2, ofepower = 1, defpower = 0, weight = 6,direction = dir,
+						state = EnemyState.	Spawn,
+						pixSize = new Vector(32, 64), position = setpos, triggerArea = new Vector(32, 64), widthblock = 1,heightblock = 2,
+						imgEnemy = new Image() { Source = (!dir)?ImageData.cbBoar[1]:ImageData.cbBoar[0], Width = 64, Height = 32},
+						deathEvent = EnemyDeathEvent.Pop,
+					};
 
-			Canvas.SetLeft(EnemyData.lstSpawnEnemy[index].imgEnemy, EnemyData.lstSpawnEnemy[index].enemyStartPos.X);
-			Canvas.SetTop(EnemyData.lstSpawnEnemy[index].imgEnemy, EnemyData.lstSpawnEnemy[index].enemyStartPos.Y);
+					break;
+			}
+			
+			return enemy;
 		}
 	}
 }

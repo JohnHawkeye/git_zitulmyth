@@ -202,7 +202,7 @@ namespace Zitulmyth
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
 						Item.FallingItems();
-						//this.MoveEnemy();
+						EnemyBehavior.EnemyAction();
 						//this.FallingEnemy();
 						SubWeapon.SubWeaponPosUpdate(Canvas);
 						MainWeapon.MainWeaponAttack(Canvas);

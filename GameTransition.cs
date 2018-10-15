@@ -264,7 +264,7 @@ namespace Zitulmyth
 									StageEvent.listEvent[eventCount].imgTarget.Source = StageEvent.listEvent[eventCount].imgSource;
 									break;
 								case TargetType.Enemy:
-									EnemyData.lstSpawnEnemy[0].imgEnemy.Source = StageEvent.listEvent[eventCount].imgSource;
+									SpawnEnemy.lstEnemyData[0].imgEnemy.Source = StageEvent.listEvent[eventCount].imgSource;
 									break;
 								case TargetType.Object:
 

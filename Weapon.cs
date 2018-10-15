@@ -257,15 +257,15 @@ namespace Zitulmyth
 
 		public static void CollisionSubWeapon(Canvas canvas)
 		{
-			for (int i = 0; i < EnemyData.lstSpawnEnemy.Count; i++)
+			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{
 				if (ImageData.imgSubWeapon.Count >= 1)
 				{
 					Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgSubWeapon[0]), Canvas.GetTop(ImageData.imgSubWeapon[0]));
 					Vector size1 = new Vector(32, 32);
 
-					Vector p2 = new Vector(Canvas.GetLeft(EnemyData.lstSpawnEnemy[i].imgEnemy), Canvas.GetTop(EnemyData.lstSpawnEnemy[i].imgEnemy));
-					Vector size2 = new Vector(EnemyData.lstSpawnEnemy[i].enemySize.X, EnemyData.lstSpawnEnemy[i].enemySize.Y);
+					Vector p2 = new Vector(Canvas.GetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy), Canvas.GetTop(SpawnEnemy.lstEnemyData[i].imgEnemy));
+					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].pixSize.X, SpawnEnemy.lstEnemyData[i].pixSize.Y);
 
 					if (CollisionCheck.Collision(p1, p2, size1, size2))
 					{
@@ -280,14 +280,14 @@ namespace Zitulmyth
 							Sound.seStop = true;
 						}
 
-						EnemyData.lstSpawnEnemy[i].enemyHp -= 1;
+						SpawnEnemy.lstEnemyData[i].life -= 1;
 
-						if (EnemyData.lstSpawnEnemy[i].enemyHp <= 0)
+						if (SpawnEnemy.lstEnemyData[i].life <= 0)
 						{
 							bool popOn = false;
 							EnemyName name = EnemyName.Zigytu01;
 
-							if (EnemyData.lstSpawnEnemy[i].deathEffect == EnemyDeathEffect.Pop)
+							if (SpawnEnemy.lstEnemyData[i].deathEvent == EnemyDeathEvent.Pop)
 							{
 								if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 								{
@@ -296,8 +296,8 @@ namespace Zitulmyth
 
 							}
 
-							canvas.Children.Remove(EnemyData.lstSpawnEnemy[i].imgEnemy);
-							EnemyData.lstSpawnEnemy.RemoveAt(i);
+							canvas.Children.Remove(SpawnEnemy.lstEnemyData[i].imgEnemy);
+							SpawnEnemy.lstEnemyData.RemoveAt(i);
 							GameTransition.numKillEnemy++;
 							Console.WriteLine(GameTransition.numKillEnemy);
 

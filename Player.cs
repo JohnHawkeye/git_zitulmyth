@@ -336,15 +336,15 @@ namespace Zitulmyth
 
 			if (!PlayerStatus.flagDamaged)
 			{
-				for (int i = 0; i < EnemyData.lstSpawnEnemy.Count; i++)
+				for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 				{
 
 					Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
 					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
 
-					Vector p2 = new Vector(Canvas.GetLeft(EnemyData.lstSpawnEnemy[i].imgEnemy),
-											Canvas.GetTop(EnemyData.lstSpawnEnemy[i].imgEnemy));
-					Vector size2 = new Vector(EnemyData.lstSpawnEnemy[i].enemySize.X, EnemyData.lstSpawnEnemy[i].enemySize.Y);
+					Vector p2 = new Vector(Canvas.GetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy),
+											Canvas.GetTop(SpawnEnemy.lstEnemyData[i].imgEnemy));
+					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].pixSize.X, SpawnEnemy.lstEnemyData[i].pixSize.Y);
 
 					if (CollisionCheck.Collision(p1, p2, size1, size2))
 					{
@@ -358,7 +358,7 @@ namespace Zitulmyth
 
 						if (PlayerStatus.playerNowHp > 0)
 						{
-							PlayerStatus.playerNowHp -= EnemyData.lstSpawnEnemy[i].enemyOfePower;
+							PlayerStatus.playerNowHp -= SpawnEnemy.lstEnemyData[i].ofepower;
 						}
 
 						PlayerStatus.flagDamaged = true;

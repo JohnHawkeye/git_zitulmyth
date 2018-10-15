@@ -52,6 +52,16 @@ namespace Zitulmyth
 			}
 
 			Item.ItemGenerate(canvas);
+
+			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
+			{
+
+				canvas.Children.Add(SpawnEnemy.lstEnemyData[i].imgEnemy);
+				Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].startPos.X);
+				Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].startPos.Y);
+				Canvas.SetZIndex(SpawnEnemy.lstEnemyData[i].imgEnemy,6);
+
+			}
 		}
 	}
 }
