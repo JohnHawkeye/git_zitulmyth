@@ -20,7 +20,7 @@ namespace Zitulmyth
 {
 	public class PlayerStatus
 	{
-
+		
 		//player parameters
 		public static int playerMaxHp = 3;
 		public static int playerNowHp;
@@ -29,6 +29,7 @@ namespace Zitulmyth
 		public static int damageInvincibleTotal = 0;
 		public static int damageInvincible = 60;
 		public static bool flagDamaged = false;
+		public static EquipWeaponName equipWeapon = EquipWeaponName.None;
 
 		public static Vector playerSize = new Vector(32, 64);//for pixel calculation
 		public static int playerWidth = 1;	//block num
@@ -39,14 +40,14 @@ namespace Zitulmyth
 		public static int moveSpeed = 2;
 		public static bool isMove = false;
 		public static bool isGround = false;
-		public static int meleeSpeed = 2;
+		public static int meleeSpeed = 4;
 		public static bool meleeDirection = false;
 		public static bool isMainAttack = false;
 
 		public static int jumpPower = 12;
 		public static int jumpCount = 0;
 		public static int jumpMaxHeight = 96;
-		public static int jumpTotalLength = 0;
+		public static double jumpTotalLength = 0;
 		public static bool jumping = false;
 		public static int fallingEndure = 3;
 		public static bool fallingStart = false;
@@ -82,11 +83,11 @@ namespace Zitulmyth
 
 			if (KeyController.keyLeft)
 			{
-				if (!BlockCheck.BlockCheckLeft(posX, posY, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckLeft(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.moveSpeed))
 				{
-					if (posX - PlayerStatus.moveSpeed > 0)
+					if (posX - SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed > 0)
 					{
-						posX -= PlayerStatus.moveSpeed;
+						posX -= SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
 					}
 					PlayerStatus.playerDirection = false;
 				}
@@ -95,12 +96,12 @@ namespace Zitulmyth
 
 			if (KeyController.keyRight)
 			{
-				if (!BlockCheck.BlockCheckRight(posX, posY, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckRight(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.moveSpeed))
 				{
 
-					if (posX + PlayerStatus.moveSpeed < 992)
+					if (posX + SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed < 992)
 					{
-						posX += PlayerStatus.moveSpeed;
+						posX += SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
 					}
 					PlayerStatus.playerDirection = true;
 
@@ -122,9 +123,9 @@ namespace Zitulmyth
 			{
 				if (BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed))
 				{
-					if (posY - PlayerStatus.moveSpeed > 0)
+					if (posY - SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed > 0)
 					{
-						posY -= PlayerStatus.moveSpeed;
+						posY -= SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
 					}
 				}
 
@@ -134,20 +135,20 @@ namespace Zitulmyth
 			{
 				//ladder
 				if ((BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed) ||
-					BlockCheck.BlockCheckTopLadder(posX, posY, PlayerStatus.weight))&&
+					BlockCheck.BlockCheckTopLadder(posX, posY + PlayerStatus.playerHeight*32, PlayerStatus.weight))&&
 					!BlockCheck.BlockCheckGround(posX, posY, PlayerStatus.weight))
 				{
-					if (posY + PlayerStatus.moveSpeed < 768)
+					if (posY + SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed < 768)
 					{
-						posY += PlayerStatus.moveSpeed;
+						posY += SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
 					}
 				}
 
-				if (BlockCheck.BlockCheckOnPlat(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight))
+				if (BlockCheck.BlockCheckOnPlat(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.weight))
 				{
-					if (posY + PlayerStatus.moveSpeed < 768)
+					if (posY + SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed < 768)
 					{
-						posY += PlayerStatus.moveSpeed;
+						posY += SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
 					}
 				}
 
@@ -194,9 +195,9 @@ namespace Zitulmyth
 			{
 				if (PlayerStatus.jumpTotalLength < PlayerStatus.jumpMaxHeight)
 				{
-					posY -= PlayerStatus.jumpPower;
+					posY -= SystemOperator.BlockPerSecond() * PlayerStatus.jumpPower;
 
-					PlayerStatus.jumpTotalLength += PlayerStatus.jumpPower;
+					PlayerStatus.jumpTotalLength += SystemOperator.BlockPerSecond() * PlayerStatus.jumpPower;
 				}
 				else
 				{
@@ -277,16 +278,15 @@ namespace Zitulmyth
 		{
 			double posX = Canvas.GetLeft(ImageData.imgPlayer);
 			double posY = Canvas.GetTop(ImageData.imgPlayer);
-
-			if (!PlayerStatus.isLadder && !BlockCheck.BlockCheckTopLadder(posX,posY,PlayerStatus.weight))
+			
+			if (!PlayerStatus.isLadder && !BlockCheck.BlockCheckTopLadder(posX,posY + PlayerStatus.playerHeight * 32 ,PlayerStatus.weight))
 			{
-				if ((!BlockCheck.BlockCheckBottom(posX, posY, PlayerStatus.weight,PlayerStatus.playerHeight))&&
-					!BlockCheck.BlockCheckOnPlat(posX, posY, PlayerStatus.weight, PlayerStatus.playerHeight))
+				if ((!BlockCheck.BlockCheckBottom(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.weight))&&
+					!BlockCheck.BlockCheckOnPlat(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.weight))
 				{
-					if (posY + 32 < 23 * 32)
-					{
-						posY += PlayerStatus.weight;
-					}
+
+					posY += SystemOperator.BlockPerSecond() * PlayerStatus.weight;
+
 
 					if (!PlayerStatus.fallingStart)
 					{
@@ -398,6 +398,7 @@ namespace Zitulmyth
 
 						if(Item.lstItemData[i].itemName == ItemName.TreeBranch)
 						{
+							PlayerStatus.equipWeapon = EquipWeaponName.TreeBranch;
 							MainWeapon.SetMainWeapon();
 						}
 

@@ -28,6 +28,7 @@ namespace Zitulmyth
 
 		public static MediaElement bgm = new MediaElement();
 		public static MediaElement seChannelA = new MediaElement();
+		public static MediaElement seChannelB = new MediaElement();
 
 		
 
@@ -43,10 +44,14 @@ namespace Zitulmyth
 			seChannelA.Source = new Uri(dirpath + "\\itemget.wav", UriKind.Absolute);
 			seChannelA.LoadedBehavior = MediaState.Manual;
 
+			canvas.Children.Add(seChannelB);
+			seChannelB.Source = new Uri(dirpath + "\\shock.wav", UriKind.Absolute);
+			seChannelB.LoadedBehavior = MediaState.Manual;
+
 			canvas.Children.Add(bgm);
-			bgm.Source = new Uri(dirpath + "\\darkness.wav", UriKind.Absolute);
+			bgm.Source = new Uri(dirpath + "\\opening.mp3", UriKind.Absolute);
 			bgm.LoadedBehavior = MediaState.Manual;
-			//bgm.Play();
+			bgm.Play();
 		}
 
 

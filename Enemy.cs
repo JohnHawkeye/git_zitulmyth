@@ -7,6 +7,7 @@ using Zitulmyth.Checking;
 using Zitulmyth.Data;
 using System.Windows;
 using System.Windows.Controls;
+using static Zitulmyth.SpawnEnemy;
 
 namespace Zitulmyth
 {
@@ -15,174 +16,251 @@ namespace Zitulmyth
 		Spawn,
 		Idle,
 		Active,
-		Damage,
 		Death,
 	}
 
 	public class EnemyBehavior
 	{
-		private int enemyJumpCount = 0;
-		private int enemyJumpPower = 8;
-		private bool enemyJumping = false;
-		private int jumpTotalLength = 0;
-		private int jumpMaxHeight = 64;
+		public static int timeSeed = Environment.TickCount;
+		public static Random randomNum;
 
 
 		public static void EnemyAction()
 		{
 
-			for(int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
+			for (int i = 0; i < lstEnemyData.Count; i++)
 			{
-				switch (SpawnEnemy.lstEnemyData[i].state)
+
+				if (lstEnemyData[i].isDamage)
+				{
+					EnemyInvincibleTimeCount(i);
+				}
+				
+				EnemyFalling(i,lstEnemyData[i].direction, lstEnemyData[i].position,
+					lstEnemyData[i].widthblock, lstEnemyData[i].heightblock,lstEnemyData[i].speed, lstEnemyData[i].targetDistance);
+
+				switch (lstEnemyData[i].state)
 				{
 					case EnemyState.Spawn:
-						SpawnEnemy.lstEnemyData[i].state = EnemyState.Idle;
+						lstEnemyData[i].state = EnemyState.Idle;
 						break;
 
 					case EnemyState.Idle:
 
+						if (!lstEnemyData[i].isWaiting)
+						{
+							EnemyIdle(i);
+						}
+						else { EnemyWaiting(i); }
+						
+
 						break;
+
 					case EnemyState.Active:
 						break;
-					case EnemyState.Damage:
-						break;
+
 					case EnemyState.Death:
 						break;
 				}
 
 
-				Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.X);
-				Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.Y);
+				Canvas.SetLeft(lstEnemyData[i].imgEnemy, lstEnemyData[i].position.X);
+				Canvas.SetTop(lstEnemyData[i].imgEnemy, lstEnemyData[i].position.Y);
 			}
 
 		}
 
-		private void EnemyHorizontalMove(int index, bool direction,Vector pos,int blockW,int speed,Vector target)
+		private static void EnemyHorizontalMove(int index, bool direction,Vector pos,int blockW,int blockH,int speed,Vector target)
 		{
-			if (target.X < SpawnEnemy.lstEnemyData[index].totalDistance.X)
+
+			if (lstEnemyData[index].totalDistance.X < target.X )
 			{
 
 				if (!direction)
 				{
-					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y, speed))
+					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y + blockH * 32, speed))
 					{
-						if (pos.X - speed > 0)
+						if (pos.X - SystemOperator.BlockPerSecond() * speed > 0)
 						{
-							pos.X -= speed;
+							pos.X -= SystemOperator.BlockPerSecond() * speed;
 						}
 						else
 						{
-							SpawnEnemy.lstEnemyData[index].targetDistance = new Vector(0, SpawnEnemy.lstEnemyData[index].targetDistance.Y);
-							SpawnEnemy.lstEnemyData[index].direction = true;
+							lstEnemyData[index].targetDistance = new Vector(0, lstEnemyData[index].targetDistance.Y);
+							lstEnemyData[index].direction = true;
 						}
 
-						SpawnEnemy.lstEnemyData[index].direction = false;
 					}
 
 				}
 				else
 				{
 
-					if (!BlockCheck.BlockCheckRight(pos.X + blockW * 32, pos.Y, speed))
+					if (!BlockCheck.BlockCheckRight(pos.X + blockW * 32, pos.Y + blockH * 32, speed))
 					{
 
-						if (pos.X + speed < 992)
+						if (pos.X + SystemOperator.BlockPerSecond() * speed < 992)
 						{
-							pos.X += speed;
+							pos.X += SystemOperator.BlockPerSecond() * speed;
 						}
 						else
 						{
-							SpawnEnemy.lstEnemyData[index].targetDistance = new Vector(0, SpawnEnemy.lstEnemyData[index].targetDistance.Y);
-							SpawnEnemy.lstEnemyData[index].direction = false;
+							lstEnemyData[index].targetDistance = new Vector(0, lstEnemyData[index].targetDistance.Y);
+							lstEnemyData[index].direction = false;
 						}
-
-						SpawnEnemy.lstEnemyData[index].direction = true;
 
 					}
 
 				}
 
-				SpawnEnemy.lstEnemyData[index].position.X = pos.X;
-				SpawnEnemy.lstEnemyData[index].totalDistance.X += pos.X;
+				lstEnemyData[index].position.X = pos.X;
+				lstEnemyData[index].totalDistance.X += SystemOperator.BlockPerSecond() * speed; ;
 			}
 			else
 			{
-				SpawnEnemy.lstEnemyData[index].targetDistance = new Vector(0, SpawnEnemy.lstEnemyData[index].targetDistance.Y);
+				lstEnemyData[index].targetDistance = new Vector(0, 0);
+				lstEnemyData[index].totalDistance = new Vector(0, 0);
+				lstEnemyData[index].isWaiting = true;
+				lstEnemyData[index].totalWaitTime = 0;
+				lstEnemyData[index].targetWaitTime = 2000;
+				lstEnemyData[index].isMovingH = false;
 			}
 
 		}
 
-		public void EnemyJumping(int index, bool direction, Vector pos, int blockW, int speed, Vector target)
+		private static void EnemyWaiting(int index)
+		{
+			if(lstEnemyData[index].totalWaitTime< lstEnemyData[index].targetWaitTime)
+			{
+				lstEnemyData[index].totalWaitTime += MainWindow.elapsedTime;
+			}
+			else
+			{
+				lstEnemyData[index].isWaiting = false;
+			}
+		}
+
+		public void EnemyJumping(int index, bool direction, Vector pos, int blockW, int jumpPower, Vector target)
 		{
 
-			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].jumpPower))
+			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y,jumpPower))
 			{
-				if (pos.Y - SpawnEnemy.lstEnemyData[index].jumpPower > 0)
+				if (pos.Y - SystemOperator.BlockPerSecond() * jumpPower > 0)
 				{
-					SpawnEnemy.lstEnemyData[index].jumpCount++;
+					lstEnemyData[index].jumpCount++;
 
-					SpawnEnemy.lstEnemyData[index].isJumping = true;
+					lstEnemyData[index].isJumping = true;
 				}
 			}
 
 
-			if (SpawnEnemy.lstEnemyData[index].isJumping)
+			if (lstEnemyData[index].isJumping)
 			{
-				if (SpawnEnemy.lstEnemyData[index].jumpTotalLength < SpawnEnemy.lstEnemyData[index].jumpMaxHeight)
+				if (lstEnemyData[index].jumpTotalLength < lstEnemyData[index].jumpMaxHeight)
 				{
-					pos.Y -= SpawnEnemy.lstEnemyData[index].jumpPower;
-
-					SpawnEnemy.lstEnemyData[index].jumpTotalLength += SpawnEnemy.lstEnemyData[index].jumpPower;
+					lstEnemyData[index].position.Y -= SystemOperator.BlockPerSecond() * jumpPower;
+					lstEnemyData[index].jumpTotalLength += SystemOperator.BlockPerSecond() * jumpPower;
 				}
 				else
 				{
-					SpawnEnemy.lstEnemyData[index].isJumping = false;
-					SpawnEnemy.lstEnemyData[index].jumpTotalLength = 0;
+					lstEnemyData[index].isJumping = false;
+					lstEnemyData[index].jumpTotalLength = 0;
 				}
 			}
 
 		}
 
-		private void EnemyFalling(int index, bool direction, Vector pos, int blockW,int blockH, int speed, Vector target)
+		private static void EnemyFalling(int index, bool direction, Vector pos, int blockW,int blockH, int speed, Vector target)
 		{
 
-			if (!SpawnEnemy.lstEnemyData[index].isLadder && !BlockCheck.BlockCheckTopLadder(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].weight))
+			if (!lstEnemyData[index].isLadder && !BlockCheck.BlockCheckTopLadder(pos.X, pos.Y+blockH * 32, lstEnemyData[index].weight))
 			{
-				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].weight,blockH)) &&
-					!BlockCheck.BlockCheckOnPlat(pos.X, pos.Y, SpawnEnemy.lstEnemyData[index].weight, blockH))
+				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y + blockH *32, lstEnemyData[index].weight)) &&
+					!BlockCheck.BlockCheckOnPlat(pos.X, pos.Y + blockH * 32, lstEnemyData[index].weight))
 				{
-					pos.Y += SpawnEnemy.lstEnemyData[index].weight;
 					
-					if (!PlayerStatus.fallingStart)
+					lstEnemyData[index].position.Y += SystemOperator.BlockPerSecond()*lstEnemyData[index].weight;
+					
+					if (!lstEnemyData[index].isFalling)
 					{
-						PlayerStatus.fallingStartPoint = pos.Y;
+						lstEnemyData[index].fallingStartPoint = pos.Y;
 					}
-					PlayerStatus.fallingStart = true;
+
+					lstEnemyData[index].isFalling = true;
 
 				}
 				else
 				{
-					if (PlayerStatus.fallingStart)
+					if (lstEnemyData[index].isFalling)
 					{
 						int block = 0;
 
-						block = (int)(pos.Y - PlayerStatus.fallingStartPoint) / 32;
+						block = (int)(pos.Y - lstEnemyData[index].fallingStartPoint) / 32;
 
-						if (block > PlayerStatus.fallingEndure)
+						if (block > lstEnemyData[index].fallingEndure)
 						{
-							Sound.seDamage.Play();
+							Sound.seChannelB.Play();
+							lstEnemyData[index].life -= 1;
+
 						}
 					}
 
-					PlayerStatus.fallingStart = false;
-					PlayerStatus.isGround = true;
-					PlayerStatus.jumpCount = 0;
+					lstEnemyData[index].isFalling = false;
+					lstEnemyData[index].jumpCount = 0;
 				}
 
 			}
 
 		}
 
+		public static void EnemyIdle(int index)
+		{
+			bool radDir;
+			int num;
+
+
+			if (!lstEnemyData[index].isMovingH)
+			{
+
+				randomNum = new Random(timeSeed++);
+
+				num = randomNum.Next(1, 3);
+				radDir = (num == 1) ? false : true;
+
+				randomNum = new Random(timeSeed++);
+				lstEnemyData[index].direction = radDir;
+				lstEnemyData[index].targetDistance = new Vector(randomNum.Next(32, 96), 0);
+							
+
+				lstEnemyData[index].isMovingH = true;
+			}
+			
+			switch(lstEnemyData[index].name)
+			{
+				case EnemyName.Boar:
+					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position, 
+						lstEnemyData[index].widthblock, lstEnemyData[index].heightblock,
+						lstEnemyData[index].speed, lstEnemyData[index].targetDistance);
+
+					break;
+
+			}
+		}
+
+
+		public static void EnemyInvincibleTimeCount(int index)
+		{
+			if(lstEnemyData[index].totalInvincibleTime < 1000)
+			{
+				lstEnemyData[index].totalInvincibleTime += MainWindow.elapsedTime;
+				lstEnemyData[index].imgEnemy.Opacity = 0.5;
+			}
+			else
+			{
+				lstEnemyData[index].imgEnemy.Opacity = 1;
+				lstEnemyData[index].isDamage = false;
+			}
+		}
 	}
 
 
@@ -190,6 +268,7 @@ namespace Zitulmyth
 	{
 
 		public static List<EnemyData> lstEnemyData = new List<EnemyData>();
+
 
 		public static void SpawnSelect(Canvas canvas,EnemyName name){
 
@@ -264,10 +343,10 @@ namespace Zitulmyth
 
 					enemy = new EnemyData
 					{
-						name = EnemyName.Zigytu01,
-						speed = 4, life = 2, ofepower = 1, defpower = 0, weight = 6,direction = dir,
-						state = EnemyState.	Spawn,
-						pixSize = new Vector(32, 64), position = setpos, triggerArea = new Vector(32, 64), widthblock = 1,heightblock = 2,
+						name = EnemyName.Boar,
+						speed = 2, life = 4, ofepower = 1, defpower = 0, weight = 6,direction = dir,
+						state = EnemyState.Spawn,
+						pixSize = new Vector(32, 64), position = setpos, triggerArea = new Vector(32, 64), widthblock = 2,heightblock = 1,
 						imgEnemy = new Image() { Source = (!dir)?ImageData.cbBoar[1]:ImageData.cbBoar[0], Width = 64, Height = 32},
 						deathEvent = EnemyDeathEvent.Pop,
 					};

@@ -134,7 +134,7 @@ namespace Zitulmyth
 					elapsedTime = nowTime - lastTime;
 
 
-					NowTimeLabel.Content = PlayerStatus.isLadder.ToString();
+					NowTimeLabel.Content = elapsedTime.ToString();
 
 					if (elapsedTime < 0)
 					{
@@ -197,16 +197,22 @@ namespace Zitulmyth
 						{
 							TalkCommander.TalkWithNpc(Canvas);
 						}
-						
+
+						//first action,last Processing including deletion of list
 
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
 						Item.FallingItems();
 						EnemyBehavior.EnemyAction();
-						//this.FallingEnemy();
-						SubWeapon.SubWeaponPosUpdate(Canvas);
-						MainWeapon.MainWeaponAttack(Canvas);
 
+						SubWeapon.SubWeaponPosUpdate(Canvas);
+
+						if (PlayerStatus.isMainAttack)
+						{
+							MainWeapon.MainWeaponAttack(Canvas);
+							MainWeapon.MainWeaponCollision(Canvas);
+						}
+						
 						ObjectChecker.CollisionPtoActionCollider();
 						PlayerBehavior.CollisionPtoE();
 						SubWeapon.CollisionSubWeapon(Canvas);

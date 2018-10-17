@@ -59,7 +59,7 @@ namespace Zitulmyth
 
 						case ObjectName.Empty_Collider:
 
-							cbAnimCell[0] = cbAnimCell[1] = cbAnimCell[2] = cbAnimCell[3] = ImageData.cbDebug;
+							cbAnimCell[0] = cbAnimCell[1] = cbAnimCell[2] = cbAnimCell[3] = ImageData.cbDebug[0];
 
 							break;
 					}
