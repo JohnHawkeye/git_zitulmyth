@@ -34,8 +34,16 @@ namespace Zitulmyth
 				if (lstEnemyData[i].isDamage)
 				{
 					EnemyInvincibleTimeCount(i);
+
+					if (lstEnemyData[i].isKnockBack)
+					{
+
+						SystemOperator.BoundObject(i,lstEnemyData[i].position,
+							lstEnemyData[i].totalDistance, lstEnemyData[i].targetDistance, lstEnemyData[i].bps);
+					}
 				}
 				
+				if(!lstEnemyData[i].isKnockBack)
 				EnemyFalling(i,lstEnemyData[i].direction, lstEnemyData[i].position,
 					lstEnemyData[i].widthblock, lstEnemyData[i].heightblock,lstEnemyData[i].speed, lstEnemyData[i].targetDistance);
 
@@ -47,7 +55,7 @@ namespace Zitulmyth
 
 					case EnemyState.Idle:
 
-						if (!lstEnemyData[i].isWaiting)
+						if (!lstEnemyData[i].isWaiting && !lstEnemyData[i].isKnockBack)
 						{
 							EnemyIdle(i);
 						}
@@ -114,7 +122,7 @@ namespace Zitulmyth
 				}
 
 				lstEnemyData[index].position.X = pos.X;
-				lstEnemyData[index].totalDistance.X += SystemOperator.BlockPerSecond() * speed; ;
+				lstEnemyData[index].totalDistance.X += SystemOperator.BlockPerSecond() * speed;
 			}
 			else
 			{
@@ -344,7 +352,7 @@ namespace Zitulmyth
 					enemy = new EnemyData
 					{
 						name = EnemyName.Boar,
-						speed = 2, life = 4, ofepower = 1, defpower = 0, weight = 6,direction = dir,
+						speed = 2, life = 20, ofepower = 1, defpower = 0, weight = 6,direction = dir,
 						state = EnemyState.Spawn,
 						pixSize = new Vector(32, 64), position = setpos, triggerArea = new Vector(32, 64), widthblock = 2,heightblock = 1,
 						imgEnemy = new Image() { Source = (!dir)?ImageData.cbBoar[1]:ImageData.cbBoar[0], Width = 64, Height = 32},

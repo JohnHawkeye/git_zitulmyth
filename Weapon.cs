@@ -219,6 +219,14 @@ namespace Zitulmyth
 							SpawnEnemy.lstEnemyData[j].totalInvincibleTime = 0;
 
 
+							SpawnEnemy.lstEnemyData[j].isMovingH = false;
+
+							SpawnEnemy.lstEnemyData[j].totalDistance = new Vector(0, 0);
+							SpawnEnemy.lstEnemyData[j].bps = new Vector(0, 0);
+							SpawnEnemy.lstEnemyData[j].targetDistance = new Vector(64, 96);
+							SpawnEnemy.lstEnemyData[j].isKnockBack = true;
+							
+
 							if (!Sound.seStop)
 							{
 								Sound.seChannelB.Stop();
