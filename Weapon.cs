@@ -212,18 +212,17 @@ namespace Zitulmyth
 						Vector p2 = new Vector(SpawnEnemy.lstEnemyData[j].position.X, SpawnEnemy.lstEnemyData[j].position.Y);
 						Vector size2 = new Vector(SpawnEnemy.lstEnemyData[j].pixSize.X, SpawnEnemy.lstEnemyData[j].pixSize.Y);
 
-						if (CollisionCheck.Collision(p1, p2, size1, size2))
+						if (CollisionCheck.Collision(p1, p2, size1, size2)&&
+							SpawnEnemy.lstEnemyData[j].state != EnemyState.Death)
 						{
 
 							SpawnEnemy.lstEnemyData[j].isDamage = true;
 							SpawnEnemy.lstEnemyData[j].totalInvincibleTime = 0;
 
-
-							SpawnEnemy.lstEnemyData[j].isMovingH = false;
-
+							SpawnEnemy.lstEnemyData[j].universalvalue = 0;
 							SpawnEnemy.lstEnemyData[j].totalDistance = new Vector(0, 0);
 							SpawnEnemy.lstEnemyData[j].bps = new Vector(0, 0);
-							SpawnEnemy.lstEnemyData[j].targetDistance = new Vector(64, 96);
+							SpawnEnemy.lstEnemyData[j].targetDistance = new Vector(32, 32);
 							SpawnEnemy.lstEnemyData[j].isKnockBack = true;
 							
 
@@ -238,10 +237,8 @@ namespace Zitulmyth
 
 							if (SpawnEnemy.lstEnemyData[j].life <= 0)
 							{
-								canvas.Children.Remove(SpawnEnemy.lstEnemyData[j].imgEnemy);
-								SpawnEnemy.lstEnemyData.RemoveAt(j);
-								GameTransition.numKillEnemy++;
-								Console.WriteLine(GameTransition.numKillEnemy);
+								SpawnEnemy.lstEnemyData[j].isWaiting = false;
+								SpawnEnemy.lstEnemyData[j].state = EnemyState.Death;
 
 							}
 

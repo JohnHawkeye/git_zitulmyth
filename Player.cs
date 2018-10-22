@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Zitulmyth.Checking;
 using Zitulmyth.Data;
+using static Zitulmyth.PlayerStatus;
 
 namespace Zitulmyth
 {
@@ -32,6 +33,7 @@ namespace Zitulmyth
 		public static EquipWeaponName equipWeapon = EquipWeaponName.None;
 
 		public static Vector playerSize = new Vector(32, 64);//for pixel calculation
+		public static Vector playerPos;
 		public static int playerWidth = 1;	//block num
 		public static int playerHeight = 2;
 		public static int playerImageZindex = 7;
@@ -43,6 +45,11 @@ namespace Zitulmyth
 		public static int meleeSpeed = 4;
 		public static bool meleeDirection = false;
 		public static bool isMainAttack = false;
+		public static Vector knockBackTotalDis;
+		public static Vector knockBackBps;
+		public static Vector knockBackTargetDis;
+		public static double knockBackCountNum;
+		public static bool isKnockBack;
 
 		public static int jumpPower = 12;
 		public static int jumpCount = 0;
@@ -54,6 +61,7 @@ namespace Zitulmyth
 		public static double fallingStartPoint = 0;
 		public static bool isLadder = false;
 		public static bool isSquat = false;
+		public static bool boundDirection = false;
 
 
 		public static void PlayerStatusUpdate()
@@ -78,32 +86,31 @@ namespace Zitulmyth
 
 		public static void MovePlayer(Canvas canvas)
 		{
-			double posX = Canvas.GetLeft(ImageData.imgPlayer);
-			double posY = Canvas.GetTop(ImageData.imgPlayer);
+			playerPos = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
 
 			if (KeyController.keyLeft)
 			{
-				if (!BlockCheck.BlockCheckLeft(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckLeft(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed))
 				{
-					if (posX - SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed > 0)
+					if (playerPos.X - SystemOperator.BlockPerSecond() * moveSpeed > 0)
 					{
-						posX -= SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
+						playerPos.X -= SystemOperator.BlockPerSecond() * moveSpeed;
 					}
-					PlayerStatus.playerDirection = false;
+					playerDirection = false;
 				}
 
 			}
 
 			if (KeyController.keyRight)
 			{
-				if (!BlockCheck.BlockCheckRight(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.moveSpeed))
+				if (!BlockCheck.BlockCheckRight(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed))
 				{
 
-					if (posX + SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed < 992)
+					if (playerPos.X + SystemOperator.BlockPerSecond() * moveSpeed < 992)
 					{
-						posX += SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
+						playerPos.X += SystemOperator.BlockPerSecond() * moveSpeed;
 					}
-					PlayerStatus.playerDirection = true;
+					playerDirection = true;
 
 				}
 
@@ -111,21 +118,21 @@ namespace Zitulmyth
 
 			if(KeyController.keyLeft || KeyController.keyRight)
 			{
-				PlayerStatus.isMove = true;
+				isMove = true;
 			}
 			else
 			{
-				PlayerStatus.isMove = false;
+				isMove = false;
 			}
 
 			
 			if (KeyController.keyUp)
 			{
-				if (BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed))
+				if (BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y+playerHeight*32, moveSpeed))
 				{
-					if (posY - SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed > 0)
+					if (playerPos.Y - SystemOperator.BlockPerSecond() * moveSpeed > 0)
 					{
-						posY -= SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
+						playerPos.Y -= SystemOperator.BlockPerSecond() * moveSpeed;
 					}
 				}
 
@@ -134,75 +141,76 @@ namespace Zitulmyth
 			if (KeyController.keyDown)
 			{
 				//ladder
-				if ((BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed) ||
-					BlockCheck.BlockCheckTopLadder(posX, posY + PlayerStatus.playerHeight*32, PlayerStatus.weight))&&
-					!BlockCheck.BlockCheckGround(posX, posY, PlayerStatus.weight))
+				if ((BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed)  ||
+					BlockCheck.BlockCheckTopLadder(playerPos.X, playerPos.Y + playerHeight*32, weight))&&
+					!BlockCheck.BlockCheckGround(playerPos.X, playerPos.Y + playerHeight * 32, weight))
 				{
-					if (posY + SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed < 768)
+					if (playerPos.Y + SystemOperator.BlockPerSecond() * moveSpeed < 768)
 					{
-						posY += SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
+						playerPos.Y += SystemOperator.BlockPerSecond() * moveSpeed;
 					}
 				}
 
-				if (BlockCheck.BlockCheckOnPlat(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.weight))
+				if (BlockCheck.BlockCheckOnPlat(playerPos.X, playerPos.Y + playerHeight * 32, weight))
 				{
-					if (posY + SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed < 768)
+					if (playerPos.Y + SystemOperator.BlockPerSecond() * moveSpeed < 768)
 					{
-						posY += SystemOperator.BlockPerSecond() * PlayerStatus.moveSpeed;
+						playerPos.Y += SystemOperator.BlockPerSecond() * moveSpeed;
 					}
 				}
 
-				if (!PlayerStatus.isLadder)
+				if (!isLadder)
 				{
-					PlayerStatus.isSquat = true;
+					isSquat = true;
 
 				}
 
 			}
 			else
 			{
-				PlayerStatus.isSquat = false;
+				isSquat = false;
 			}
 
 
 			//laddercheck
-			if(!BlockCheck.BlockCheckLadder(posX, posY, PlayerStatus.moveSpeed)){
-				PlayerStatus.isLadder = false;
+			if(!BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed))
+			{
+				isLadder = false;
 				
 			}
 			else
 			{
-				PlayerStatus.isLadder = true;
-				PlayerStatus.fallingStartPoint = posY;
+				isLadder = true;
+				fallingStartPoint = playerPos.Y;
 			}
 
 
 			//jump
-			if (KeyController.keySpace && PlayerStatus.jumpCount == 0)
+			if (KeyController.keySpace && jumpCount == 0)
 			{
-				if (!BlockCheck.BlockCheckTop(posX, posY, PlayerStatus.jumpPower))
+				if (!BlockCheck.BlockCheckTop(playerPos.X, playerPos.Y, jumpPower))
 				{
-					if (posY - PlayerStatus.jumpPower > 0)
+					if (playerPos.Y - jumpPower > 0)
 					{
-						PlayerStatus.jumpCount++;
+						jumpCount++;
 
-						PlayerStatus.jumping = true;
+						jumping = true;
 					}
 				}
 			}
 
-			if (PlayerStatus.jumping)
+			if (jumping)
 			{
-				if (PlayerStatus.jumpTotalLength < PlayerStatus.jumpMaxHeight)
+				if (jumpTotalLength < jumpMaxHeight)
 				{
-					posY -= SystemOperator.BlockPerSecond() * PlayerStatus.jumpPower;
+					playerPos.Y -= SystemOperator.BlockPerSecond() * jumpPower;
 
-					PlayerStatus.jumpTotalLength += SystemOperator.BlockPerSecond() * PlayerStatus.jumpPower;
+					jumpTotalLength += SystemOperator.BlockPerSecond() * jumpPower;
 				}
 				else
 				{
-					PlayerStatus.jumping = false;
-					PlayerStatus.jumpTotalLength = 0;
+					jumping = false;
+					jumpTotalLength = 0;
 				}
 			}
 
@@ -216,18 +224,17 @@ namespace Zitulmyth
 			//Attack
 			if (KeyController.keyS)
 			{
-
-				SubWeapon.SubWeaponGenerate(canvas, posX, posY);
+				SubWeapon.SubWeaponGenerate(canvas, playerPos.X, playerPos.Y);
 
 			}
 
 			if (KeyController.keyD)
 			{
-				if(!PlayerStatus.isMainAttack)
+				if(!isMainAttack)
 				{
 					MainWeapon.imgMainWeapon.Visibility = Visibility.Visible;
-					PlayerStatus.meleeDirection = PlayerStatus.playerDirection;
-					PlayerStatus.isMainAttack = true;
+					meleeDirection = playerDirection;
+					isMainAttack = true;
 				}
 			}
 
@@ -239,11 +246,17 @@ namespace Zitulmyth
 				}
 			}
 
+			//if (isKnockBack)
+			//{
+			//	SystemOperator.BoundObject(SystemTargetName.Player, 0, new Vector(playerPos.X, playerPos.Y),
+			//		knockBackTotalDis, knockBackTargetDis, knockBackBps, knockBackCountNum);
+			//}
+
 	//image change
 			if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 			{
 
-				if (!PlayerStatus.playerDirection)
+				if (!playerDirection)
 				{
 					ImageData.imgPlayer.Source = ImageData.cbPlayer[1];
 				}
@@ -252,9 +265,9 @@ namespace Zitulmyth
 					ImageData.imgPlayer.Source = ImageData.cbPlayer[0];
 				}
 
-				if (PlayerStatus.isSquat)
+				if (isSquat)
 				{
-					if (!PlayerStatus.playerDirection)
+					if (!playerDirection)
 					{
 						ImageData.imgPlayer.Source = ImageData.cbPlayer[5];
 					}
@@ -264,83 +277,83 @@ namespace Zitulmyth
 					}
 				}
 
-				if (PlayerStatus.isLadder && (KeyController.keyUp || KeyController.keyDown))
+				if (isLadder && (KeyController.keyUp || KeyController.keyDown))
 				{
 					ImageData.imgPlayer.Source = ImageData.cbPlayer[6];
 				}
 			}
 
-			Canvas.SetLeft(ImageData.imgPlayer, posX);
-			Canvas.SetTop(ImageData.imgPlayer, posY);
+			Canvas.SetLeft(ImageData.imgPlayer, playerPos.X);
+			Canvas.SetTop(ImageData.imgPlayer, playerPos.Y);
 		}
 
 		public static void FallingPlayer()
 		{
-			double posX = Canvas.GetLeft(ImageData.imgPlayer);
-			double posY = Canvas.GetTop(ImageData.imgPlayer);
+			playerPos.X = Canvas.GetLeft(ImageData.imgPlayer);
+			playerPos.Y = Canvas.GetTop(ImageData.imgPlayer);
 			
-			if (!PlayerStatus.isLadder && !BlockCheck.BlockCheckTopLadder(posX,posY + PlayerStatus.playerHeight * 32 ,PlayerStatus.weight))
+			if (!isLadder && !BlockCheck.BlockCheckTopLadder(playerPos.X,playerPos.Y + playerHeight * 32 ,weight))
 			{
-				if ((!BlockCheck.BlockCheckBottom(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.weight))&&
-					!BlockCheck.BlockCheckOnPlat(posX, posY + PlayerStatus.playerHeight * 32, PlayerStatus.weight))
+				if ((!BlockCheck.BlockCheckBottom(playerPos.X, playerPos.Y + playerHeight * 32, weight))&&
+					!BlockCheck.BlockCheckOnPlat(playerPos.X, playerPos.Y + playerHeight * 32, weight))
 				{
+					if(!isKnockBack)
+					playerPos.Y += SystemOperator.BlockPerSecond() * weight;
 
-					posY += SystemOperator.BlockPerSecond() * PlayerStatus.weight;
 
-
-					if (!PlayerStatus.fallingStart)
+					if (!fallingStart)
 					{
-						PlayerStatus.fallingStartPoint = posY;
+						fallingStartPoint = playerPos.Y;
 					}
-					PlayerStatus.fallingStart = true;
-					PlayerStatus.isGround = false;
+					fallingStart = true;
+					isGround = false;
 				}
 				else
 				{
-					if (PlayerStatus.fallingStart)
+					if (fallingStart)
 					{
 						int block = 0;
 
-						block = (int)(posY - PlayerStatus.fallingStartPoint)/32;
+						block = (int)(playerPos.Y - fallingStartPoint)/32;
 
-						if (block > PlayerStatus.fallingEndure)
+						if (block > fallingEndure)
 						{
 							Sound.seDamage.Play();
 						}
 					}
-					PlayerStatus.fallingStart = false;
-					PlayerStatus.isGround = true;
-					PlayerStatus.jumpCount = 0;
+					fallingStart = false;
+					isGround = true;
+					jumpCount = 0;
 				}
 
-				Canvas.SetTop(ImageData.imgPlayer, posY);
+				Canvas.SetTop(ImageData.imgPlayer, playerPos.Y);
 			}
 			
 		}
 
 		public static void DamageInvinsibleTimer()
 		{
-			if (PlayerStatus.damageInvincibleTotal < PlayerStatus.damageInvincible)
+			if (damageInvincibleTotal < damageInvincible)
 			{
-				PlayerStatus.damageInvincibleTotal++;
+				damageInvincibleTotal++;
 			}
 			else
 			{
-				PlayerStatus.damageInvincibleTotal = 0;
-				PlayerStatus.flagDamaged = false;
+				damageInvincibleTotal = 0;
+				flagDamaged = false;
 			}
 		}
 
 		public static void CollisionPtoE()
 		{
 
-			if (!PlayerStatus.flagDamaged)
+			if (!flagDamaged)
 			{
 				for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 				{
 
 					Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
-					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
+					Vector size1 = new Vector(playerSize.X, playerSize.Y);
 
 					Vector p2 = new Vector(Canvas.GetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy),
 											Canvas.GetTop(SpawnEnemy.lstEnemyData[i].imgEnemy));
@@ -356,13 +369,25 @@ namespace Zitulmyth
 							Sound.seStop = true;
 						}
 
-						if (PlayerStatus.playerNowHp > 0)
+						//if (!isKnockBack)
+						//{
+						//	KeyController.keyControlLocking = true;
+						//	knockBackTotalDis = new Vector(0, 0);
+						//	knockBackBps = new Vector(0, 0);
+						//	knockBackTargetDis = new Vector(64, 64);
+						//	knockBackCountNum = 0;
+						//	isKnockBack = true;
+						//}
+						
+
+
+						if (playerNowHp > 0)
 						{
-							PlayerStatus.playerNowHp -= SpawnEnemy.lstEnemyData[i].ofepower;
+							playerNowHp -= SpawnEnemy.lstEnemyData[i].ofepower;
 						}
 
-						PlayerStatus.flagDamaged = true;
-						PlayerStatus.damageInvincibleTotal = 0;
+						flagDamaged = true;
+						damageInvincibleTotal = 0;
 						Console.WriteLine("Break");
 						break;
 
@@ -375,13 +400,13 @@ namespace Zitulmyth
 		public static void PlayerItemGetting(Canvas canvas)
 		{
 
-			if (!PlayerStatus.flagDamaged)
+			if (!flagDamaged)
 			{
 				for (int i = 0; i < Item.lstItemData.Count; i++)
 				{
 
 					Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
-					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
+					Vector size1 = new Vector(playerSize.X, playerSize.Y);
 
 					Vector p2 = new Vector(Canvas.GetLeft(Item.lstItemData[i].imgItem),Canvas.GetTop(Item.lstItemData[i].imgItem));
 					Vector size2 = new Vector(Item.lstItemData[i].width*32, Item.lstItemData[i].height*32);
@@ -398,7 +423,7 @@ namespace Zitulmyth
 
 						if(Item.lstItemData[i].itemName == ItemName.TreeBranch)
 						{
-							PlayerStatus.equipWeapon = EquipWeaponName.TreeBranch;
+							equipWeapon = EquipWeaponName.TreeBranch;
 							MainWeapon.SetMainWeapon();
 						}
 

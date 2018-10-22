@@ -30,10 +30,15 @@ namespace Zitulmyth
 		public static int elapsedTime;
 
 		//Controls
+
 		public static Canvas canScreenFade = new Canvas();
 		public static StackPanel stpPlayerStatus;
 
 		public static bool titleStrSwitch = true;
+
+		//window settings
+		public static int gameWindowWidth = 1024;
+		public static int gameWindowHeight = 768; 
 
 		//mainwindow
 		public MainWindow()
@@ -192,6 +197,7 @@ namespace Zitulmyth
 					if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 					{
 						Animator.AnimationObject();
+						Animator.AnimationEnemy();
 
 						if (TalkCommander.isTalk && !TalkCommander.isTalkOpenBalloon)
 						{
@@ -202,6 +208,7 @@ namespace Zitulmyth
 
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
+
 						Item.FallingItems();
 						EnemyBehavior.EnemyAction();
 
@@ -219,6 +226,8 @@ namespace Zitulmyth
 
 						PlayerStatus.PlayerStatusUpdate();
 						PlayerBehavior.DamageInvinsibleTimer();
+
+						SpawnEnemy.RemoveEnemy(Canvas);
 					}
 
 					if (Sound.seStop)
