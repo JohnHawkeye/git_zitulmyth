@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="Zitulmyth" Height="900" Width="1200" Background="Black" MinWidth="1024" MinHeight="774" ResizeMode="NoResize" Loaded="Window_Loaded" HorizontalAlignment="Left" VerticalAlignment="Top" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
 	<Canvas x:Name="Canvas" HorizontalAlignment="Center" Height="768" VerticalAlignment="Center" Width="1024" Margin="0,0,0,0">
-		<StackPanel x:Name="PlayerStatus" Height="96" Width="512" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="400">
+		<StackPanel x:Name="spPlayerStatus" Height="96" Width="512" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="442" Canvas.Left="171">
 			<Canvas x:Name="CaLife" Width="512" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 			<Canvas x:Name="CaMana" Width="512" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 		</StackPanel>
-		<Label x:Name="NowTimeLabel" Content="Label" Canvas.Left="386" Canvas.Top="780" Width="221" Background="White"/>
+		<Label x:Name="DebugLabelA" Content="Label" Canvas.Left="-70" Canvas.Top="782" Width="221" Background="White"/>
 	</Canvas>
 </Window>

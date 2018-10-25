@@ -230,8 +230,88 @@ namespace Zitulmyth
 			return temp;
 		}
 
-	}
 
-	
+		public static void AnimationItem()
+		{
+
+			for (int i = 0; i < Item.lstItemData.Count; i++)
+			{
+				if (Item.lstItemData[i].totalAnimTime < keyFlameTime)
+				{
+
+					Item.lstItemData[i].totalAnimTime += MainWindow.elapsedTime;
+
+				}
+				else
+				{
+
+					CBItemData tempCBItemData = GetCBItemData(Item.lstItemData[i].itemName);
+					CroppedBitmap cbAnimItemCell = new CroppedBitmap();
+
+					cbAnimItemCell = tempCBItemData.lstCBIdle[AnimItemDirection(i)];
+
+					Item.lstItemData[i].imgItem.Source = cbAnimItemCell;
+
+
+					if (Item.lstItemData[i].keyFlame != 3)
+					{
+						Item.lstItemData[i].keyFlame++;
+					}
+					else
+					{
+						Item.lstItemData[i].keyFlame = 0;
+					}
+
+					Item.lstItemData[i].totalAnimTime = 0;
+
+
+				}
+
+
+			}
+		}
+
+		public static CBItemData GetCBItemData(ItemName name)
+		{
+			CBItemData temp = ImageData.lstCBItem[0];
+
+			for (int i = 0; i < ImageData.lstCBItem.Count; i++)
+			{
+				if (ImageData.lstCBItem[i].name == name)
+				{
+					temp = ImageData.lstCBItem[i];
+
+					if(temp.lstCBIdle.Count < 2)
+					{
+						temp.lstCBIdle.Add(temp.lstCBIdle[0]);
+					}
+
+					break;
+				}
+				
+			}
+
+			return temp;
+		}
+
+
+		public static int AnimItemDirection(int index)
+		{
+
+			int temp = 0;
+
+			if (Item.lstItemData[index].keyFlame == 0 ||
+				Item.lstItemData[index].keyFlame == 2)
+			{
+				temp = 0;
+			}
+			else
+			{
+				temp = 1;
+			}
+
+			return temp;
+		}
+	}
 
 }

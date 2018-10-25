@@ -31,6 +31,7 @@ namespace Zitulmyth
 
 		//Controls
 
+		public static Canvas mainCanvas;
 		public static Canvas canScreenFade = new Canvas();
 		public static StackPanel stpPlayerStatus;
 
@@ -77,10 +78,13 @@ namespace Zitulmyth
 			ImageData.ImageLoadFirst();
 			Sound.SoundEffectLoad(Canvas);
 
-			this.TitleOpen();
+			SplashLogoOpen();
+
 
 			//objects maked
+			mainCanvas = this.FindName("Canvas") as Canvas;
 
+			CollisionCheck.ColliderCheckMaskGenerater(Canvas);
 			MainWeapon.InitMainWeapon(Canvas);
 
 			BalloonMessage.GenerateBalloon(Canvas);
@@ -104,25 +108,42 @@ namespace Zitulmyth
 			StageInit.InitPlayerStatus(CaLife, CaMana);
 		}
 
-		private void TitleOpen()
+		private void SplashLogoOpen()
 		{
+			ImageData.imgTitle[0] = new Image
+			{
+				Source = ImageData.cbSplash,
+				Width = 1024,
+				Height = 768,
+			};
+
+			ImageData.imgTitle[0].Opacity = 0;
+			this.Canvas.Children.Add(ImageData.imgTitle[0]);
+			Canvas.SetLeft(ImageData.imgTitle[0], 0);
+			Canvas.SetTop(ImageData.imgTitle[0], 0);
+
+		}
+
+		public static void TitleOpen(Canvas canvas)
+		{
+
+			canvas.Children.Remove(ImageData.imgTitle[0]);
+
 			ImageData.imgTitle[0] = new Image
 			{
 				Source = ImageData.cbTitle[0],
 				Width = 1024,Height = 768,
 			};
 
-			this.Canvas.Children.Add(ImageData.imgTitle[0]);
-			Canvas.SetLeft(ImageData.imgTitle[0], 0);
-			Canvas.SetTop(ImageData.imgTitle[0], 0);
-
+			canvas.Children.Add(ImageData.imgTitle[0]);
 
 			ImageData.imgTitle[1] = new Image
 			{
 				Source = ImageData.cbTitle[1],Width = 448,Height = 32,
 			};
 
-			this.Canvas.Children.Add(ImageData.imgTitle[1]);
+			ImageData.imgTitle[0].Opacity = 1;
+			canvas.Children.Add(ImageData.imgTitle[1]);
 			Canvas.SetLeft(ImageData.imgTitle[1],288);
 			Canvas.SetTop(ImageData.imgTitle[1], 608);
 		}
@@ -138,8 +159,11 @@ namespace Zitulmyth
 					this.GetNowTime();
 					elapsedTime = nowTime - lastTime;
 
-
-					NowTimeLabel.Content = elapsedTime.ToString();
+					if (SpawnEnemy.lstEnemyData.Count >= 1)
+					{
+						DebugLabelA.Content = SpawnEnemy.lstEnemyData[0].triggerAreaPos.ToString();
+					}
+					
 
 					if (elapsedTime < 0)
 					{
@@ -197,7 +221,8 @@ namespace Zitulmyth
 					if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 					{
 						Animator.AnimationObject();
-						Animator.AnimationEnemy();
+						
+						Animator.AnimationItem();
 
 						if (TalkCommander.isTalk && !TalkCommander.isTalkOpenBalloon)
 						{
@@ -211,6 +236,8 @@ namespace Zitulmyth
 
 						Item.FallingItems();
 						EnemyBehavior.EnemyAction();
+
+						Animator.AnimationEnemy();
 
 						SubWeapon.SubWeaponPosUpdate(Canvas);
 
@@ -228,6 +255,7 @@ namespace Zitulmyth
 						PlayerBehavior.DamageInvinsibleTimer();
 
 						SpawnEnemy.RemoveEnemy(Canvas);
+						SpawnEnemy.ReSpawnEnemy(Canvas);
 					}
 
 					if (Sound.seStop)
@@ -259,13 +287,17 @@ namespace Zitulmyth
 			{
 				case GameTransitionType.Title:
 
-					canvas.Children.Remove(ImageData.imgTitle[0]); canvas.Children.Remove(ImageData.imgTitle[1]);
-					countTime = 0;
-					GameTransition.gameTransition = GameTransitionType.StageInit;
+					if (GameTransition.endSplashLogo)
+					{
+						canvas.Children.Remove(ImageData.imgTitle[0]); canvas.Children.Remove(ImageData.imgTitle[1]);
+						countTime = 0;
+						GameTransition.gameTransition = GameTransitionType.StageInit;
 
-//debug stagechange
-					StageManager.stageNum = 2;
-					GameTransition.eventNum = 4;
+						//debug stagechange
+						StageManager.stageNum = 2;
+						GameTransition.eventNum = 4;
+					}
+					
 					break;
 
 				case GameTransitionType.StageStart:

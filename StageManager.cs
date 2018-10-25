@@ -51,7 +51,15 @@ namespace Zitulmyth
 				Canvas.SetZIndex(ObjectChecker.lstObject[i].imgObject, ObjectChecker.lstObject[i].zindex);
 			}
 
-			Item.ItemGenerate(canvas);
+			for (int i = 0; i < Item.lstItemData.Count; i++)
+			{
+				canvas.Children.Add(Item.lstItemData[i].imgItem);
+				Canvas.SetLeft(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.X);
+				Canvas.SetTop(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.Y);
+				Canvas.SetZIndex(Item.lstItemData[i].imgItem, 6);
+			}
+
+		//	ImageData.Serializer();
 
 			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{

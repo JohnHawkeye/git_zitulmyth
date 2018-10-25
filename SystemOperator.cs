@@ -31,6 +31,9 @@ namespace Zitulmyth
 	public class SystemOperator
 	{
 
+		public static int timeSeed = Environment.TickCount;
+		public static Random randomNum;
+
 		public static double BlockPerSecond()
 		{
 			double temp;
@@ -215,9 +218,11 @@ namespace Zitulmyth
 
 
 				case SystemTargetName.Item:
+
 					break;
 
 				case SystemTargetName.Ui:
+
 					break;
 
 			}

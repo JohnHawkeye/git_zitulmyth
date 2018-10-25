@@ -37,9 +37,6 @@ namespace Zitulmyth
 
 		public static int mainWeaponDamage = 1;
 
-		//collider check image
-		public static Image[] imgColliderCheck = new Image[2];
-
 
 		public static void InitMainWeapon(Canvas canvas)
 		{
@@ -59,33 +56,6 @@ namespace Zitulmyth
 			Canvas.SetTop(imgMainWeapon, 0);
 			Canvas.SetZIndex(imgMainWeapon, 9);
 
-
-			var _imgap = new Image
-			{
-				Source = ImageData.cbDebug[1],
-				Width = 32,
-				Height = 32,
-			};
-
-			imgColliderCheck[0] = _imgap;
-			canvas.Children.Add(imgColliderCheck[0]);
-			imgColliderCheck[0].Visibility = Visibility.Hidden;
-			Canvas.SetLeft(imgColliderCheck[0], 0);
-			Canvas.SetTop(imgColliderCheck[0], 0);
-			Canvas.SetZIndex(imgColliderCheck[0], 9);
-
-			var _imgap2 = new Image
-			{
-				Source = ImageData.cbDebug[1],
-				Width = 32,
-				Height = 32,
-			};
-			imgColliderCheck[1] = _imgap2;
-			canvas.Children.Add(imgColliderCheck[1]);
-			imgColliderCheck[1].Visibility = Visibility.Hidden;
-			Canvas.SetLeft(imgColliderCheck[1], 0);
-			Canvas.SetTop(imgColliderCheck[1], 0);
-			Canvas.SetZIndex(imgColliderCheck[1], 9);
 
 		}
 
@@ -144,9 +114,6 @@ namespace Zitulmyth
 						lstMainWeaponCollider[i] = new Vector(posx + 32 * (i+1) * Math.Cos(radian),
 																posy + 32 * (i+1) * Math.Sin(radian));
 
-						Canvas.SetLeft(imgColliderCheck[i], lstMainWeaponCollider[i].X);
-						Canvas.SetTop(imgColliderCheck[i], lstMainWeaponCollider[i].Y);
-
 					}
 
 				}
@@ -177,9 +144,6 @@ namespace Zitulmyth
 						lstMainWeaponCollider[i] = new Vector(posx + 32 * (i + 1) * Math.Cos(radian),
 																posy + 32 * (i + 1) * Math.Sin(radian));
 
-
-						Canvas.SetLeft(imgColliderCheck[i], lstMainWeaponCollider[i].X);
-						Canvas.SetTop(imgColliderCheck[i], lstMainWeaponCollider[i].Y);
 					}
 
 				}
@@ -240,6 +204,7 @@ namespace Zitulmyth
 								SpawnEnemy.lstEnemyData[j].isWaiting = false;
 								SpawnEnemy.lstEnemyData[j].state = EnemyState.Death;
 
+								SpawnEnemy.EnemyDeathItemDrop(canvas, SpawnEnemy.lstEnemyData[j].name, SpawnEnemy.lstEnemyData[j].position);
 							}
 
 						}

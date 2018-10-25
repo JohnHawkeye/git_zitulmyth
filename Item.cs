@@ -24,6 +24,7 @@ namespace Zitulmyth
 		Apple,
 		StarFruit,
 		TreeBranch,
+		BoarMeat,
 	}
 
 	public class Item
@@ -31,69 +32,80 @@ namespace Zitulmyth
 
 		public static List<ItemData> lstItemData = new List<ItemData>();
 
-		public static void ItemGenerate(Canvas canvas)
+		public static  ItemData SetItemData(ItemName name,Vector targetpos)
 		{
-			if(StageManager.stageNum == 2)
+			var item = new ItemData();
+
+			switch (name)
 			{
-				lstItemData.Add(new ItemData
-				{
-					itemName = ItemName.Coin,
-					imgItem = new Image { Source = ImageData.cbItem[0], Width = 32, Height = 32 },
-					position = new Vector(128, 384),
-					weight = 6,width= 1,height=1,
-					expirationTime = 1000,
-					totalTime = 0,
-				});
+				case ItemName.Coin:
 
+					item = new ItemData
+						{
+							itemName = ItemName.Coin,
+							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.Coin), Width = 32, Height = 32 },
+							position = targetpos,
+							weight = 6,	width = 1,height = 1,expirationTime = 1000,totalTime = 0,
+						};
 
-				lstItemData.Add(new ItemData
-				{
-					itemName = ItemName.Coin,
-					imgItem = new Image { Source = ImageData.cbItem[0], Width = 32, Height = 32 },
-					position = new Vector(192, 384),
-					weight = 6,	width= 1,height=1,expirationTime = 1000,	totalTime = 0
-				});
+					break;
 
-				lstItemData.Add(new ItemData
-				{
-					itemName = ItemName.StarFruit,
-					imgItem = new Image { Source = ImageData.cbItem[3], Width = 32, Height = 32 },
-					position = new Vector(288, 384),
-					weight = 4,width= 1,height=1,	expirationTime = 1000,	totalTime = 0
-				});
+				case ItemName.Apple:
 
-				lstItemData.Add(new ItemData
-				{
-					itemName = ItemName.TreeBranch,
-					imgItem = new Image { Source = ImageData.cbItem[4], Width = 64, Height = 32 },
-					position = new Vector(320, 544),
-					weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
-				});
+					item = new ItemData
+						{
+							itemName = ItemName.Apple,
+							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.Apple), Width = 32, Height = 32 },
+							position = targetpos,
+							weight = 4,width = 1,height = 1,expirationTime = 1000,totalTime = 0
+						};
 
-				lstItemData.Add(new ItemData
-				{
-					itemName = ItemName.Apple,
-					imgItem = new Image { Source = ImageData.cbItem[2], Width = 32, Height = 32 },
-					position = new Vector(480, 384),
-					weight = 4,width= 1,height=1,expirationTime = 1000,totalTime = 0
-				});
+					break;
 
-				lstItemData.Add(new ItemData
-				{
-					itemName = ItemName.Apple,
-					imgItem = new Image { Source = ImageData.cbItem[2], Width = 32, Height = 32 },
-					position = new Vector(768, 384),
-					weight = 4,width= 1,height=1,expirationTime = 1000,totalTime = 0
-				});
+				case ItemName.StarFruit:
+					item = new ItemData
+						{
+							itemName = ItemName.StarFruit,
+							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.StarFruit), Width = 32, Height = 32 },
+							position = targetpos,
+							weight = 4,width= 1,height=1,	expirationTime = 1000,	totalTime = 0
+						};
+					break;
 
-				for(int i = 0; i < lstItemData.Count; i++)
-				{
-					canvas.Children.Add(lstItemData[i].imgItem);
-					Canvas.SetLeft(lstItemData[i].imgItem, lstItemData[i].position.X);
-					Canvas.SetTop(lstItemData[i].imgItem, lstItemData[i].position.Y);
-					Canvas.SetZIndex(lstItemData[i].imgItem, 6);
-				}
+				case ItemName.TreeBranch:
+					item = new ItemData
+						{
+							itemName = ItemName.TreeBranch,
+							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.TreeBranch), Width = 64, Height = 32 },
+							position = targetpos,
+							weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
+						};
+					break;
+
+				case ItemName.BoarMeat:
+					item = new ItemData
+						{
+							itemName = ItemName.BoarMeat,
+							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.BoarMeat), Width = 32, Height = 32 },
+							position = targetpos,
+							weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
+						};
+					break;
+
 			}
+			return item;
+		}
+
+		public static void ItemGenerate(Canvas canvas,ItemName name,Vector targetpos)
+		{
+			lstItemData.Add(SetItemData(name, targetpos));
+			
+			int index = lstItemData.Count - 1;
+
+			canvas.Children.Add(lstItemData[index].imgItem);
+			Canvas.SetLeft(lstItemData[index].imgItem, lstItemData[index].position.X);
+			Canvas.SetTop(lstItemData[index].imgItem, lstItemData[index].position.Y);
+			Canvas.SetZIndex(lstItemData[index].imgItem, 6);
 		}
 
 		public static void FallingItems()
@@ -130,6 +142,10 @@ namespace Zitulmyth
 		public int weight;
 		public int expirationTime;
 		public int totalTime;
+
+		public int keyFlame;
+		public int totalAnimTime;
+		
 
 	}
 }

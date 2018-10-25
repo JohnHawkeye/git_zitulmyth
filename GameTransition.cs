@@ -46,6 +46,10 @@ namespace Zitulmyth
 	{
 		public static GameTransitionType gameTransition = GameTransitionType.Title;
 
+		public static bool endSplashLogo = false;
+		private static int splashLogoPhase = 0;
+		private static int splashWaitTotal = 0;
+
 		public static bool duringTransition = false;
 		public static int eventNum = 1;
 		public static int eventCount = 0;
@@ -79,24 +83,108 @@ namespace Zitulmyth
 
 				case GameTransitionType.Title:
 
-					MainWindow.countTime += MainWindow.elapsedTime;
-
-					if(MainWindow.countTime >= 1000)
+					if (!endSplashLogo)
 					{
-						MainWindow.titleStrSwitch = !MainWindow.titleStrSwitch;
-						MainWindow.countTime = 0;
+						switch (splashLogoPhase)
+						{
+							case 0:
 
-						if (!MainWindow.titleStrSwitch)
-						{
-							ImageData.imgTitle[1].Visibility = Visibility.Hidden;
+								if (splashWaitTotal < 1000)
+								{
+									splashWaitTotal += MainWindow.elapsedTime;
+								}
+								else
+								{
+									splashLogoPhase++;
+									splashWaitTotal = 0;
+								}
+								break;
+
+							case 1:
+								if (screenFadeTotal < 1)
+								{
+									double temp = (double)MainWindow.elapsedTime / 2000;
+									screenFadeTotal += Math.Round(temp, 2);
+
+									ImageData.imgTitle[0].Opacity = screenFadeTotal;
+
+								}
+								else
+								{
+									ImageData.imgTitle[0].Opacity = 1;
+									splashLogoPhase++;
+								}
+								break;
+
+							case 2:
+
+								if (splashWaitTotal < 2000)
+								{
+									splashWaitTotal += MainWindow.elapsedTime;
+								}
+								else
+								{
+									splashLogoPhase++;
+									splashWaitTotal = 0;
+								}
+								break;
+
+							case 3:
+								if (screenFadeTotal > 0)
+								{
+									double temp = (double)MainWindow.elapsedTime / 2000;
+									screenFadeTotal -= Math.Round(temp, 2);
+
+									ImageData.imgTitle[0].Opacity = screenFadeTotal;
+
+								}
+								else
+								{
+									ImageData.imgTitle[0].Opacity = 0;
+									splashLogoPhase++;
+									
+								}
+								break;
+							case 4:
+								if (splashWaitTotal < 1000)
+								{
+									splashWaitTotal += MainWindow.elapsedTime;
+
+								}
+								else
+								{
+									endSplashLogo = true;
+									screenFadeTotal = 0;
+									
+									MainWindow.TitleOpen(canvas);
+									
+								}
+								break;
 						}
-						else
-						{
-							ImageData.imgTitle[1].Visibility = Visibility.Visible;
-						}
-						Console.WriteLine("Title");
+
 					}
-					
+					else
+					{
+
+						MainWindow.countTime += MainWindow.elapsedTime;
+
+						if (MainWindow.countTime >= 1000)
+						{
+							MainWindow.titleStrSwitch = !MainWindow.titleStrSwitch;
+							MainWindow.countTime = 0;
+
+							if (!MainWindow.titleStrSwitch)
+							{
+								ImageData.imgTitle[1].Visibility = Visibility.Hidden;
+							}
+							else
+							{
+								ImageData.imgTitle[1].Visibility = Visibility.Visible;
+							}
+						}
+
+					}
+									   					
 					break;
 
 				case GameTransitionType.StageInit:
