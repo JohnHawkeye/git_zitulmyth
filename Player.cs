@@ -126,7 +126,7 @@ namespace Zitulmyth
 			}
 
 			
-			if (KeyController.keyUp)
+			if (KeyController.keyUp && !TalkCommander.isTalk)
 			{
 				if (BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y+playerHeight*32, moveSpeed))
 				{
@@ -138,7 +138,7 @@ namespace Zitulmyth
 
 			}
 
-			if (KeyController.keyDown)
+			if (KeyController.keyDown && !TalkCommander.isTalk)
 			{
 				//ladder
 				if ((BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed)  ||

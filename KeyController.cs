@@ -91,6 +91,20 @@ namespace Zitulmyth
 				keyReturn = true;
 			}
 
+			if (TalkCommander.isTalkSelecting)
+			{
+
+				if (e.Key == Key.Up)
+				{
+					keyUp = true;
+				}
+
+				if (e.Key == Key.Down)
+				{
+					keyDown = true;
+				}
+			}
+
 		}
 
 		public static void InputKeyUp(object sender, KeyEventArgs e)
@@ -103,6 +117,7 @@ namespace Zitulmyth
 			{
 				keyRight = false;
 			}
+
 			if (e.Key == Key.Up)
 			{
 				keyUp = false;
@@ -140,6 +155,19 @@ namespace Zitulmyth
 			if (e.Key == Key.Return)
 			{
 				keyReturn = false;
+			}
+
+			if (TalkCommander.isTalkSelecting)
+			{
+
+				if (e.Key == Key.Up)
+				{
+					keyUp = false;
+				}
+				if (e.Key == Key.Down)
+				{
+					keyDown = false;
+				}
 			}
 		}
 

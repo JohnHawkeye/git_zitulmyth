@@ -96,12 +96,23 @@ namespace Zitulmyth
 			{
 				Source = ImageData.cbSystem,
 				Width = 64,Height=32,
+				Visibility = Visibility.Hidden,
 			};
 
 			ImageData.imgPopCanTalk = _popcantalk;
-			ImageData.imgPopCanTalk.Visibility = Visibility.Hidden;
 			Canvas.Children.Add(ImageData.imgPopCanTalk);
 			Canvas.SetZIndex(ImageData.imgPopCanTalk, 15);
+
+
+			ImageData.imgHandCursor = new Image
+			{
+				Source = ImageData.cbHandCursor,
+				Width = 32,	Height = 32,
+				Visibility = Visibility.Hidden,
+			};
+
+			Canvas.Children.Add(ImageData.imgHandCursor);
+			Canvas.SetZIndex(ImageData.imgHandCursor, 20);
 
 
 			StageInit.InitPlayer(Canvas);
@@ -229,6 +240,11 @@ namespace Zitulmyth
 							TalkCommander.TalkWithNpc(Canvas);
 						}
 
+						if (TalkCommander.isTalkSelecting)
+						{
+							TalkCommander.TalkSelecting(Canvas);
+						}
+
 						//first action,last Processing including deletion of list
 
 						PlayerBehavior.MovePlayer(Canvas);
@@ -317,11 +333,10 @@ namespace Zitulmyth
 
 					if (!KeyController.keyReturnInterval)
 					{
-						BalloonMessage.spnBalloon.Visibility = Visibility.Hidden;
-						BalloonMessage.txtBalloon.Text = "";
-						TalkCommander.isTalkOpenBalloon = false;
-
-						KeyController.keyReturnInterval = true;
+						if (TalkCommander.isTalkOpenBalloon)
+						{
+							TalkCommander.TalkEnterTheNext();
+						}
 					}
 
 

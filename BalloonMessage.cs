@@ -58,6 +58,7 @@ namespace Zitulmyth
 				};
 
 				Canvas canBalloon = new Canvas();
+
 				canBalloon.HorizontalAlignment = HorizontalAlignment.Left;
 				canBalloon.VerticalAlignment = VerticalAlignment.Top;
 
