@@ -240,9 +240,9 @@ namespace Zitulmyth
 
 			if (KeyController.keyE)
 			{
-				if (ObjectChecker.isTrigger)
+				if (ObjectChecker.isTrigger && !TalkCommander.isTalk)
 				{
-					ObjectBehavior.OnTriggerEvent();
+					ObjectBehavior.OnTriggerReactEvent();
 				}
 			}
 

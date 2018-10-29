@@ -23,6 +23,7 @@ namespace Zitulmyth
 
 	public enum ObjectName
 	{
+		Player,
 		Empty_Collider,
 		Npc_Opsa,
 		Npc_Yeeda,
@@ -47,15 +48,19 @@ namespace Zitulmyth
 		public int totalAnimTime;
 		public ObjectName triggerTarget;
 		public bool triggerAction;
+		public bool triggerType;	//false:touch true:input
+		public int talkID;
 	}
 
 	 public class ObjectChecker
 	{
 		public static List<ObjectData> lstObject = new List<ObjectData>();
 		public static int activeObject; //store index
+		public static int oldActiveObject;
 		public static bool isTrigger;
 
 		public static Vector triggerTargetPosition;
+
 
 		public static void CollisionPtoActionCollider()
 		{
@@ -76,6 +81,7 @@ namespace Zitulmyth
 						GetTriggerTargetPosition(i);
 
 						activeObject = i;
+
 						isTrigger = true;
 
 						Canvas.SetLeft(ImageData.imgPopCanTalk, triggerTargetPosition.X - 16);
@@ -95,6 +101,7 @@ namespace Zitulmyth
 			{
 				if (!TriggerExitCheck())
 				{
+					oldActiveObject = 0;
 					isTrigger = false;
 				}
 			}
@@ -122,16 +129,27 @@ namespace Zitulmyth
 
 		public static void GetTriggerTargetPosition(int index)
 		{
-			for(int i = 0; i < lstObject.Count; i++)
+
+			if (lstObject[index].triggerTarget == ObjectName.Player)
 			{
-				if(lstObject[index].triggerTarget == lstObject[i].objName)
+				Vector playerPos = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
+				triggerTargetPosition = playerPos;
+			}
+			else
+			{
+				for (int i = 0; i < lstObject.Count; i++)
 				{
+					if (lstObject[index].triggerTarget == lstObject[i].objName)
+					{
 
-					triggerTargetPosition = lstObject[i].position;
+						triggerTargetPosition = lstObject[i].position;
 
-					break;
+						break;
+					}
 				}
 			}
+				
+		
 		}
 
 
@@ -139,7 +157,8 @@ namespace Zitulmyth
 
 	public class ObjectBehavior
 	{
-		public static void OnTriggerEvent()
+
+		public static void OnTriggerReactEvent()
 		{
 			if (!TalkCommander.isTalk)
 			{
@@ -148,6 +167,20 @@ namespace Zitulmyth
 				KeyController.keyControlLocking = true;
 			}
 
+		}
+
+		public static void OnTriggerTouchEvent()
+		{
+							   
+			if (!TalkCommander.isTalk && !ObjectChecker.lstObject[ObjectChecker.activeObject].triggerType)
+			{
+				if(ObjectChecker.activeObject != ObjectChecker.oldActiveObject)
+				{
+					TalkCommander.TalkDataInit();
+					TalkCommander.isTalk = true;
+					KeyController.keyControlLocking = true;
+				}
+			}
 		}
 
 	}

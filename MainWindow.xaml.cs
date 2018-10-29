@@ -170,11 +170,9 @@ namespace Zitulmyth
 					this.GetNowTime();
 					elapsedTime = nowTime - lastTime;
 
-					if (SpawnEnemy.lstEnemyData.Count >= 1)
-					{
-						DebugLabelA.Content = SpawnEnemy.lstEnemyData[0].triggerAreaPos.ToString();
-					}
-					
+//debug
+					DebugLabelA.Content = ObjectChecker.isTrigger.ToString();
+										
 
 					if (elapsedTime < 0)
 					{
@@ -234,6 +232,12 @@ namespace Zitulmyth
 						Animator.AnimationObject();
 						
 						Animator.AnimationItem();
+
+
+						if (ObjectChecker.isTrigger && !TalkCommander.isTalk)
+						{
+							ObjectBehavior.OnTriggerTouchEvent();
+						}
 
 						if (TalkCommander.isTalk && !TalkCommander.isTalkOpenBalloon)
 						{

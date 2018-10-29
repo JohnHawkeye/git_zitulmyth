@@ -340,12 +340,12 @@ namespace Zitulmyth
 
 							canvas.Children.Remove(SpawnEnemy.lstEnemyData[i].imgEnemy);
 							SpawnEnemy.lstEnemyData.RemoveAt(i);
-							GameTransition.numKillEnemy++;
-							Console.WriteLine(GameTransition.numKillEnemy);
+							StageManager.numKillEnemy++;
+							Console.WriteLine(StageManager.numKillEnemy);
 
 							if (popOn)
 							{
-								if (GameTransition.numKillEnemy < 10)
+								if (StageManager.numKillEnemy < 10)
 								{
 									SpawnEnemy.SpawnSelect(canvas, name);
 								}

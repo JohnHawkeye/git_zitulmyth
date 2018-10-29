@@ -440,8 +440,8 @@ namespace Zitulmyth
 				{
 					canvas.Children.Remove(lstEnemyData[i].imgEnemy);
 					lstEnemyData.RemoveAt(i);
-					GameTransition.numKillEnemy++;
-					Console.WriteLine(GameTransition.numKillEnemy);
+					StageManager.numKillEnemy++;
+					Console.WriteLine(StageManager.numKillEnemy);
 				}
 
 			}

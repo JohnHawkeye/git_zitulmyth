@@ -11,15 +11,39 @@ using Zitulmyth.Data;
 
 namespace Zitulmyth
 {
+
+	public enum StageClearConditionName
+	{
+		NumEnemiesKilled,
+		ReachTheTartgetPoint,
+		TalkFlag,
+		TimeElapsed,
+	}
+
+	public class StageClearCondition
+	{
+		public StageClearConditionName conditionName;
+		public int targetNumKill;
+		public bool isReach;
+		public Vector targetPoint;
+		public int targetTalkFlag;
+		public int targetTime;
+	}
+
 	public class StageManager
 	{
+
+		public static List<StageClearCondition> lstClearCondition = new List<StageClearCondition>();
+
 		public static int stageNum = 0;
 
 		public  static int interiorZindex = 1;
 		public static int furnitureZindex = 2;
 		public static int npcZindex = 3;
 
-			
+		public static int numKillEnemy = 0;
+		
+
 		public static void StageObjectsSetting(Canvas canvas)
 		{
 	
@@ -71,5 +95,61 @@ namespace Zitulmyth
 
 			}
 		}
+
+		public static bool StageClearCheck()
+		{
+
+			int satisfyCount = 0;
+
+			for(int i = 0; i < lstClearCondition.Count; i++)
+			{
+				switch (lstClearCondition[i].conditionName)
+				{
+					case StageClearConditionName.NumEnemiesKilled:
+
+						if (numKillEnemy >= lstClearCondition[i].targetNumKill)
+						{
+							satisfyCount++;
+						}
+
+						break;
+					case StageClearConditionName.ReachTheTartgetPoint:
+
+						if (numKillEnemy >= lstClearCondition[i].targetNumKill)
+						{
+							satisfyCount++;
+						}
+
+						break;
+					case StageClearConditionName.TalkFlag:
+
+						if (TalkCommander.memoryTalkFlagID == lstClearCondition[i].targetTalkFlag)
+						{
+							satisfyCount++;
+						}
+						break;
+
+					case StageClearConditionName.TimeElapsed:
+						if (numKillEnemy >= lstClearCondition[i].targetNumKill)
+						{
+							satisfyCount++;
+						}
+
+						break;
+				}
+
+			}
+
+			if (satisfyCount >= lstClearCondition.Count)
+			{
+				numKillEnemy = 0;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 	}
 }

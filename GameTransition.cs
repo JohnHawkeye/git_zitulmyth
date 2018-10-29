@@ -74,8 +74,6 @@ namespace Zitulmyth
 		public static int charaMoveIndex = 0;
 		public static bool charaMoveStart;
 
-		public static int numKillEnemy = 0;
-
 		public static void GameTransitionController(Canvas canvas, Canvas caLife,Canvas caMana)
 		{
 			switch (gameTransition)
@@ -221,10 +219,10 @@ namespace Zitulmyth
 
 				case GameTransitionType.StageDuring:
 
-					if (numKillEnemy >= 10)
+					if (StageManager.StageClearCheck())
 					{
 						gameTransition = GameTransitionType.StageEnd;
-						numKillEnemy = 0;
+						
 					}
 
 					break;
@@ -248,6 +246,8 @@ namespace Zitulmyth
 
 					StageInit.StageBlockRemove(canvas);
 					StageInit.StageObjectsRemove(canvas);
+
+					StageManager.lstClearCondition.Clear();
 
 					gameTransition = GameTransitionType.StageInit;
 
