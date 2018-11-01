@@ -49,11 +49,14 @@ namespace Zitulmyth
 		public static Vector knockBackBps;
 		public static Vector knockBackTargetDis;
 		public static double knockBackCountNum;
+		public static double coefficient;
 		public static bool isKnockBack;
+		public static bool boundDirectionX = false;
+		public static bool boundDirectionY = false;
 
 		public static int jumpPower = 12;
 		public static int jumpCount = 0;
-		public static int jumpMaxHeight = 96;
+		public static int jumpMaxHeight = 128;
 		public static double jumpTotalLength = 0;
 		public static bool jumping = false;
 		public static int fallingEndure = 3;
@@ -61,7 +64,8 @@ namespace Zitulmyth
 		public static double fallingStartPoint = 0;
 		public static bool isLadder = false;
 		public static bool isSquat = false;
-		public static bool boundDirection = false;
+
+
 
 
 		public static void PlayerStatusUpdate()
@@ -246,13 +250,14 @@ namespace Zitulmyth
 				}
 			}
 
-			//if (isKnockBack)
-			//{
-			//	SystemOperator.BoundObject(SystemTargetName.Player, 0, new Vector(playerPos.X, playerPos.Y),
-			//		knockBackTotalDis, knockBackTargetDis, knockBackBps, knockBackCountNum);
-			//}
+			if (isKnockBack)
+			{
+				SystemOperator.BoundObject(ref playerPos, boundDirectionX, ref knockBackTotalDis, knockBackTargetDis,
+					ref knockBackBps, ref coefficient, ref boundDirectionY,
+					weight, moveSpeed, jumpPower, playerWidth, playerHeight, ref isKnockBack);
+			}
 
-	//image change
+			//image change
 			if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 			{
 
@@ -339,6 +344,7 @@ namespace Zitulmyth
 			}
 			else
 			{
+				ImageData.imgPlayer.Opacity = 1;
 				damageInvincibleTotal = 0;
 				flagDamaged = false;
 			}
@@ -369,21 +375,27 @@ namespace Zitulmyth
 							Sound.seStop = true;
 						}
 
-						//if (!isKnockBack)
-						//{
-						//	KeyController.keyControlLocking = true;
-						//	knockBackTotalDis = new Vector(0, 0);
-						//	knockBackBps = new Vector(0, 0);
-						//	knockBackTargetDis = new Vector(64, 64);
-						//	knockBackCountNum = 0;
-						//	isKnockBack = true;
-						//}
+						if (!isKnockBack)
+						{
+							playerPos = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
+							boundDirectionX = SystemOperator.FaceEachOther(playerPos.X, SpawnEnemy.lstEnemyData[i].position.X);
 						
+							knockBackTotalDis = new Vector(0, 0);
+							knockBackBps = new Vector(0, 0);
+							coefficient = 0;
+							boundDirectionY = false;
+							knockBackTargetDis = new Vector(64, 64);
+
+							isKnockBack = true;
+
+						}
+
 
 
 						if (playerNowHp > 0)
 						{
 							playerNowHp -= SpawnEnemy.lstEnemyData[i].ofepower;
+							ImageData.imgPlayer.Opacity = 0.6;
 						}
 
 						flagDamaged = true;
@@ -421,11 +433,7 @@ namespace Zitulmyth
 							Sound.seStop = true;
 						}
 
-						if(Item.lstItemData[i].itemName == ItemName.TreeBranch)
-						{
-							equipWeapon = EquipWeaponName.TreeBranch;
-							MainWeapon.SetMainWeapon();
-						}
+						ItemGetSelector(i);
 
 						canvas.Children.Remove(Item.lstItemData[i].imgItem);
 						Item.lstItemData.RemoveAt(i);
@@ -435,6 +443,46 @@ namespace Zitulmyth
 					}
 
 				}
+			}
+		}
+
+		private static void ItemGetSelector(int index)
+		{
+			switch (Item.lstItemData[index].itemName)
+			{
+				case ItemName.Apple:
+
+					if(playerNowHp < playerMaxHp)
+					{
+						playerNowHp++;
+					}
+
+					break;
+
+				case ItemName.BoarMeat:
+
+					if (playerNowHp < playerMaxHp)
+					{
+						playerNowHp++;
+					}
+					break;
+
+				case ItemName.Coin:
+					break;
+
+				case ItemName.StarFruit:
+
+					if (playerNowMana < playerMaxMana)
+					{
+						playerNowMana++;
+					}
+					break;
+
+				case ItemName.TreeBranch:
+					equipWeapon = EquipWeaponName.TreeBranch;
+					MainWeapon.SetMainWeapon();
+					break;
+
 			}
 		}
 

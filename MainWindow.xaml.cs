@@ -313,7 +313,7 @@ namespace Zitulmyth
 						countTime = 0;
 						GameTransition.gameTransition = GameTransitionType.StageInit;
 
-						//debug stagechange
+//debug stagechange
 						StageManager.stageNum = 2;
 						GameTransition.eventNum = 4;
 					}

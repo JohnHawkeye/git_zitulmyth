@@ -44,189 +44,115 @@ namespace Zitulmyth
 		}
 		
 
-		public static void BoundObject(SystemTargetName stn, int index,Vector pos ,bool charaDir,
-										Vector total, Vector target , Vector bps,double acceleration)
+		public static void BoundObject(ref Vector pos ,bool charaDir,ref Vector total, Vector target , ref Vector bps,
+										ref double coefficient, ref bool boundDir,int weight,int speed,int jumppower,
+										int width,int height,ref bool isKnockBack)
 		{
 
 			double addY = 0;
 			double radian = 0;
 
-			switch (stn)
+			
+
+			bps.X = target.X / 32 * BlockPerSecond() * 2;
+			bps.Y = target.Y * bps.X / target.X;
+
+			addY = coefficient * weight / (target.X / 2)*0.102;
+
+			radian = Math.Atan(bps.Y - addY / bps.X) * Math.PI / 180;
+
+			if (!boundDir)
 			{
-				case SystemTargetName.Player:
 
-					bps.X = target.X / 32 * BlockPerSecond();
-					bps.Y = target.Y * bps.X / target.X;
+				if (total.Y < target.Y)
+				{
 
-					addY = acceleration * PlayerStatus.weight / (target.X / 2);
-
-					radian = Math.Atan(bps.Y - addY / bps.X) * Math.PI / 180;
-
-					if (!PlayerStatus.boundDirection)
+					if (!charaDir)
 					{
-
-						if (total.Y < target.Y)
+						if (!BlockCheck.BlockCheckLeft(pos.X - bps.X, pos.Y, speed) &&
+							pos.X - bps.X > 0)
 						{
-
-							PlayerStatus.playerPos.X += bps.X;
-							PlayerStatus.playerPos.Y -= bps.Y;
-
-							PlayerStatus.knockBackTotalDis.X += Math.Sqrt(Math.Pow(bps.X, 2));
-							PlayerStatus.knockBackTotalDis.Y += Math.Sqrt(Math.Pow(bps.Y, 2));
-
-							PlayerStatus.knockBackBps.X += bps.X;
-							PlayerStatus.knockBackBps.Y += bps.Y;
-
-							PlayerStatus.knockBackCountNum++;
-
+							pos.X -= bps.X;
 						}
-						else
-						{
-							PlayerStatus.boundDirection = true;
-							KeyController.keyControlLocking = false;
-						}
+
 					}
 					else
 					{
-
-						if (total.Y > 0)
+						if (!BlockCheck.BlockCheckRight(pos.X + bps.X, pos.Y, speed) &&
+							pos.X + bps.X < 1024 - width * 32)
 						{
-
-
-							PlayerStatus.playerPos.X += bps.X;
-							PlayerStatus.playerPos.Y += bps.Y;
-
-							PlayerStatus.knockBackTotalDis.X += Math.Sqrt(Math.Pow(bps.X, 2));
-							PlayerStatus.knockBackTotalDis.Y += Math.Sqrt(Math.Pow(bps.Y, 2));
-
-							PlayerStatus.knockBackBps.X += bps.X;
-							PlayerStatus.knockBackBps.Y += bps.Y;
-
-							PlayerStatus.knockBackCountNum--;
-
-						}
-						else
-						{
-							PlayerStatus.boundDirection = false;
-							PlayerStatus.isKnockBack = false;
+							pos.X += bps.X;
 						}
 					}
-					break;
 
-				case SystemTargetName.Enemy:
-
-					bps.X = target.X / 32 * BlockPerSecond();
-					bps.Y = target.Y * bps.X / target.X;
-
-					addY = acceleration * SpawnEnemy.lstEnemyData[index].weight / (target.X / 2);
-
-					radian = Math.Atan(bps.Y - addY / bps.X) * Math.PI / 180;
-
-					if (!SpawnEnemy.lstEnemyData[index].boundDirection)
+					if (!BlockCheck.BlockCheckTop(pos.X, pos.Y - bps.Y,jumppower) &&
+						pos.Y - bps.Y > 0)
 					{
-
-						if (total.Y < target.Y)
-						{
-
-							if (!charaDir)
-							{
-								if (!BlockCheck.BlockCheckLeft(pos.X-bps.X, pos.Y, SpawnEnemy.lstEnemyData[index].speed) &&
-									pos.X - bps.X > 0)
-								{
-									SpawnEnemy.lstEnemyData[index].position.X -= bps.X;
-								}
-								
-							}
-							else
-							{
-								if (!BlockCheck.BlockCheckRight(pos.X+bps.X, pos.Y, SpawnEnemy.lstEnemyData[index].speed) &&
-									pos.X + bps.X < 1024-SpawnEnemy.lstEnemyData[index].widthblock*32)
-								{
-									SpawnEnemy.lstEnemyData[index].position.X += bps.X;
-								}
-							}
-
-							if (!BlockCheck.BlockCheckTop(pos.X, pos.Y-bps.Y, SpawnEnemy.lstEnemyData[index].jumpPower)&&
-								pos.Y - bps.Y > 0)
-							{
-								SpawnEnemy.lstEnemyData[index].position.Y -= bps.Y;
-							}
-
-							
-
-							SpawnEnemy.lstEnemyData[index].totalDistance.X += Math.Sqrt(Math.Pow(bps.X, 2));
-							SpawnEnemy.lstEnemyData[index].totalDistance.Y += Math.Sqrt(Math.Pow(bps.Y, 2));
-
-							SpawnEnemy.lstEnemyData[index].bps.X += bps.X;
-							SpawnEnemy.lstEnemyData[index].bps.Y += bps.Y;
-
-							SpawnEnemy.lstEnemyData[index].universalvalue++;
-
-						}
-						else
-						{
-							SpawnEnemy.lstEnemyData[index].boundDirection = true;
-						}
+						pos.Y -= bps.Y;
 					}
-					else
-					{
-
-						if (total.Y > 0)
-						{
-
-							if (!charaDir)
-							{
-								if (!BlockCheck.BlockCheckLeft(pos.X-bps.X, pos.Y, SpawnEnemy.lstEnemyData[index].speed)&&
-									pos.X - bps.X > 0)
-								{
-									SpawnEnemy.lstEnemyData[index].position.X -= bps.X;
-								}
-
-							}
-							else
-							{
-								if (!BlockCheck.BlockCheckRight(pos.X+bps.X, pos.Y, SpawnEnemy.lstEnemyData[index].speed)&&
-									pos.X + bps.X < 1024 - SpawnEnemy.lstEnemyData[index].widthblock * 32)
-								{
-									SpawnEnemy.lstEnemyData[index].position.X += bps.X;
-								}
-							}
-
-							if (!BlockCheck.BlockCheckBottom(pos.X, pos.Y+bps.Y, SpawnEnemy.lstEnemyData[index].weight)&&
-								pos.Y + bps.Y < 768 - SpawnEnemy.lstEnemyData[index].heightblock * 32)
-							{
-								SpawnEnemy.lstEnemyData[index].position.Y += bps.Y;
-							}
-								
-
-							SpawnEnemy.lstEnemyData[index].totalDistance.X += Math.Sqrt(Math.Pow(bps.X, 2));
-							SpawnEnemy.lstEnemyData[index].totalDistance.Y += Math.Sqrt(Math.Pow(bps.Y, 2));
-
-							SpawnEnemy.lstEnemyData[index].bps.X += bps.X;
-							SpawnEnemy.lstEnemyData[index].bps.Y += bps.Y;
-
-							SpawnEnemy.lstEnemyData[index].universalvalue--;
-
-						}
-						else
-						{
-							SpawnEnemy.lstEnemyData[index].boundDirection = false;
-							SpawnEnemy.lstEnemyData[index].isKnockBack = false;
-						}
-					}
-					break;
 
 
-				case SystemTargetName.Item:
 
-					break;
+					total.X += Math.Sqrt(Math.Pow(bps.X, 2));
+					total.Y += Math.Sqrt(Math.Pow(bps.Y, 2));
 
-				case SystemTargetName.Ui:
+					bps.X += bps.X;
+					bps.Y += bps.Y;
 
-					break;
+					coefficient++;
 
+				}
+				else
+				{
+					boundDir = true;
+					total.Y = target.Y;
+				}
 			}
+			else
+			{
 
+				if (total.Y > 0)
+				{
+
+					if (!charaDir)
+					{
+						if (!BlockCheck.BlockCheckLeft(pos.X - bps.X, pos.Y, speed) &&
+							pos.X - bps.X > 0)
+						{
+							pos.X -= bps.X;
+						}
+
+					}
+					else
+					{
+						if (!BlockCheck.BlockCheckRight(pos.X + bps.X, pos.Y, speed) &&
+							pos.X + bps.X < 1024 - width * 32)
+						{
+							pos.X += bps.X;
+						}
+					}
+
+					if (!BlockCheck.BlockCheckBottom(pos.X, pos.Y + bps.Y + height * 32,weight) &&
+						pos.Y + bps.Y < 768 - height * 32)
+					{
+						pos.Y += bps.Y;
+					}
+
+					total.X += Math.Sqrt(Math.Pow(bps.X, 2));
+					total.Y -= Math.Sqrt(Math.Pow(bps.Y, 2));
+
+					bps.X += bps.X;
+					bps.Y += bps.Y;
+
+					coefficient--;
+
+				}
+				else
+				{
+					boundDir = false;
+					isKnockBack = false;
+				}
+			}
 		}
 
 		public static bool FaceEachOther(double posX ,double attackerX)

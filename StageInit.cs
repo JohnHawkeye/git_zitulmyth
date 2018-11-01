@@ -108,6 +108,29 @@ namespace Zitulmyth
 
 		}
 
+
+		public static void StageItemRemove(Canvas canvas)
+		{
+			for (int i = 0; i < Item.lstItemData.Count; i++)
+			{
+				canvas.Children.Remove(Item.lstItemData[i].imgItem);
+			}
+
+			Item.lstItemData.Clear();
+		}
+
+		public static void StageEnemyRemove(Canvas canvas)
+		{
+			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
+			{
+				canvas.Children.Remove(SpawnEnemy.lstEnemyData[i].imgEnemy);
+			}
+			
+			SpawnEnemy.lstEnemyData.Clear();
+
+
+		}
+
 		public static void InitPlayer(Canvas canvas)
 		{
 			PlayerStatus.playerNowHp = PlayerStatus.playerMaxHp;

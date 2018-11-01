@@ -246,6 +246,8 @@ namespace Zitulmyth
 
 					StageInit.StageBlockRemove(canvas);
 					StageInit.StageObjectsRemove(canvas);
+					StageInit.StageEnemyRemove(canvas);
+					StageInit.StageItemRemove(canvas);
 
 					StageManager.lstClearCondition.Clear();
 
@@ -538,13 +540,13 @@ namespace Zitulmyth
 
 				dis = (double)PlayerStatus.moveSpeed * MainWindow.elapsedTime * 0.01 * ac;
 
-				if (StageEvent.listEvent[charaMoveIndex].moveDistance.X >= 0)
+				if (!StageEvent.listEvent[charaMoveIndex].direction)
 				{
-					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x + dis);
+					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x - dis);
 				}
 				else
 				{
-					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x - dis);
+					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x + dis);
 				}
 
 				StageEvent.listEvent[charaMoveIndex].moveTotal.X += dis;

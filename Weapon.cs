@@ -42,7 +42,7 @@ namespace Zitulmyth
 		{
 			var _imgMainWeapon = new Image
 			{
-				Source = ImageData.cbMainWeapon,
+				Source = ImageData.cbEmpty,
 				Width = 96,
 				Height = 32,
 
@@ -183,7 +183,7 @@ namespace Zitulmyth
 							SpawnEnemy.lstEnemyData[j].isDamage = true;
 							SpawnEnemy.lstEnemyData[j].totalInvincibleTime = 0;
 
-							SpawnEnemy.lstEnemyData[j].universalvalue = 0;
+							SpawnEnemy.lstEnemyData[j].coefficient = 0;
 							SpawnEnemy.lstEnemyData[j].totalDistance = new Vector(0, 0);
 							SpawnEnemy.lstEnemyData[j].bps = new Vector(0, 0);
 							SpawnEnemy.lstEnemyData[j].targetDistance = new Vector(32, 32);
@@ -327,7 +327,7 @@ namespace Zitulmyth
 						if (SpawnEnemy.lstEnemyData[i].life <= 0)
 						{
 							bool popOn = false;
-							EnemyName name = EnemyName.Zigytu01;
+							EnemyName name = EnemyName.Zigitu01;
 
 							if (SpawnEnemy.lstEnemyData[i].deathEvent == EnemyDeathEvent.Pop)
 							{

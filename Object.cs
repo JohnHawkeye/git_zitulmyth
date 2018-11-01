@@ -27,6 +27,7 @@ namespace Zitulmyth
 		Empty_Collider,
 		Npc_Opsa,
 		Npc_Yeeda,
+		Npc_Ilsona,
 		Obj_Chair,
 		Obj_Table,
 		Obj_Huton,

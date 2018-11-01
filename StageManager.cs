@@ -42,7 +42,7 @@ namespace Zitulmyth
 		public static int npcZindex = 3;
 
 		public static int numKillEnemy = 0;
-		
+		public static bool respawnEnemy;
 
 		public static void StageObjectsSetting(Canvas canvas)
 		{

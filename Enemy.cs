@@ -34,13 +34,21 @@ namespace Zitulmyth
 				{
 					if (EnemyTriggerCollisionCheck(i))
 					{
-						lstEnemyData[i].state = EnemyState.Active;
 
+						if (lstEnemyData[i].state != EnemyState.Active)
+						{
+							lstEnemyData[i].isValueSetted = false;
+						}
+
+						lstEnemyData[i].state = EnemyState.Active;
+						
 					}
 					else
 					{
 						lstEnemyData[i].state = EnemyState.Idle;
 					}
+
+					EnemyBehaviorValuesSetup(i);
 				}
 
 				if (lstEnemyData[i].isDamage)
@@ -50,10 +58,11 @@ namespace Zitulmyth
 					if (lstEnemyData[i].isKnockBack)
 					{
 
-						SystemOperator.BoundObject(SystemTargetName.Enemy, i,lstEnemyData[i].position,
-													SystemOperator.FaceEachOther(lstEnemyData[i].position.X,PlayerStatus.playerPos.X),
-													lstEnemyData[i].totalDistance, lstEnemyData[i].targetDistance,
-													lstEnemyData[i].bps,lstEnemyData[i].universalvalue);
+						SystemOperator.BoundObject(ref lstEnemyData[i].position,SystemOperator.FaceEachOther(lstEnemyData[i].position.X,PlayerStatus.playerPos.X),
+							ref lstEnemyData[i].totalDistance,lstEnemyData[i].targetDistance,ref lstEnemyData[i].bps,
+							ref lstEnemyData[i].coefficient,ref lstEnemyData[i].boundDirection,
+							lstEnemyData[i].weight, lstEnemyData[i].speed, lstEnemyData[i].jumpPower,
+							lstEnemyData[i].widthblock, lstEnemyData[i].heightblock, ref lstEnemyData[i].isKnockBack);
 					}
 				}
 
@@ -113,13 +122,13 @@ namespace Zitulmyth
 
 		}
 
-		public static void EnemyIdle(int index)
+		public static void EnemyBehaviorValuesSetup(int index)
 		{
 			bool radDir;
 			int num;
 
 
-			if (!lstEnemyData[index].isMovingH)
+			if (!lstEnemyData[index].isValueSetted)
 			{
 
 				SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
@@ -129,18 +138,32 @@ namespace Zitulmyth
 
 				SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
 				lstEnemyData[index].direction = radDir;
+				lstEnemyData[index].acceleration = 1;
 				lstEnemyData[index].targetDistance = new Vector(SystemOperator.randomNum.Next(32, 96), 0);
 
 
-				lstEnemyData[index].isMovingH = true;
+				if(lstEnemyData[index].state == EnemyState.Active)
+				{
+					SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
+					lstEnemyData[index].acceleration = 2;
+					lstEnemyData[index].targetDistance = new Vector(SystemOperator.randomNum.Next(280, 320), 0);
+				}
+
+				lstEnemyData[index].isValueSetted = true;
 			}
+
+		}
+
+		public static void EnemyIdle(int index)
+		{
+	
 
 			switch (lstEnemyData[index].name)
 			{
 				case EnemyName.Boar:
 					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
 										lstEnemyData[index].widthblock, lstEnemyData[index].heightblock,
-										lstEnemyData[index].speed, lstEnemyData[index].targetDistance);
+										lstEnemyData[index].speed, lstEnemyData[index].targetDistance,true);
 
 					break;
 
@@ -150,21 +173,14 @@ namespace Zitulmyth
 		public static void EnemyActiv(int index)
 		{
 		
-			if (!lstEnemyData[index].isMovingH)
-			{
-
-				SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
-
-				lstEnemyData[index].targetDistance = new Vector(SystemOperator.randomNum.Next(96, 128), 0);
-				lstEnemyData[index].isMovingH = true;
-			}
 
 			switch (lstEnemyData[index].name)
 			{
 				case EnemyName.Boar:
 					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
 										lstEnemyData[index].widthblock, lstEnemyData[index].heightblock,
-										lstEnemyData[index].speed*2, lstEnemyData[index].targetDistance);
+										lstEnemyData[index].speed * lstEnemyData[index].acceleration,
+										lstEnemyData[index].targetDistance,false);
 
 					break;
 
@@ -172,7 +188,8 @@ namespace Zitulmyth
 		}
 
 
-		private static void EnemyHorizontalMove(int index, bool direction,Vector pos,int blockW,int blockH,int speed,Vector target)
+		private static void EnemyHorizontalMove(int index, bool direction,Vector pos,int blockW,int blockH,
+			int speed,Vector target,bool wait)
 		{
 
 			if (lstEnemyData[index].totalDistance.X < target.X )
@@ -222,12 +239,18 @@ namespace Zitulmyth
 			}
 			else
 			{
+				if (wait)
+				{
+					lstEnemyData[index].isWaiting = true;
+					lstEnemyData[index].totalWaitTime = 0;
+					lstEnemyData[index].targetWaitTime = 2000;
+
+				}
+
 				lstEnemyData[index].targetDistance = new Vector(0, 0);
 				lstEnemyData[index].totalDistance = new Vector(0, 0);
-				lstEnemyData[index].isWaiting = true;
-				lstEnemyData[index].totalWaitTime = 0;
-				lstEnemyData[index].targetWaitTime = 2000;
-				lstEnemyData[index].isMovingH = false;
+
+				lstEnemyData[index].isValueSetted = false;
 			}
 
 		}
@@ -391,7 +414,7 @@ namespace Zitulmyth
 
 			switch (name)
 			{
-				case EnemyName.Zigytu01:
+				case EnemyName.Zigitu01:
 
 					rnd = new Random(seed++);
 
@@ -422,7 +445,7 @@ namespace Zitulmyth
 		public static void GenerateEnemy(Canvas canvas, Vector setpos)
 		{
 
-			lstEnemyData.Add(SetEnemyData(EnemyName.Zigytu01,setpos,false));
+			lstEnemyData.Add(SetEnemyData(EnemyName.Zigitu01, setpos,false));
 
 			int index = lstEnemyData.Count - 1;
 
@@ -454,17 +477,17 @@ namespace Zitulmyth
 			
 			switch (name)
 			{
-				case EnemyName.Zigytu01:
+				case EnemyName.Zigitu01:
 
 					enemy = new EnemyData
 					{
-						name = EnemyName.Zigytu01,
+						name = EnemyName.Zigitu01,
 						speed = 4, life = 2, ofepower = 1, defpower = 0, weight = 6, direction = dir,
 						state = EnemyState.Spawn,
 						pixSize = new Vector(32, 64), position = setpos,
 						triggerAreaPos = new Vector(32, 64),triggerAreaSize = new Vector(0,0),triggerAreaOffset = new Vector(0, 0),
 						widthblock = 1,heightblock = 2,
-						imgEnemy = new Image(){ Source = ImageData.cbEnemy[1],Width = 32,Height = 64},
+						imgEnemy = new Image(){ Source = ImageData.lstCBEnemy[0].lstCBSpawn[0],Width = 32,Height = 64},
 						deathEvent = EnemyDeathEvent.Pop,
 					};
 
@@ -531,7 +554,7 @@ namespace Zitulmyth
 
 		public static void ReSpawnEnemy(Canvas canvas)
 		{
-			if(lstEnemyData.Count == 0)
+			if(StageManager.respawnEnemy && lstEnemyData.Count == 0)
 			{
 				SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
 
