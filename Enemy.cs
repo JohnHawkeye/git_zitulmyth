@@ -332,7 +332,9 @@ namespace Zitulmyth
 
 						if (block > lstEnemyData[index].fallingEndure)
 						{
-							Sound.seChannelB.Play();
+							Sound.SoundEffectSelector(SeName.Shock);
+							Sound.SoundEffectPlayer(SeName.Shock);
+
 							lstEnemyData[index].life -= 1;
 
 						}

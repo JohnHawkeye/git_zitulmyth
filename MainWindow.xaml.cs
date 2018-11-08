@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 using Zitulmyth.Checking;
 using Zitulmyth.Data;
 
@@ -21,6 +22,8 @@ namespace Zitulmyth
 
 	public partial class MainWindow : Window
 	{
+
+		public bool isDeactivated;
 
 		//timer
 		private Timer timerFrameUpdate;
@@ -32,12 +35,15 @@ namespace Zitulmyth
 		//Controls
 
 		public static Canvas mainCanvas;
+		public static Label lblMode;
 		public static Canvas canScreenFade = new Canvas();
 		public static StackPanel stpPlayerStatus;
 
 		public static bool titleStrSwitch = true;
 
 		//window settings
+		public EventEditorWindow eventEditor = new EventEditorWindow();
+
 		public static int gameWindowWidth = 1024;
 		public static int gameWindowHeight = 768; 
 
@@ -54,6 +60,8 @@ namespace Zitulmyth
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
+			
+
 			this.InitGame();
 		}
 
@@ -81,8 +89,10 @@ namespace Zitulmyth
 			SplashLogoOpen();
 
 
-			//objects maked
+			//controlls maked
 			mainCanvas = this.FindName("Canvas") as Canvas;
+			lblMode = FindName("lblGameMode") as Label;
+
 
 			CollisionCheck.ColliderCheckMaskGenerater(Canvas);
 			MainWeapon.InitMainWeapon(Canvas);
@@ -226,11 +236,25 @@ namespace Zitulmyth
 					{
 						EnterKeyAction(Canvas);
 					}
-
-					if (GameTransition.gameTransition == GameTransitionType.StageDuring)
+					
+	//got to Edit Mode
+					if(GameTransition.gameTransition == GameTransitionType.Title)
+					{
+						if (KeyController.keyE)
+						{
+							mainCanvas.Children.Remove(ImageData.imgTitle[0]); mainCanvas.Children.Remove(ImageData.imgTitle[1]);
+							countTime = 0;
+							GameTransition.gameTransition = GameTransitionType.EditMode;
+							btnStageLoad.IsEnabled = true;
+							lblMode.Content = "ゲームモード：エディット";
+						}
+					}
+					
+	//StageDuring game play
+					if (GameTransition.gameTransition == GameTransitionType.StageDuring &&
+						!isDeactivated)
 					{
 						Animator.AnimationObject();
-						
 						Animator.AnimationItem();
 
 
@@ -309,13 +333,13 @@ namespace Zitulmyth
 
 					if (GameTransition.endSplashLogo)
 					{
+						Sound.bgm.Stop();
 						canvas.Children.Remove(ImageData.imgTitle[0]); canvas.Children.Remove(ImageData.imgTitle[1]);
 						countTime = 0;
+						lblMode.Content = "ゲームモード：ステージ準備";
 						GameTransition.gameTransition = GameTransitionType.StageInit;
-
 //debug stagechange
-						StageManager.stageNum = 2;
-						GameTransition.eventNum = 4;
+					//	StageManager.stageNum = 2;
 					}
 					
 					break;
@@ -373,6 +397,56 @@ namespace Zitulmyth
 			millisec = dateTime.Millisecond;
 
 			nowTime = millisec + (seconds * 1000);
+		}
+
+		private void GameWindow_Closed(object sender, EventArgs e)
+		{
+			eventEditor.Close();
+		}
+
+		private void btnViewEventWindow_Click(object sender, RoutedEventArgs e)
+		{
+			eventEditor.Show();
+		}
+
+		private void GameWindow_Activated(object sender, EventArgs e)
+		{
+			isDeactivated = false;
+		}
+
+		private void GameWindow_Deactivated(object sender, EventArgs e)
+		{
+			isDeactivated = true;
+		}
+
+		private void btnStageLoad_Click(object sender, RoutedEventArgs e)
+		{
+
+
+			//remove
+			StageInit.StageBlockRemove(mainCanvas);
+			StageInit.StageObjectsRemove(mainCanvas);
+			StageInit.StageEnemyRemove(mainCanvas);
+			StageInit.StageItemRemove(mainCanvas);
+
+			StageManager.lstClearCondition.Clear();
+
+			//init
+
+			StageManager.stageNum = int.Parse(txtStageNumber.Text);
+
+			ImageData.ImageLoadAfterSecond();
+
+			StageInit.InitBlockData();
+			StageDataSetting.SetData();
+
+			StageInit.StageBlockSet(mainCanvas);
+			StageManager.StageObjectsSetting(mainCanvas);
+		}
+
+		private void txtStageNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
 		}
 	}
 }

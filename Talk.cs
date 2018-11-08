@@ -30,7 +30,7 @@ namespace Zitulmyth
 	{
 		public int branchID;
 		public TalkType type;
-		public String message;
+		public string message;
 		public bool speaker; //false:player,true:other
 		public int[] destination;
 		public bool branchEnd;

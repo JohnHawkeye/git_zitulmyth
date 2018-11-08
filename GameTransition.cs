@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Timers;
 using Zitulmyth.Data;
 using Zitulmyth.Enums;
@@ -20,6 +21,7 @@ namespace Zitulmyth
 		StageDuring,
 		StageEnd,
 		StageNext,
+		EditMode,
 
 	}
 
@@ -51,7 +53,6 @@ namespace Zitulmyth
 		private static int splashWaitTotal = 0;
 
 		public static bool duringTransition = false;
-		public static int eventNum = 1;
 		public static int eventCount = 0;
 
 		public static bool eventStart = false;
@@ -61,6 +62,7 @@ namespace Zitulmyth
 		
 		public static bool eventBalloonIsOpen = false;
 
+		public static Image eventTargetImage;
 		public static bool charaRenderStart = false;
 		public static int charaRenderIndex = 0;
 		public static double renderRateTotal = 0;
@@ -153,7 +155,10 @@ namespace Zitulmyth
 								{
 									endSplashLogo = true;
 									screenFadeTotal = 0;
-									
+
+									Sound.SoundBgmSelector(BgmName.Opening);
+									Sound.bgm.Play();
+
 									MainWindow.TitleOpen(canvas);
 									
 								}
@@ -198,8 +203,8 @@ namespace Zitulmyth
 					StageInit.StageBlockSet(canvas);
 					StageManager.StageObjectsSetting(canvas);
 
-					GameTransition.gameTransition = GameTransitionType.StageStart;
-					Console.WriteLine("StageInit");
+					MainWindow.lblMode.Content = "ゲームモード：ステージ開始";
+					gameTransition = GameTransitionType.StageStart;
 
 					break;
 
@@ -213,7 +218,6 @@ namespace Zitulmyth
 						eventCount = 0;
 						eventStart = true;
 					}
-					Console.WriteLine("StageStart");
 
 					break;
 
@@ -222,7 +226,7 @@ namespace Zitulmyth
 					if (StageManager.StageClearCheck())
 					{
 						gameTransition = GameTransitionType.StageEnd;
-						
+						MainWindow.lblMode.Content = "ゲームモード：ステージ終了";
 					}
 
 					break;
@@ -232,9 +236,6 @@ namespace Zitulmyth
 					if (!eventStart)
 					{
 						duringTransition = true;
-
-						StageEvent.InitEvent();
-						eventCount = 0;
 						eventStart = true;
 					}
 
@@ -251,7 +252,12 @@ namespace Zitulmyth
 
 					StageManager.lstClearCondition.Clear();
 
+					MainWindow.lblMode.Content = "ゲームモード：ステージ準備";
 					gameTransition = GameTransitionType.StageInit;
+
+					break;
+
+				case GameTransitionType.EditMode:
 
 					break;
 			}
@@ -276,15 +282,20 @@ namespace Zitulmyth
 						case EventCommandEnum.Balloon:
 
 							Vector blpos = StageEvent.listEvent[eventCount].balloonPos;
-							String blstring = StageEvent.listEvent[eventCount].balloonMsg;
+							string blstring = StageEvent.listEvent[eventCount].balloonMsg;
 
-							if (StageEvent.listEvent[eventCount].targetType == TargetType.Object)
+							if(StageEvent.listEvent[eventCount].targetImgType == TargetImageType.IMG_Player)
 							{
-								SelectObjectImage();
+								eventTargetImage = ImageData.imgPlayer;
 							}
 
-							Image blTarget = StageEvent.listEvent[eventCount].imgTarget;
-							BalloonMessage.OpenBalloon(eventCount, canvas, blpos, blTarget, blstring,false);
+							if (StageEvent.listEvent[eventCount].targetImgType == TargetImageType.IMG_Object)
+							{
+								eventTargetImage = SelectObjectImage();
+							}
+
+							
+							BalloonMessage.OpenBalloon(eventCount, canvas, blpos, eventTargetImage, blstring,false);
 
 							
 							eventBalloonIsOpen = true;
@@ -310,9 +321,11 @@ namespace Zitulmyth
 
 						case EventCommandEnum.Move:
 
-							if(StageEvent.listEvent[eventCount].targetType == TargetType.Object)
+
+
+							if(StageEvent.listEvent[eventCount].targetImgType == TargetImageType.IMG_Object)
 							{
-								SelectObjectImage();
+								eventTargetImage = SelectObjectImage();
 							}
 
 							charaMoveIndex = eventCount;
@@ -321,23 +334,28 @@ namespace Zitulmyth
 							break;
 
 						case EventCommandEnum.BgmPlay:
-							if(StageEvent.listEvent[eventCount].bgm != null)
-								StageEvent.listEvent[eventCount].bgm.PlayLooping();
+
+							Sound.SoundBgmSelector(StageEvent.listEvent[eventCount].bgmName);
+							Sound.bgm.Play();
+
 							Console.WriteLine("bgm");
 							break;
 
 						case EventCommandEnum.SePlay:
-							if (StageEvent.listEvent[eventCount].bgm != null)
-								StageEvent.listEvent[eventCount].bgm.Play();
+
+							Sound.SoundEffectSelector(StageEvent.listEvent[eventCount].seName);
+
+							Sound.SoundEffectPlayer(StageEvent.listEvent[eventCount].seName);
+
 							Console.WriteLine("se");
 							break;
 
 						case EventCommandEnum.CharaFadeIn:
 
-							StageEvent.listEvent[eventCount].imgTarget.Opacity = 0;
-							StageEvent.listEvent[eventCount].imgTarget.Source = ImageData.cbPlayer[0];
-							StageEvent.listEvent[eventCount].imgTarget.Width = 32;
-							StageEvent.listEvent[eventCount].imgTarget.Height = 64;
+							ImageData.imgPlayer.Opacity = 0;
+							ImageData.imgPlayer.Source = ImageData.cbPlayer[StageEvent.listEvent[eventCount].imgIndex];
+							ImageData.imgPlayer.Width = 32;
+							ImageData.imgPlayer.Height = 64;
 
 							renderRateTotal = 0;
 
@@ -348,20 +366,20 @@ namespace Zitulmyth
 
 						case EventCommandEnum.CharaImageChange:
 
-							switch (StageEvent.listEvent[eventCount].targetType)
+							switch (StageEvent.listEvent[eventCount].targetImgType)
 							{
-								case TargetType.Player:
-									StageEvent.listEvent[eventCount].imgTarget.Source = StageEvent.listEvent[eventCount].imgSource;
+								case TargetImageType.IMG_Player:
+									ImageData.imgPlayer.Source = CbSelector();
 									break;
-								case TargetType.Enemy:
-									SpawnEnemy.lstEnemyData[0].imgEnemy.Source = StageEvent.listEvent[eventCount].imgSource;
+								case TargetImageType.IMG_Enemy:
+									SpawnEnemy.lstEnemyData[0].imgEnemy.Source = CbSelector();
 									break;
-								case TargetType.Object:
+								case TargetImageType.IMG_Object:
 
-									SelectObjectImage();
+									SelectObjectImage().Source = CbSelector();
 
 									break;
-								case TargetType.Item:
+								case TargetImageType.IMG_Item:
 									break;
 							}
 							
@@ -418,20 +436,21 @@ namespace Zitulmyth
 							{
 								if (!StageEvent.listEvent[eventCount].eventOnly)
 								{
+									MainWindow.lblMode.Content = "ゲームモード：ステージプレイ";
 									gameTransition = GameTransitionType.StageDuring;
 								}
 								else
 								{
+									MainWindow.lblMode.Content = "ゲームモード：ステージ初期化";
 									gameTransition = GameTransitionType.StageNext;
 								}
 								
 							}
 							else if(gameTransition == GameTransitionType.StageEnd)
 							{
+								MainWindow.lblMode.Content = "ゲームモード：ステージ初期化";
 								gameTransition = GameTransitionType.StageNext;
 							}
-
-							eventNum++;
 
 							Console.WriteLine("end");
 							
@@ -477,12 +496,12 @@ namespace Zitulmyth
 				double temp = (double)MainWindow.elapsedTime/ StageEvent.listEvent[charaRenderIndex].eventValue;
 				renderRateTotal += Math.Round(temp,2);
 
-				StageEvent.listEvent[charaRenderIndex].imgTarget.Opacity = renderRateTotal;
+				ImageData.imgPlayer.Opacity = renderRateTotal;
 
 			}
 			else
 			{
-				StageEvent.listEvent[charaRenderIndex].imgTarget.Opacity = 1;
+				ImageData.imgPlayer.Opacity = 1;
 				charaRenderStart = false;
 			}
 		}
@@ -534,7 +553,7 @@ namespace Zitulmyth
 			if(StageEvent.listEvent[charaMoveIndex].moveTotal.X < StageEvent.listEvent[charaMoveIndex].moveDistance.X)
 			{
 
-				double x = Canvas.GetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget);
+				double x = Canvas.GetLeft(eventTargetImage);
 				double dis = 0;
 				double ac = StageEvent.listEvent[charaMoveIndex].moveSpeed;
 
@@ -542,11 +561,11 @@ namespace Zitulmyth
 
 				if (!StageEvent.listEvent[charaMoveIndex].direction)
 				{
-					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x - dis);
+					Canvas.SetLeft(eventTargetImage, x - dis);
 				}
 				else
 				{
-					Canvas.SetLeft(StageEvent.listEvent[charaMoveIndex].imgTarget, x + dis);
+					Canvas.SetLeft(eventTargetImage, x + dis);
 				}
 
 				StageEvent.listEvent[charaMoveIndex].moveTotal.X += dis;
@@ -559,8 +578,10 @@ namespace Zitulmyth
 
 		}
 
-		public static void SelectObjectImage()
+		public static Image SelectObjectImage()
 		{
+			Image temp = new Image();
+
 			switch (StageEvent.listEvent[eventCount].eventType)
 			{
 				case EventCommandEnum.CharaImageChange:
@@ -569,7 +590,7 @@ namespace Zitulmyth
 					{
 						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
 						{
-							ObjectChecker.lstObject[i].imgObject.Source = StageEvent.listEvent[eventCount].imgSource;
+							temp = ObjectChecker.lstObject[i].imgObject;
 							break;
 						}
 					}
@@ -582,7 +603,7 @@ namespace Zitulmyth
 					{
 						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
 						{
-							StageEvent.listEvent[eventCount].imgTarget = ObjectChecker.lstObject[i].imgObject;
+							temp = ObjectChecker.lstObject[i].imgObject;
 							
 							break;
 						}
@@ -596,17 +617,56 @@ namespace Zitulmyth
 					{
 						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
 						{
-							StageEvent.listEvent[eventCount].imgTarget = ObjectChecker.lstObject[i].imgObject;
+							temp = ObjectChecker.lstObject[i].imgObject;
 
 							break;
 						}
 					}
 
 					break;
+
 			}
 
+			return temp;
 
+		}
 
+		public static CroppedBitmap CbSelector()
+		{
+			CroppedBitmap getCB;
+
+			switch (StageEvent.listEvent[eventCount].targetCBSource)
+			{
+				case TargetCBSource.CB_Empty:
+					getCB = ImageData.cbEmpty;
+					break;
+
+				case TargetCBSource.CB_Player:
+					getCB = ImageData.cbPlayer[StageEvent.listEvent[eventCount].imgIndex];
+					break;
+
+				case TargetCBSource.CB_Enemy:
+					getCB = ImageData.lstCBEnemy[0].lstCBSpawn[StageEvent.listEvent[eventCount].imgIndex];
+					break;
+
+				case TargetCBSource.CB_Item:
+					getCB = ImageData.lstCBItem[0].lstCBIdle[StageEvent.listEvent[eventCount].imgIndex];
+					break;
+
+				case TargetCBSource.CB_Npc:
+					getCB = ImageData.cbNpc[StageEvent.listEvent[eventCount].imgIndex];
+					break;
+
+				case TargetCBSource.CB_Object:
+					getCB = ImageData.cbObject[StageEvent.listEvent[eventCount].imgIndex];
+					break;
+
+				default:
+					getCB = ImageData.cbEmpty;
+					break;
+			}
+
+			return getCB;
 		}
 
 	}

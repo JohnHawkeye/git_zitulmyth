@@ -192,8 +192,9 @@ namespace Zitulmyth
 
 							if (!Sound.seStop)
 							{
-								Sound.seChannelB.Stop();
-								Sound.seChannelB.Play();
+								Sound.SoundEffectSelector(SeName.Shock);
+								Sound.SoundEffectPlayer(SeName.Shock);
+
 								Sound.seStop = true;
 							}
 
@@ -317,8 +318,9 @@ namespace Zitulmyth
 
 						if (!Sound.seStop)
 						{
-							Sound.seFog.Stop();
-							Sound.seFog.Play();
+							Sound.SoundEffectSelector(SeName.Fog);
+							Sound.SoundEffectPlayer(SeName.Fog);
+
 							Sound.seStop = true;
 						}
 

@@ -323,7 +323,9 @@ namespace Zitulmyth
 
 						if (block > fallingEndure)
 						{
-							Sound.seDamage.Play();
+							Sound.SoundEffectSelector(SeName.Player_Damage);
+
+							Sound.SoundEffectPlayer(SeName.Player_Damage);
 						}
 					}
 					fallingStart = false;
@@ -370,8 +372,9 @@ namespace Zitulmyth
 
 						if (!Sound.seStop)
 						{
-							Sound.seDamage.Stop();
-							Sound.seDamage.Play();
+							Sound.SoundEffectSelector(SeName.Player_Damage);
+							Sound.SoundEffectPlayer(SeName.Player_Damage);
+
 							Sound.seStop = true;
 						}
 
@@ -428,8 +431,9 @@ namespace Zitulmyth
 
 						if (!Sound.seStop)
 						{
-							Sound.seChannelA.Stop();
-							Sound.seChannelA.Play();
+							Sound.SoundEffectSelector(SeName.Item_Get);
+							Sound.SoundEffectPlayer(SeName.Item_Get);
+
 							Sound.seStop = true;
 						}
 

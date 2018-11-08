@@ -19,18 +19,33 @@ using Zitulmyth.Data;
 
 namespace Zitulmyth
 {
+
+	public enum BgmName
+	{
+		None = 0,
+		Opening = 1,
+		Darkness = 2,
+	}
+
+	public enum SeName
+	{
+		None = 0,
+		Player_Damage = 1,
+		Fog = 2,
+		Item_Get = 3,
+		Shock = 4,
+
+	}
+
 	public class Sound
 	{
 
-		public static System.Media.SoundPlayer seDamage = new System.Media.SoundPlayer("player_damage.wav");
-		public static System.Media.SoundPlayer seFog = new System.Media.SoundPlayer("fog.wav");
-		public static System.Media.SoundPlayer bgmDarkness = new System.Media.SoundPlayer("darkness.wav");
-
 		public static MediaElement bgm = new MediaElement();
-		public static MediaElement seChannelA = new MediaElement();
-		public static MediaElement seChannelB = new MediaElement();
-
+		public static MediaElement seListenerPlayer = new MediaElement();
+		public static MediaElement seListenerEnemy = new MediaElement();
+		public static MediaElement seListenerObject = new MediaElement();
 		
+		public static string dirpath = Directory.GetCurrentDirectory();
 
 		public static int sePlayTime = 0;
 		public static bool seStop;
@@ -38,22 +53,90 @@ namespace Zitulmyth
 		public static void SoundEffectLoad(Canvas canvas)
 		{
 
-			string dirpath = Directory.GetCurrentDirectory();
-
-			canvas.Children.Add(seChannelA);
-			seChannelA.Source = new Uri(dirpath + "\\itemget.wav", UriKind.Absolute);
-			seChannelA.LoadedBehavior = MediaState.Manual;
-
-			canvas.Children.Add(seChannelB);
-			seChannelB.Source = new Uri(dirpath + "\\shock.wav", UriKind.Absolute);
-			seChannelB.LoadedBehavior = MediaState.Manual;
-
 			canvas.Children.Add(bgm);
-			bgm.Source = new Uri(dirpath + "\\opening.mp3", UriKind.Absolute);
 			bgm.LoadedBehavior = MediaState.Manual;
-			bgm.Play();
+
+			SoundBgmSelector(BgmName.Opening);
+
+
+
+			canvas.Children.Add(seListenerPlayer);
+			seListenerPlayer.LoadedBehavior = MediaState.Manual;
+
+			canvas.Children.Add(seListenerEnemy);
+			seListenerEnemy.LoadedBehavior = MediaState.Manual;
+
+			canvas.Children.Add(seListenerObject);
+			seListenerObject.LoadedBehavior = MediaState.Manual;
+
 		}
 
+		public static void SoundBgmSelector(BgmName name)
+		{
+			switch (name)
+			{
+				case BgmName.None:
+					bgm.Source = new Uri(dirpath + "", UriKind.Absolute);
+					break;
 
+				case BgmName.Opening:
+					bgm.Source = new Uri(dirpath + "\\opening.mp3", UriKind.Absolute);
+					break;
+
+				case BgmName.Darkness:
+					bgm.Source = new Uri(dirpath + "\\darkness.wav", UriKind.Absolute);
+					break;
+			}
+		}
+
+		public static void SoundEffectSelector(SeName name)
+		{
+
+			switch (name)
+			{
+				case SeName.None:
+					seListenerPlayer.Source = new Uri(dirpath + "", UriKind.Absolute);
+					break;
+
+				case SeName.Player_Damage:
+					seListenerPlayer.Source = new Uri(dirpath + "\\player_damage.wav", UriKind.Absolute);
+					break;
+
+				case SeName.Fog:
+					seListenerEnemy.Source = new Uri(dirpath + "\\fog.wav", UriKind.Absolute);
+					break;
+
+				case SeName.Item_Get:
+					seListenerObject.Source = new Uri(dirpath + "\\itemget.wav", UriKind.Absolute);
+					break;
+
+				case SeName.Shock:
+					seListenerEnemy.Source = new Uri(dirpath + "\\shock.wav", UriKind.Absolute);
+					break;
+			}
+
+		}
+
+		public static void SoundEffectPlayer(SeName name)
+		{
+			switch (name)
+			{
+				case SeName.Player_Damage:
+					seListenerPlayer.Play();
+					break;
+
+				case SeName.Fog:
+					seListenerEnemy.Play();
+					break;
+
+				case SeName.Item_Get:
+					seListenerObject.Play();
+					break;
+
+				case SeName.Shock:
+					seListenerEnemy.Play();
+					break;
+			}
+		}
 	}
 }

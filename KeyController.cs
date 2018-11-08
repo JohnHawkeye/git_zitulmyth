@@ -21,6 +21,7 @@ namespace Zitulmyth
 	public class KeyController
 	{
 		//input
+		public static bool keyF1;
 		public static bool keyLeft = false;
 		public static bool keyRight = false;
 		public static bool keyUp = false;
@@ -40,6 +41,11 @@ namespace Zitulmyth
 		{
 			if (!keyControlLocking)
 			{
+				if (e.Key == Key.F1)
+				{
+					keyF1 = true;
+				}
+
 				if (e.Key == Key.Left)
 				{
 					keyLeft = true;
@@ -109,10 +115,16 @@ namespace Zitulmyth
 
 		public static void InputKeyUp(object sender, KeyEventArgs e)
 		{
+			if (e.Key == Key.F1)
+			{
+				keyF1 = false;
+			}
+
 			if (e.Key == Key.Left)
 			{
 				keyLeft = false;
 			}
+
 			if (e.Key == Key.Right)
 			{
 				keyRight = false;

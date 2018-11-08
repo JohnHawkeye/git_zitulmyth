@@ -5,12 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="Zitulmyth" Height="900" Width="1200" Background="Black" MinWidth="1024" MinHeight="774" ResizeMode="NoResize" Loaded="Window_Loaded" HorizontalAlignment="Left" VerticalAlignment="Top" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
-	<Canvas x:Name="Canvas" HorizontalAlignment="Center" Height="768" VerticalAlignment="Center" Width="1024" Margin="0,0,0,0">
+        Title="Zitulmyth" Height="1081" Width="1200" Background="Black" MinWidth="1024" MinHeight="774" ResizeMode="NoResize" Loaded="Window_Loaded" HorizontalAlignment="Left" VerticalAlignment="Top" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp" Left="0" Top="0" Closed="GameWindow_Closed" Activated="GameWindow_Activated" Deactivated="GameWindow_Deactivated">
+	<Canvas x:Name="Canvas" HorizontalAlignment="Center" Height="768" VerticalAlignment="Top" Width="1024" Margin="0,64,0,0">
 		<StackPanel x:Name="spPlayerStatus" Height="96" Width="512" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="442" Canvas.Left="171">
 			<Canvas x:Name="CaLife" Width="512" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 			<Canvas x:Name="CaMana" Width="512" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 		</StackPanel>
-		<Label x:Name="DebugLabelA" Content="Label" Canvas.Left="-70" Canvas.Top="782" Width="221" Background="White"/>
+		<Label x:Name="lblGameMode" Content="ゲームモード：タイトル" Canvas.Left="-74" Canvas.Top="-50" Width="428" Foreground="White" FontSize="18"/>
+		<StackPanel x:Name="stpEditControll" Canvas.Left="-56" Canvas.Top="802" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1110" Height="75">
+			<TextBox x:Name="txtStageNumber" TextWrapping="Wrap" Text="0" Width="90" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Right" PreviewTextInput="txtStageNumber_PreviewTextInput"/>
+			<Button x:Name="btnStageLoad" Content="ステージ読み込み" Width="170" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" FontSize="16" Focusable="False" IsEnabled="False" Click="btnStageLoad_Click"/>
+			<Button x:Name="btnStagePlay" Content="▶" Width="58" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,0,0,0" FontSize="16" Focusable="False"/>
+		</StackPanel>
+		<StackPanel x:Name="stpSubView" Height="84" Canvas.Left="-56" Canvas.Top="898" Width="1110" Orientation="Horizontal">
+			<Button x:Name="btnViewEventWindow" Content="イベントエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewEventWindow_Click" Focusable="False"/>
+		</StackPanel>
+		<Label x:Name="DebugLabelA" Content="Label" Width="221" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Canvas.Left="875" Canvas.Top="815"/>
 	</Canvas>
 </Window>
