@@ -12,13 +12,9 @@
 			<Canvas x:Name="CaMana" Width="512" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 		</StackPanel>
 		<Label x:Name="lblGameMode" Content="ゲームモード：タイトル" Canvas.Left="-74" Canvas.Top="-50" Width="428" Foreground="White" FontSize="18"/>
-		<StackPanel x:Name="stpEditControll" Canvas.Left="-56" Canvas.Top="802" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1110" Height="75">
-			<TextBox x:Name="txtStageNumber" TextWrapping="Wrap" Text="0" Width="90" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Right" PreviewTextInput="txtStageNumber_PreviewTextInput"/>
-			<Button x:Name="btnStageLoad" Content="ステージ読み込み" Width="170" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" FontSize="16" Focusable="False" IsEnabled="False" Click="btnStageLoad_Click"/>
-			<Button x:Name="btnStagePlay" Content="▶" Width="58" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,0,0,0" FontSize="16" Focusable="False"/>
-		</StackPanel>
+		<StackPanel x:Name="stpEditControll" Canvas.Left="-56" Canvas.Top="802" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1110" Height="75"/>
 		<StackPanel x:Name="stpSubView" Height="84" Canvas.Left="-56" Canvas.Top="898" Width="1110" Orientation="Horizontal">
-			<Button x:Name="btnViewEventWindow" Content="イベントエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewEventWindow_Click" Focusable="False"/>
+			<Button x:Name="btnViewEventWindow" Content="イベントエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewEventWindow_Click" Focusable="False" IsEnabled="False"/>
 		</StackPanel>
 		<Label x:Name="DebugLabelA" Content="Label" Width="221" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Canvas.Left="875" Canvas.Top="815"/>
 	</Canvas>

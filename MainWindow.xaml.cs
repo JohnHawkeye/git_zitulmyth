@@ -245,7 +245,7 @@ namespace Zitulmyth
 							mainCanvas.Children.Remove(ImageData.imgTitle[0]); mainCanvas.Children.Remove(ImageData.imgTitle[1]);
 							countTime = 0;
 							GameTransition.gameTransition = GameTransitionType.EditMode;
-							btnStageLoad.IsEnabled = true;
+							btnViewEventWindow.IsEnabled = true;
 							lblMode.Content = "ゲームモード：エディット";
 						}
 					}
@@ -399,6 +399,7 @@ namespace Zitulmyth
 			nowTime = millisec + (seconds * 1000);
 		}
 
+//control event
 		private void GameWindow_Closed(object sender, EventArgs e)
 		{
 			eventEditor.Close();
@@ -407,6 +408,7 @@ namespace Zitulmyth
 		private void btnViewEventWindow_Click(object sender, RoutedEventArgs e)
 		{
 			eventEditor.Show();
+			eventEditor.Focus();
 		}
 
 		private void GameWindow_Activated(object sender, EventArgs e)
@@ -419,34 +421,5 @@ namespace Zitulmyth
 			isDeactivated = true;
 		}
 
-		private void btnStageLoad_Click(object sender, RoutedEventArgs e)
-		{
-
-
-			//remove
-			StageInit.StageBlockRemove(mainCanvas);
-			StageInit.StageObjectsRemove(mainCanvas);
-			StageInit.StageEnemyRemove(mainCanvas);
-			StageInit.StageItemRemove(mainCanvas);
-
-			StageManager.lstClearCondition.Clear();
-
-			//init
-
-			StageManager.stageNum = int.Parse(txtStageNumber.Text);
-
-			ImageData.ImageLoadAfterSecond();
-
-			StageInit.InitBlockData();
-			StageDataSetting.SetData();
-
-			StageInit.StageBlockSet(mainCanvas);
-			StageManager.StageObjectsSetting(mainCanvas);
-		}
-
-		private void txtStageNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
-		{
-			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
-		}
 	}
 }
