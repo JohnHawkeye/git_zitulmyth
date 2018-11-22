@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using Zitulmyth.Checking;
 using Zitulmyth.Data;
+using Zitulmyth.Enums;
 
 namespace Zitulmyth
 {
@@ -34,6 +35,8 @@ namespace Zitulmyth
 
 		//Controls
 
+		public static bool closeMainWindow = false;
+
 		public static Canvas mainCanvas;
 		public static Label lblMode;
 		public static Canvas canScreenFade = new Canvas();
@@ -42,10 +45,17 @@ namespace Zitulmyth
 		public static bool titleStrSwitch = true;
 
 		//window settings
-		public EventEditorWindow eventEditor = new EventEditorWindow();
+		public static StageEditorWindow stageEditor = new StageEditorWindow();
+		public static EventEditorWindow eventEditor = new EventEditorWindow();
 
 		public static int gameWindowWidth = 1024;
-		public static int gameWindowHeight = 768; 
+		public static int gameWindowHeight = 768;
+
+		//mouse
+		public static Vector mouseMainCanvasPosition;
+		public static bool isMouseLeftClicked;
+		public static bool isMouseRightClicked;
+		public static bool isMouseDragged;
 
 		//mainwindow
 		public MainWindow()
@@ -100,7 +110,7 @@ namespace Zitulmyth
 			BalloonMessage.GenerateBalloon(Canvas);
 			stpPlayerStatus = Canvas.FindName("spPlayerStatus")as StackPanel;
 			stpPlayerStatus.Visibility = Visibility.Hidden;
-			Canvas.SetZIndex(spPlayerStatus, 2);
+			Canvas.SetZIndex(spPlayerStatus, ImageZindex.status);
 
 			var _popcantalk = new Image
 			{
@@ -111,7 +121,7 @@ namespace Zitulmyth
 
 			ImageData.imgPopCanTalk = _popcantalk;
 			Canvas.Children.Add(ImageData.imgPopCanTalk);
-			Canvas.SetZIndex(ImageData.imgPopCanTalk, 15);
+			Canvas.SetZIndex(ImageData.imgPopCanTalk, ImageZindex.status);
 
 
 			ImageData.imgHandCursor = new Image
@@ -122,7 +132,7 @@ namespace Zitulmyth
 			};
 
 			Canvas.Children.Add(ImageData.imgHandCursor);
-			Canvas.SetZIndex(ImageData.imgHandCursor, 20);
+			Canvas.SetZIndex(ImageData.imgHandCursor, ImageZindex.handCursor);
 
 
 			StageInit.InitPlayer(Canvas);
@@ -245,6 +255,7 @@ namespace Zitulmyth
 							mainCanvas.Children.Remove(ImageData.imgTitle[0]); mainCanvas.Children.Remove(ImageData.imgTitle[1]);
 							countTime = 0;
 							GameTransition.gameTransition = GameTransitionType.EditMode;
+							btnViewStageEditorWindow.IsEnabled = true;
 							btnViewEventWindow.IsEnabled = true;
 							lblMode.Content = "ゲームモード：エディット";
 						}
@@ -402,6 +413,8 @@ namespace Zitulmyth
 //control event
 		private void GameWindow_Closed(object sender, EventArgs e)
 		{
+			closeMainWindow = true;
+			stageEditor.Close();
 			eventEditor.Close();
 		}
 
@@ -421,5 +434,123 @@ namespace Zitulmyth
 			isDeactivated = true;
 		}
 
+		private void btnViewStageEditorWindow_Click(object sender, RoutedEventArgs e)
+		{
+			stageEditor.Show();
+			stageEditor.Focus();
+		}
+
+		private void Canvas_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (StageEditorOperator.paletteMode == PaletteMode.Player)
+			{
+				Point point = e.GetPosition(mainCanvas);
+
+				if(point.X < 1024 - 32)
+				{
+					Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, point.X);
+					mouseMainCanvasPosition.X = point.X;
+				}
+				else
+				{
+					Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, 1024 - 32);
+					mouseMainCanvasPosition.X = 1024-32;
+				}
+
+				if(point.Y < 768 - 64)
+				{
+					Canvas.SetTop(StageEditorOperator.imgEditorPlayer, point.Y);
+					mouseMainCanvasPosition.Y = point.Y;
+				}
+				else
+				{
+					Canvas.SetTop(StageEditorOperator.imgEditorPlayer, 768 - 64);
+					mouseMainCanvasPosition.Y = 768 - 64;
+				}
+					
+			}
+
+			if(StageEditorOperator.paletteMode == PaletteMode.Block)
+			{
+				Vector blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+				Canvas.SetLeft(StageEditorOperator.imgEditorPointerCursor,( blockPos.X-1) *32);
+				Canvas.SetTop(StageEditorOperator.imgEditorPointerCursor, (blockPos.Y-1) *32);
+			}
+		}
+
+		private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+
+			if (!isMouseLeftClicked)
+			{
+				switch (StageEditorOperator.paletteMode)
+				{
+					case PaletteMode.Player:
+
+						StageEditorOperator.EditorPlayerStartPosDecision();
+						break;
+
+					case PaletteMode.Block:
+
+						Vector blockPos =  SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditSetupBlockOnMainCanvas(blockPos);
+
+						break;
+					case PaletteMode.Object:
+						break;
+					case PaletteMode.Enemy:
+						break;
+					case PaletteMode.Item:
+						break;
+				}
+
+				
+				isMouseLeftClicked = true;
+			}
+			
+		}
+
+		private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			isMouseLeftClicked = false;
+		}
+
+		private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if (!isMouseRightClicked)
+			{
+				switch (StageEditorOperator.paletteMode)
+				{
+					case PaletteMode.Player:
+
+						StageEditorOperator.imgEditorPlayer.Opacity = 1;
+					
+						Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, StageEditorOperator.memoryPlayerStartPos.X);
+						Canvas.SetTop(StageEditorOperator.imgEditorPlayer, StageEditorOperator.memoryPlayerStartPos.Y);
+
+						StageEditorOperator.paletteMode = PaletteMode.None;
+						StageEditorWindow.ctlGridMain.IsEnabled = true;
+						stageEditor.Focus();
+						break;
+
+					case PaletteMode.Block:
+						break;
+					case PaletteMode.Object:
+						break;
+					case PaletteMode.Enemy:
+						break;
+					case PaletteMode.Item:
+						break;
+				}
+
+				isMouseRightClicked = true;
+			}
+		
+		}
+
+		private void Canvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			isMouseRightClicked = false;
+		}
 	}
 }

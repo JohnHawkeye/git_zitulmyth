@@ -162,38 +162,6 @@ namespace Zitulmyth
 
 		}
 
-		private void txtStageNum_PreviewTextInput(object sender, TextCompositionEventArgs e)
-		{
-			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
-		}
-
-		private void btnStageNumDecrease_Click(object sender, RoutedEventArgs e)
-		{
-
-			int targetStageNum = int.Parse( txtStageNum.Text);
-
-			if(targetStageNum > 0)
-			{
-				targetStageNum--;
-				txtStageNum.Text = targetStageNum.ToString();
-
-				StageLoad();
-			}
-		}
-
-		private void btnStageNumIncrease_Click(object sender, RoutedEventArgs e)
-		{
-			int targetStageNum = int.Parse(txtStageNum.Text);
-
-			if (targetStageNum < 255)
-			{
-				targetStageNum++;
-				txtStageNum.Text = targetStageNum.ToString();
-
-				StageLoad();
-			}
-		}
-
 		private void StageLoad()
 		{
 			//remove
@@ -205,8 +173,6 @@ namespace Zitulmyth
 			StageManager.lstClearCondition.Clear();
 
 			//init
-
-			StageManager.stageNum = int.Parse(txtStageNum.Text);
 
 			ImageData.ImageLoadAfterSecond();
 
@@ -1131,7 +1097,23 @@ namespace Zitulmyth
 			}
 		}
 
+		private void EventEditor_Closed(object sender, EventArgs e)
+		{
+		}
 
+		private void EventEditor_Closing(object sender, CancelEventArgs e)
+		{
+			if (!MainWindow.closeMainWindow)
+			{
+				e.Cancel = true;
+				this.Visibility = Visibility.Hidden;
+			}
+			else
+			{
+				e.Cancel = false;
+			}
+		
+		}
 	}
 	
 }

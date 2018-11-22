@@ -105,7 +105,7 @@ namespace Zitulmyth
 			canvas.Children.Add(lstItemData[index].imgItem);
 			Canvas.SetLeft(lstItemData[index].imgItem, lstItemData[index].position.X);
 			Canvas.SetTop(lstItemData[index].imgItem, lstItemData[index].position.Y);
-			Canvas.SetZIndex(lstItemData[index].imgItem, 6);
+			Canvas.SetZIndex(lstItemData[index].imgItem, ImageZindex.item);
 		}
 
 		public static void FallingItems()

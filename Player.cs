@@ -36,7 +36,6 @@ namespace Zitulmyth
 		public static Vector playerPos;
 		public static int playerWidth = 1;	//block num
 		public static int playerHeight = 2;
-		public static int playerImageZindex = 7;
 		public static bool playerDirection = true;  //f:left t:right
 		public static int weight = 6;
 		public static int moveSpeed = 2;

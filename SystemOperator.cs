@@ -160,7 +160,20 @@ namespace Zitulmyth
 			return (attackerX < posX) ? true : false;
 		}
 
+		public static Vector FromCodeToBlocks(Point point)
+		{
+			Vector blockPos = new Vector();
 
+			blockPos.X = (int)Math.Ceiling(point.X / 32);
+			blockPos.Y = (int)Math.Ceiling(point.Y / 32);
+
+			if (blockPos.X == 0) blockPos.X = 1;
+			if (blockPos.Y == 0) blockPos.Y = 1;
+			if (blockPos.X >= 32) blockPos.X = 32;
+			if (blockPos.Y >= 24) blockPos.Y = 24;
+
+			return blockPos ;
+		}
 
 	}
 }

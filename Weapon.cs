@@ -54,7 +54,7 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(imgMainWeapon, 0);
 			Canvas.SetTop(imgMainWeapon, 0);
-			Canvas.SetZIndex(imgMainWeapon, 9);
+			Canvas.SetZIndex(imgMainWeapon, ImageZindex.mainWeapon);
 
 
 		}
@@ -227,8 +227,6 @@ namespace Zitulmyth
 		public static int subWeaponRange = 320;
 		public static int subWeaponTotalDistance = 0;
 		public static bool subWeaponDirection;
-		public static int subWeaponZindex = 10;
-
 
 		public static void SubWeaponGenerate(Canvas canvas, double posX,double posY)
 		{
@@ -261,7 +259,7 @@ namespace Zitulmyth
 
 				Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
 				Canvas.SetTop(ImageData.imgSubWeapon[0], posY);
-				Canvas.SetZIndex(ImageData.imgSubWeapon[0], subWeaponZindex);
+				Canvas.SetZIndex(ImageData.imgSubWeapon[0], ImageZindex.subWeapon);
 			}
 		}
 
@@ -285,7 +283,7 @@ namespace Zitulmyth
 
 					subWeaponTotalDistance += subWeaponSpeed;
 					Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
-					Canvas.SetZIndex(ImageData.imgSubWeapon[0], subWeaponZindex);
+					Canvas.SetZIndex(ImageData.imgSubWeapon[0], ImageZindex.subWeapon);
 				}
 				else
 				{

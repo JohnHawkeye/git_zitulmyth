@@ -63,6 +63,68 @@ namespace Zitulmyth
 		public static Vector triggerTargetPosition;
 
 
+		public static ObjectData SetObjectData(ObjectName name, Vector pos,int wb,int hb,int zid,
+			bool action , ObjectName target,bool type,int talkid)
+		{
+			var obj = new ObjectData();
+			CroppedBitmap cb = new CroppedBitmap();
+
+			switch (name)
+			{
+				case ObjectName.Empty_Collider:
+					cb = ImageData.cbDebug[0];
+					break;
+
+				case ObjectName.Npc_Ilsona:
+					cb = ImageData.cbNpc[0];
+					break;
+
+				case ObjectName.Npc_Opsa:
+					cb = ImageData.cbNpc[0];
+					break;
+
+				case ObjectName.Npc_Yeeda:
+					cb = ImageData.cbNpc[0];
+					break;
+
+				case ObjectName.Obj_CampFire:
+					cb = ImageData.cbObject[2];
+					break;
+
+				case ObjectName.Obj_Chair:
+					cb = ImageData.cbObject[0];
+					break;
+
+				case ObjectName.Obj_Huton:
+					cb = ImageData.cbObject[2];
+					break;
+
+				case ObjectName.Obj_Table:
+					cb = ImageData.cbObject[1];
+					break;
+
+				case ObjectName.Player:
+					cb = ImageData.cbPlayer[0];
+					break;
+			}
+
+			obj = new ObjectData
+			{
+				objName = name,
+				position = pos,
+				zindex = zid,
+				triggerAction = action,
+				triggerTarget = target,
+				triggerType = type,
+				cbSource = cb,
+				width = wb,
+				height = hb,
+				talkID = talkid,
+			};
+
+			return obj;
+		}
+
 		public static void CollisionPtoActionCollider()
 		{
 			if (!isTrigger)

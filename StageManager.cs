@@ -54,7 +54,7 @@ namespace Zitulmyth
 			canvas.Children.Add(StageData.imgScenery);
 			Canvas.SetLeft(StageData.imgScenery, 0);
 			Canvas.SetTop(StageData.imgScenery, 0);
-			Canvas.SetZIndex(StageData.imgScenery, 1);
+			Canvas.SetZIndex(StageData.imgScenery, ImageZindex.scenery);
 
 
 			for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
@@ -80,7 +80,7 @@ namespace Zitulmyth
 				canvas.Children.Add(Item.lstItemData[i].imgItem);
 				Canvas.SetLeft(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.X);
 				Canvas.SetTop(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.Y);
-				Canvas.SetZIndex(Item.lstItemData[i].imgItem, 6);
+				Canvas.SetZIndex(Item.lstItemData[i].imgItem, ImageZindex.item);
 			}
 
 		//	ImageData.Serializer();
@@ -91,7 +91,7 @@ namespace Zitulmyth
 				canvas.Children.Add(SpawnEnemy.lstEnemyData[i].imgEnemy);
 				Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.X);
 				Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.Y);
-				Canvas.SetZIndex(SpawnEnemy.lstEnemyData[i].imgEnemy,6);
+				Canvas.SetZIndex(SpawnEnemy.lstEnemyData[i].imgEnemy,ImageZindex.enemy);
 
 			}
 		}

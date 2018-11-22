@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Controls;
@@ -22,7 +23,9 @@ namespace Zitulmyth
 
 		//block set
 		public static void StageBlockSet(Canvas canvas)
-		{ 
+		{
+
+			Image _image = new Image();
 
 			for (int i = 0; i < 24; i++)
 			{
@@ -32,44 +35,77 @@ namespace Zitulmyth
 					{
 						case BlockType.GreenGround:
 
-							var _imgBlock = new Image { Source = ImageData.cbBlocks[0, 1], Width = 32, Height = 32,};
-							StageData.imgBlock[i, j] = _imgBlock;
+							_image = new Image { Source = ImageData.cbBlocks[0, 1], Width = 32, Height = 32,};
+							
 							break;
 
 						case BlockType.WoodPlatform:
 
-							var _imgWoodPlat = new Image{Source = ImageData.cbPlatform[1],Width = 32,Height = 32,};
-							StageData.imgBlock[i, j] = _imgWoodPlat;
+							_image = new Image{Source = ImageData.cbPlatform[1],Width = 32,Height = 32,};
+							
 							break;
 
 						case BlockType.LadderTop:
 
-							var _imgLadderTop = new Image{Source = ImageData.cbLadder[0],Width = 32,Height = 32,};
-							StageData.imgBlock[i, j] = _imgLadderTop;
+							_image = new Image{Source = ImageData.cbLadder[0],Width = 32,Height = 32, };
+							
 							break;
 
 						case BlockType.LadderMid:
 
-							var _imgLadderMid = new Image{Source = ImageData.cbLadder[1],Width = 32,Height = 32,};
-							StageData.imgBlock[i, j] = _imgLadderMid;
+							_image = new Image{Source = ImageData.cbLadder[1],Width = 32,Height = 32,};
+						
 							break;
 
 						case BlockType.LadderBottom:
 
-							var _imgLadderBottom = new Image { Source = ImageData.cbLadder[2], Width = 32, Height = 32, };
-							StageData.imgBlock[i, j] = _imgLadderBottom;
+							_image = new Image { Source = ImageData.cbLadder[2], Width = 32, Height = 32, };
+					
+							break;
+
+						case BlockType.InvisibleBlock:
+
+							if(GameTransition.gameTransition != GameTransitionType.EditMode)
+							{
+								_image = new Image { Source = ImageData.cbEmpty, Width = 32, Height = 32, };
+							}
+							else{
+								_image = new Image { Source = ImageData.cbInvisibleBlock, Width = 32, Height = 32, };
+							}
+							
+					
+							break;
+
+						case BlockType.InvisiblePlat:
+
+							if (GameTransition.gameTransition != GameTransitionType.EditMode)
+							{
+								_image = new Image { Source = ImageData.cbEmpty, Width = 32, Height = 32, };
+							}
+							else
+							{
+								_image = new Image { Source = ImageData.cbInvisiblePlat, Width = 32, Height = 32, };
+							}
+								
+					
 							break;
 					}
 
+					StageData.imgBlock[i, j] = _image;
 
-					if(StageData.indicateStage[i,j] != BlockType.None &&
-						StageData.indicateStage[i,j] != BlockType.InvisibleBlock &&
-						StageData.indicateStage[i,j] != BlockType.InvisiblePlat)
+					if (StageData.indicateStage[i,j] != BlockType.None)
 					{
+						if(GameTransition.gameTransition == GameTransitionType.EditMode)
+						{
+
+							StageData.imgBlock[i,j].MouseLeftButtonDown += new MouseButtonEventHandler(StageEditorOperator.BlockImageLeftClick);
+
+						}
+
 						canvas.Children.Add(StageData.imgBlock[i, j]);
 						Canvas.SetTop(StageData.imgBlock[i, j], i * 32);
 						Canvas.SetLeft(StageData.imgBlock[i, j], j * 32);
-						Canvas.SetZIndex(StageData.imgBlock[i, j],2);
+						Canvas.SetZIndex(StageData.imgBlock[i, j], ImageZindex.block);
 					}
 						
 				}
@@ -156,7 +192,7 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(ImageData.imgPlayer, 300);
 			Canvas.SetTop(ImageData.imgPlayer, 671);
-			Canvas.SetZIndex(ImageData.imgPlayer, PlayerStatus.playerImageZindex);
+			Canvas.SetZIndex(ImageData.imgPlayer, ImageZindex.player);
 
 
 		}

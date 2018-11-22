@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="Zitulmyth" Height="1081" Width="1200" Background="Black" MinWidth="1024" MinHeight="774" ResizeMode="NoResize" Loaded="Window_Loaded" HorizontalAlignment="Left" VerticalAlignment="Top" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp" Left="0" Top="0" Closed="GameWindow_Closed" Activated="GameWindow_Activated" Deactivated="GameWindow_Deactivated">
-	<Canvas x:Name="Canvas" HorizontalAlignment="Center" Height="768" VerticalAlignment="Top" Width="1024" Margin="0,64,0,0">
+        Title="Zitulmyth" Height="935.5" Width="1200" Background="#FF3C3C3C" MinWidth="1024" MinHeight="774" ResizeMode="NoResize" Loaded="Window_Loaded" HorizontalAlignment="Left" VerticalAlignment="Top" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp" Left="0" Top="0" Closed="GameWindow_Closed" Activated="GameWindow_Activated" Deactivated="GameWindow_Deactivated">
+	<Canvas x:Name="Canvas" HorizontalAlignment="Center" Height="768" VerticalAlignment="Top" Width="1024" Margin="0,64,0,0" Background="Black" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseRightButtonDown="Canvas_MouseRightButtonDown" MouseRightButtonUp="Canvas_MouseRightButtonUp">
 		<StackPanel x:Name="spPlayerStatus" Height="96" Width="512" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="442" Canvas.Left="171">
 			<Canvas x:Name="CaLife" Width="512" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 			<Canvas x:Name="CaMana" Width="512" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 		</StackPanel>
 		<Label x:Name="lblGameMode" Content="ゲームモード：タイトル" Canvas.Left="-74" Canvas.Top="-50" Width="428" Foreground="White" FontSize="18"/>
-		<StackPanel x:Name="stpEditControll" Canvas.Left="-56" Canvas.Top="802" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1110" Height="75"/>
-		<StackPanel x:Name="stpSubView" Height="84" Canvas.Left="-56" Canvas.Top="898" Width="1110" Orientation="Horizontal">
-			<Button x:Name="btnViewEventWindow" Content="イベントエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewEventWindow_Click" Focusable="False" IsEnabled="False"/>
+		<StackPanel x:Name="stpSubView" Canvas.Left="-56" Canvas.Top="790" Orientation="Horizontal" Width="434" Height="51">
+			<Button x:Name="btnViewStageEditorWindow" Content="ステージエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewStageEditorWindow_Click" Focusable="False" IsEnabled="False"/>
+			<Button x:Name="btnViewEventWindow" Content="イベントエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewEventWindow_Click" Focusable="False" IsEnabled="False" Margin="32,0,0,0"/>
 		</StackPanel>
-		<Label x:Name="DebugLabelA" Content="Label" Width="221" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Canvas.Left="875" Canvas.Top="815"/>
+		<Label x:Name="DebugLabelA" Content="Label" Width="221" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Canvas.Left="537" Canvas.Top="791"/>
+		<Label x:Name="lblDebugPos" Content="Label" Canvas.Left="815" Canvas.Top="790" Background="White" Foreground="Black" Width="253"/>
 	</Canvas>
 </Window>

@@ -33,7 +33,7 @@ namespace Zitulmyth
 			canvas.Children.Add(spnBalloon);
 			Canvas.SetTop(spnBalloon, 500);
 			Canvas.SetLeft(spnBalloon,300);
-			Canvas.SetZIndex(spnBalloon, 15);
+			Canvas.SetZIndex(spnBalloon, ImageZindex.balloon);
 
 			int imgWidth=16,imgHeight=16;
 			int txtPosX = 0,txtPosY = 0;

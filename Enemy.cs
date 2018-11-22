@@ -572,7 +572,7 @@ namespace Zitulmyth
 					canvas.Children.Add(SpawnEnemy.lstEnemyData[i].imgEnemy);
 					Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.X);
 					Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.Y);
-					Canvas.SetZIndex(SpawnEnemy.lstEnemyData[i].imgEnemy, 6);
+					Canvas.SetZIndex(SpawnEnemy.lstEnemyData[i].imgEnemy, ImageZindex.enemy);
 
 				}
 			}

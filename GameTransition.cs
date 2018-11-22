@@ -406,7 +406,7 @@ namespace Zitulmyth
 							canvas.Children.Add(MainWindow.canScreenFade);
 							Canvas.SetLeft(MainWindow.canScreenFade, 0);
 							Canvas.SetTop(MainWindow.canScreenFade, 0);
-							Canvas.SetZIndex(MainWindow.canScreenFade,10);
+							Canvas.SetZIndex(MainWindow.canScreenFade, ImageZindex.fade);
 
 							screenFadeTotal = 0;
 							screenFadeIndex = eventCount;
