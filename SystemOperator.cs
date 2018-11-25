@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Zitulmyth.Checking;
 using Zitulmyth.Data;
+using static Zitulmyth.StageEditorWindow;
 
 namespace Zitulmyth
 {
@@ -174,6 +175,136 @@ namespace Zitulmyth
 
 			return blockPos ;
 		}
+		
+		public static void EditorObjectDataListConverter(int index ,bool target)
+		{	//target => false:removeAt  true:lastadd
+			StageEditorOperator.lstObjectDataConvert.Clear();
 
+			for(int i=0;i < stageEditorData.objectName.Length; i++)
+			{
+				StageEditorOperator.lstObjectDataConvert.Add(new EditorObjectDataListConvert {
+					objectName = stageEditorData.objectName[i],
+					objectPosition = stageEditorData.objectPosition[i],
+					objectWidth = stageEditorData.objectWidth[i],
+					objectHeight = stageEditorData.objectHeight[i],
+					objectZindex = stageEditorData.objectZindex[i],
+					objectTriggerAction = stageEditorData.objectTriggerAction[i],
+					objectTriggerTarget = stageEditorData.objectTriggerTarget[i],
+					objectTriggerType = stageEditorData.objectTriggerType[i],
+					objectTalkID = stageEditorData.objectTalkID[i],
+				});
+			}
+
+			if (!target)
+			{
+				StageEditorOperator.lstObjectDataConvert.RemoveAt(index);
+			}
+			else
+			{
+				StageEditorOperator.lstObjectDataConvert.Add(new EditorObjectDataListConvert { });
+			}
+		
+			int arynum = StageEditorOperator.lstObjectDataConvert.Count;
+
+			stageEditorData.objectName = new ObjectName[arynum];
+			stageEditorData.objectPosition = new Vector[arynum];
+			stageEditorData.objectWidth = new int[arynum];
+			stageEditorData.objectHeight = new int[arynum];
+			stageEditorData.objectZindex = new int[arynum];
+			stageEditorData.objectTriggerAction = new bool[arynum];
+			stageEditorData.objectTriggerTarget = new ObjectName[arynum];
+			stageEditorData.objectTriggerType = new bool[arynum];
+			stageEditorData.objectTalkID = new int[arynum];
+
+			for (int i = 0; i < stageEditorData.objectName.Length; i++)
+			{
+				stageEditorData.objectName[i] = StageEditorOperator.lstObjectDataConvert[i].objectName;
+				stageEditorData.objectPosition[i] = StageEditorOperator.lstObjectDataConvert[i].objectPosition;
+				stageEditorData.objectWidth[i] = StageEditorOperator.lstObjectDataConvert[i].objectWidth;
+				stageEditorData.objectHeight[i] = StageEditorOperator.lstObjectDataConvert[i].objectHeight;
+				stageEditorData.objectZindex[i] = StageEditorOperator.lstObjectDataConvert[i].objectZindex;
+				stageEditorData.objectTriggerAction[i] = StageEditorOperator.lstObjectDataConvert[i].objectTriggerAction;
+				stageEditorData.objectTriggerTarget[i] = StageEditorOperator.lstObjectDataConvert[i].objectTriggerTarget;
+				stageEditorData.objectTriggerType[i] = StageEditorOperator.lstObjectDataConvert[i].objectTriggerType;
+				stageEditorData.objectTalkID[i] = StageEditorOperator.lstObjectDataConvert[i].objectTalkID;
+			}
+
+		}
+
+		public static void EditorEnemyDataListConverter(int index, bool target)
+		{   //target => false:removeAt  true:lastadd
+			StageEditorOperator.lstEnemyDataConvert.Clear();
+
+			for (int i = 0; i < stageEditorData.enemyName.Length; i++)
+			{
+				StageEditorOperator.lstEnemyDataConvert.Add(new EditorEnemyDataListConvert
+				{
+					enemyName = stageEditorData.enemyName[i],
+					enemyPosition = stageEditorData.enemyPosition[i],
+					enemyDirection = stageEditorData.enemyDirection[i],
+
+				});
+			}
+
+			if (!target)
+			{
+				StageEditorOperator.lstEnemyDataConvert.RemoveAt(index);
+			}
+			else
+			{
+				StageEditorOperator.lstEnemyDataConvert.Add(new EditorEnemyDataListConvert { });
+			}
+
+			int arynum = StageEditorOperator.lstEnemyDataConvert.Count;
+
+			stageEditorData.enemyName = new EnemyName[arynum];
+			stageEditorData.enemyPosition = new Vector[arynum];
+			stageEditorData.enemyDirection = new bool[arynum];
+
+			for (int i = 0; i < stageEditorData.enemyName.Length; i++)
+			{
+				stageEditorData.enemyName[i] = StageEditorOperator.lstEnemyDataConvert[i].enemyName;
+				stageEditorData.enemyPosition[i] = StageEditorOperator.lstEnemyDataConvert[i].enemyPosition;
+				stageEditorData.enemyDirection[i] = StageEditorOperator.lstEnemyDataConvert[i].enemyDirection;
+			}
+
+		}
+
+
+		public static void EditorItemDataListConverter(int index, bool target)
+		{   //target => false:removeAt  true:lastadd
+			StageEditorOperator.lstItemDataConvert.Clear();
+
+			for (int i = 0; i < stageEditorData.itemName.Length; i++)
+			{
+				StageEditorOperator.lstItemDataConvert.Add(new EditorItemDataListConvert
+				{
+					itemName = stageEditorData.itemName[i],
+					itemPosition = stageEditorData.itemPosition[i],
+
+				});
+			}
+
+			if (!target)
+			{
+				StageEditorOperator.lstItemDataConvert.RemoveAt(index);
+			}
+			else
+			{
+				StageEditorOperator.lstItemDataConvert.Add(new EditorItemDataListConvert { });
+			}
+
+			int arynum = StageEditorOperator.lstItemDataConvert.Count;
+
+			stageEditorData.itemName = new ItemName[arynum];
+			stageEditorData.itemPosition = new Vector[arynum];
+
+			for (int i = 0; i < stageEditorData.itemName.Length; i++)
+			{
+				stageEditorData.itemName[i] = StageEditorOperator.lstItemDataConvert[i].itemName;
+				stageEditorData.itemPosition[i] = StageEditorOperator.lstItemDataConvert[i].itemPosition;
+			}
+
+		}
 	}
 }

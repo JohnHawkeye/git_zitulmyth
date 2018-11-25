@@ -95,13 +95,6 @@ namespace Zitulmyth
 
 					if (StageData.indicateStage[i,j] != BlockType.None)
 					{
-						if(GameTransition.gameTransition == GameTransitionType.EditMode)
-						{
-
-							StageData.imgBlock[i,j].MouseLeftButtonDown += new MouseButtonEventHandler(StageEditorOperator.BlockImageLeftClick);
-
-						}
-
 						canvas.Children.Add(StageData.imgBlock[i, j]);
 						Canvas.SetTop(StageData.imgBlock[i, j], i * 32);
 						Canvas.SetLeft(StageData.imgBlock[i, j], j * 32);

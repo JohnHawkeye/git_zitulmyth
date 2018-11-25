@@ -505,7 +505,7 @@ namespace Zitulmyth
 						pixSize = new Vector(64, 32), position = setpos,
 						triggerAreaPos = new Vector(64, 32), triggerAreaSize = new Vector(5, 1), triggerAreaOffset = new Vector(0, 0),
 						widthblock = 2, heightblock = 1,
-						imgEnemy = new Image() { Source = (!dir) ? ImageData.lstCBEnemy[0].lstCBIdle[1] : ImageData.lstCBEnemy[0].lstCBIdle[0], Width = 64, Height = 32 },
+						imgEnemy = new Image() { Source = (!dir) ? ImageData.lstCBEnemy[1].lstCBIdle[1] : ImageData.lstCBEnemy[1].lstCBIdle[0], Width = 64, Height = 32 },
 						deathEvent = EnemyDeathEvent.Pop,
 
 					};

@@ -61,20 +61,20 @@
 						<RowDefinition Height="314*"/>
 						<RowDefinition Height="271*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavObjectPalette" Height="240" Margin="57,39.5,57,34.5" Width="512" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
-					<ListView x:Name="lsvObjectList" HorizontalAlignment="Left" Height="128" Margin="57,27,0,0" Grid.Row="1" VerticalAlignment="Top" Width="397">
+					<Canvas x:Name="cavObjectPalette" Height="240" Margin="0" Width="512" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+					<ListView x:Name="lsvObjectList" HorizontalAlignment="Left" Height="128" Margin="57,27,0,0" Grid.Row="1" VerticalAlignment="Top" Width="440">
 						<ListView.View>
 							<GridView>
-								<GridViewColumn Header="ID"/>
-								<GridViewColumn Header="名前"/>
-								<GridViewColumn Header="位置"/>
-								<GridViewColumn Header="幅"/>
-								<GridViewColumn Header="高さ"/>
-								<GridViewColumn Header="順序"/>
-								<GridViewColumn Header="アクション"/>
-								<GridViewColumn Header="ターゲット"/>
-								<GridViewColumn Header="タイプ"/>
-								<GridViewColumn Header="会話ID"/>
+								<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=id}"/>
+								<GridViewColumn Header="名前" DisplayMemberBinding="{Binding Path=objectName}"/>
+								<GridViewColumn Header="位置" DisplayMemberBinding="{Binding Path=objectPosition}"/>
+								<GridViewColumn Header="幅" DisplayMemberBinding="{Binding Path=objectWidth}"/>
+								<GridViewColumn Header="高さ" DisplayMemberBinding="{Binding Path=objectHeight}"/>
+								<GridViewColumn Header="順序" DisplayMemberBinding="{Binding Path=objectZindex}"/>
+								<GridViewColumn Header="アクション" DisplayMemberBinding="{Binding Path=objectTriggerAction}"/>
+								<GridViewColumn Header="ターゲット" DisplayMemberBinding="{Binding Path=objectTriggerTarget}"/>
+								<GridViewColumn Header="タイプ" DisplayMemberBinding="{Binding Path=objectTriggerType}"/>
+								<GridViewColumn Header="会話ID" DisplayMemberBinding="{Binding Path=objectTalkID}"/>
 							</GridView>
 						</ListView.View>
 					</ListView>
@@ -83,19 +83,40 @@
 			<TabItem Header="エネミー">
 				<Grid Background="#FFE5E5E5">
 					<Grid.RowDefinitions>
-						<RowDefinition Height="109*"/>
-						<RowDefinition Height="86*"/>
+						<RowDefinition Height="314*"/>
+						<RowDefinition Height="271*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavEnemyPalette" Height="240" Margin="57,52,57,35" Width="512" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+					<Canvas x:Name="cavEnemyPalette" Height="240" Margin="57,36,57,38" Width="512" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+					<ListView x:Name="lsvEnemyList" HorizontalAlignment="Left" Height="128" Margin="57,14,0,0" Grid.Row="1" VerticalAlignment="Top" Width="440">
+						<ListView.View>
+							<GridView>
+								<GridViewColumn Header="ID" DisplayMemberBinding="{Binding id}"/>
+								<GridViewColumn Header="名前" DisplayMemberBinding="{Binding enemyName}"/>
+								<GridViewColumn Header="位置" DisplayMemberBinding="{Binding enemyPosition}"/>
+								<GridViewColumn Header="向き" DisplayMemberBinding="{Binding enemyDirection}"/>
+
+							</GridView>
+						</ListView.View>
+					</ListView>
 				</Grid>
 			</TabItem>
 			<TabItem Header="アイテム">
 				<Grid Background="#FFE5E5E5">
 					<Grid.RowDefinitions>
-						<RowDefinition Height="5*"/>
-						<RowDefinition Height="4*"/>
+						<RowDefinition Height="314*"/>
+						<RowDefinition Height="271*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavItemPalette" Height="240" Margin="57,39.5,57,45.5" Width="512" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+					<Canvas x:Name="cavItemPalette" Height="240" Margin="57,40,57,34" Width="512" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White"/>
+					<ListView x:Name="lsvItemList" HorizontalAlignment="Left" Height="128" Margin="57,14,0,0" Grid.Row="1" VerticalAlignment="Top" Width="440">
+						<ListView.View>
+							<GridView>
+								<GridViewColumn Header="ID" DisplayMemberBinding="{Binding id}"/>
+								<GridViewColumn Header="名前" DisplayMemberBinding="{Binding itemName}"/>
+								<GridViewColumn Header="位置" DisplayMemberBinding="{Binding itemPosition}"/>
+
+							</GridView>
+						</ListView.View>
+					</ListView>
 				</Grid>
 			</TabItem>
 		</TabControl>

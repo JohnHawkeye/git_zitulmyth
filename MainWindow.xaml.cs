@@ -442,40 +442,62 @@ namespace Zitulmyth
 
 		private void Canvas_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (StageEditorOperator.paletteMode == PaletteMode.Player)
+
+			Vector blockPos;
+
+			switch (StageEditorOperator.paletteMode)
 			{
-				Point point = e.GetPosition(mainCanvas);
+				case PaletteMode.Player:
+					Point point = e.GetPosition(mainCanvas);
 
-				if(point.X < 1024 - 32)
-				{
-					Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, point.X);
-					mouseMainCanvasPosition.X = point.X;
-				}
-				else
-				{
-					Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, 1024 - 32);
-					mouseMainCanvasPosition.X = 1024-32;
-				}
+					if (point.X < 1024 - 32)
+					{
+						Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, point.X);
+						mouseMainCanvasPosition.X = point.X;
+					}
+					else
+					{
+						Canvas.SetLeft(StageEditorOperator.imgEditorPlayer, 1024 - 32);
+						mouseMainCanvasPosition.X = 1024 - 32;
+					}
 
-				if(point.Y < 768 - 64)
-				{
-					Canvas.SetTop(StageEditorOperator.imgEditorPlayer, point.Y);
-					mouseMainCanvasPosition.Y = point.Y;
-				}
-				else
-				{
-					Canvas.SetTop(StageEditorOperator.imgEditorPlayer, 768 - 64);
-					mouseMainCanvasPosition.Y = 768 - 64;
-				}
-					
+					if (point.Y < 768 - 64)
+					{
+						Canvas.SetTop(StageEditorOperator.imgEditorPlayer, point.Y);
+						mouseMainCanvasPosition.Y = point.Y;
+					}
+					else
+					{
+						Canvas.SetTop(StageEditorOperator.imgEditorPlayer, 768 - 64);
+						mouseMainCanvasPosition.Y = 768 - 64;
+					}
+					break;
+
+				case PaletteMode.Block:
+					blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+					Canvas.SetLeft(StageEditorOperator.imgEditorPointerCursor, (blockPos.X - 1) * 32);
+					Canvas.SetTop(StageEditorOperator.imgEditorPointerCursor, (blockPos.Y - 1) * 32);
+					break;
+
+				case PaletteMode.Object:
+					blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+					Canvas.SetLeft(StageEditorOperator.imgEditorPointerCursor, (blockPos.X - 1) * 32);
+					Canvas.SetTop(StageEditorOperator.imgEditorPointerCursor, (blockPos.Y - 1) * 32);
+					break;
+
+				case PaletteMode.Enemy:
+					blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+					Canvas.SetLeft(StageEditorOperator.imgEditorPointerCursor, (blockPos.X - 1) * 32);
+					Canvas.SetTop(StageEditorOperator.imgEditorPointerCursor, (blockPos.Y - 1) * 32);
+					break;
+
+				case PaletteMode.Item:
+					blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+					Canvas.SetLeft(StageEditorOperator.imgEditorPointerCursor, (blockPos.X - 1) * 32);
+					Canvas.SetTop(StageEditorOperator.imgEditorPointerCursor, (blockPos.Y - 1) * 32);
+					break;
 			}
 
-			if(StageEditorOperator.paletteMode == PaletteMode.Block)
-			{
-				Vector blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
-				Canvas.SetLeft(StageEditorOperator.imgEditorPointerCursor,( blockPos.X-1) *32);
-				Canvas.SetTop(StageEditorOperator.imgEditorPointerCursor, (blockPos.Y-1) *32);
-			}
 		}
 
 		private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -483,6 +505,8 @@ namespace Zitulmyth
 
 			if (!isMouseLeftClicked)
 			{
+				Vector blockPos;
+
 				switch (StageEditorOperator.paletteMode)
 				{
 					case PaletteMode.Player:
@@ -492,15 +516,26 @@ namespace Zitulmyth
 
 					case PaletteMode.Block:
 
-						Vector blockPos =  SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						blockPos =  SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
 						StageEditorOperator.EditSetupBlockOnMainCanvas(blockPos);
 
 						break;
+
 					case PaletteMode.Object:
+
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditSetupObjectOnMainCanvas(blockPos);
+
 						break;
+
 					case PaletteMode.Enemy:
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditSetupEnemyOnMainCanvas(blockPos);
 						break;
+
 					case PaletteMode.Item:
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditSetupItemOnMainCanvas(blockPos);
 						break;
 				}
 
@@ -519,6 +554,7 @@ namespace Zitulmyth
 		{
 			if (!isMouseRightClicked)
 			{
+				Vector blockPos;
 				switch (StageEditorOperator.paletteMode)
 				{
 					case PaletteMode.Player:
@@ -534,12 +570,25 @@ namespace Zitulmyth
 						break;
 
 					case PaletteMode.Block:
+
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditRemoveBlockOnMainCanvas(blockPos);
+
 						break;
+
 					case PaletteMode.Object:
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditRemoveObjectOnMainCanvas(blockPos);
 						break;
+
 					case PaletteMode.Enemy:
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditRemoveEnemyOnMainCanvas(blockPos);
 						break;
+
 					case PaletteMode.Item:
+						blockPos = SystemOperator.FromCodeToBlocks(e.GetPosition(mainCanvas));
+						StageEditorOperator.EditRemoveItemOnMainCanvas(blockPos);
 						break;
 				}
 

@@ -19,8 +19,8 @@ using static Zitulmyth.StageEditorWindow;
 
 namespace Zitulmyth
 {
-
-	public class EditorClearCondition
+	//listview only
+	public class EditorListViewClearCondition
 	{
 		public int id { get; set; }
 		public string targetName { get; set; }
@@ -30,7 +30,63 @@ namespace Zitulmyth
 		public int targetTalkFlag { get; set; }
 		public int targetTime { get; set; }
 	}
+	public class EditorListViewObjectData
+	{
+		public int id { get; set; }
+		public string objectName { get; set; }
+		public Vector objectPosition { get; set; }
+		public int objectWidth { get; set; }
+		public int objectHeight { get; set; }
+		public int objectZindex { get; set; }
+		public bool objectTriggerAction { get; set; }
+		public string objectTriggerTarget { get; set; }
+		public bool objectTriggerType { get; set; }
+		public int objectTalkID { get; set; }
+	}
+	public class EditorListViewEnemyData
+	{
+		public int id { get; set; }
+		public string enemyName { get; set; }
+		public Vector enemyPosition { get; set; }
+		public bool enemyDirection { get; set; }
+		
+	}
+	public class EditorListViewItemData
+	{
+		public int id { get; set; }
+		public string itemName { get; set; }
+		public Vector itemPosition { get; set; }
+	}
 
+	//convert only
+	public class EditorObjectDataListConvert
+	{
+		public ObjectName objectName;
+		public Vector objectPosition;
+		public int objectWidth;
+		public int objectHeight;
+		public int objectZindex;
+		public bool objectTriggerAction;
+		public ObjectName objectTriggerTarget;
+		public bool objectTriggerType;
+		public int objectTalkID;
+	}
+
+	public class EditorEnemyDataListConvert
+	{
+		public EnemyName enemyName;
+		public Vector enemyPosition;
+		public bool enemyDirection;	
+	}
+
+	public class EditorItemDataListConvert
+	{
+		public ItemName itemName;
+		public Vector itemPosition;
+		
+	}
+
+	//palette
 	public class EditorBlockPalette
 	{
 		public BlockType type;
@@ -65,11 +121,21 @@ namespace Zitulmyth
 
 	public class StageEditorOperator
     {
-		public static List<EditorClearCondition> lstEditorClearConditions = new List<EditorClearCondition>();
+		public static List<EditorListViewClearCondition> lstListViewClearConditions = new List<EditorListViewClearCondition>();
+		public static List<EditorListViewObjectData> lstListViewObjectData = new List<EditorListViewObjectData>();
+		public static List<EditorListViewEnemyData> lstListViewEnemyData = new List<EditorListViewEnemyData>();
+		public static List<EditorListViewItemData> lstListViewItemData = new List<EditorListViewItemData>();
+
+
 		public static List<EditorBlockPalette> lstEditorBlockPalette = new List<EditorBlockPalette>();
 		public static List<EditorObjectPalette> lstEditorObjectPalette = new List<EditorObjectPalette>();
 		public static List<EditorEnemyPalette> lstEditorEnemyPalette = new List<EditorEnemyPalette>();
 		public static List<EditorItemPalette> lstEditorItemPalette = new List<EditorItemPalette>();
+
+		public static List<EditorObjectDataListConvert> lstObjectDataConvert = new List<EditorObjectDataListConvert>();
+		public static List<EditorEnemyDataListConvert> lstEnemyDataConvert = new List<EditorEnemyDataListConvert>();
+		public static List<EditorItemDataListConvert> lstItemDataConvert = new List<EditorItemDataListConvert>();
+
 
 		public static Image imgEditorPlayer = new Image();
 		public static Image[] imgPaletteCursor = new Image[4];
@@ -97,6 +163,7 @@ namespace Zitulmyth
 			imgEditorPointerCursor.Source = ImageData.cbEmpty;
 			imgEditorPointerCursor.Opacity = 0.6;
 			MainWindow.mainCanvas.Children.Add(imgEditorPointerCursor);
+			Canvas.SetZIndex(imgEditorPointerCursor, ImageZindex.handCursor);
 
 			for (int i = 0; i < imgPaletteCursor.Length; i++)
 			{
@@ -225,6 +292,7 @@ namespace Zitulmyth
 			var objEnum = Enum.GetValues(typeof(ObjectName)).Cast<ObjectName>().ToList();
 
 			Vector setpos = new Vector(20, 20);
+			Vector size = new Vector(32,32);
 			int colcount = 0;
 			int rowcount = 0;
 
@@ -250,34 +318,41 @@ namespace Zitulmyth
 					case ObjectName.Npc_Ilsona:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbNpc[4];
 						lstEditorObjectPalette[i].label.Content = "イルソナ";
+
+						size = new Vector(64, 64);
 						break;
 					case ObjectName.Npc_Opsa:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbNpc[0];
 						lstEditorObjectPalette[i].label.Content = "オプサ";
+						size = new Vector(32, 64);
 						break;
 					case ObjectName.Npc_Yeeda:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbNpc[2];
 						lstEditorObjectPalette[i].label.Content = "イェーダ";
+						size = new Vector(32, 64);
 						break;
 					case ObjectName.Obj_CampFire:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[2];
 						lstEditorObjectPalette[i].label.Content = "たきび";
+						size = new Vector(96, 64);
 						break;
 					case ObjectName.Obj_Chair:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[6];
 						lstEditorObjectPalette[i].label.Content = "いす";
+						size = new Vector(32, 64);
 						break;
 					case ObjectName.Obj_Huton:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[8];
 						lstEditorObjectPalette[i].label.Content = "ふとん";
+						size = new Vector(64, 32);
 						break;
 					case ObjectName.Obj_Table:
 						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[7];
 						lstEditorObjectPalette[i].label.Content = "テーブル";
+						size = new Vector(64, 32);
 						break;
 				}
 
-				Vector size = new Vector(64,64);
 				if (setpos.X + size.X * colcount+64 >= ctlCanvasObjectPalette.Width)
 				{
 					colcount = 0;
@@ -318,6 +393,7 @@ namespace Zitulmyth
 			var enemyEnum = Enum.GetValues(typeof(EnemyName)).Cast<EnemyName>().ToList();
 
 			Vector setpos = new Vector(20, 20);
+			Vector size = new Vector(32,32);
 			int colcount = 0;
 			int rowcount = 0;
 
@@ -338,14 +414,17 @@ namespace Zitulmyth
 					case EnemyName.Boar:
 						lstEditorEnemyPalette[i].image.Source = ImageData.lstCBEnemy[1].lstCBIdle[0];
 						lstEditorEnemyPalette[i].label.Content = "いのしし";
+						size = new Vector(64, 32);
+
 						break;
 					case EnemyName.Zigitu01:
 						lstEditorEnemyPalette[i].image.Source = ImageData.lstCBEnemy[0].lstCBIdle[0];
 						lstEditorEnemyPalette[i].label.Content = "ズィギツ";
+						size = new Vector(32, 64);
 						break;
 				}
 
-				Vector size = new Vector(64, 64);
+				
 				if (setpos.X + size.X * colcount + 64 >= ctlCanvasEnemyPalette.Width)
 				{
 					colcount = 0;
@@ -386,6 +465,7 @@ namespace Zitulmyth
 			var itemEnum = Enum.GetValues(typeof(ItemName)).Cast<ItemName>().ToList();
 
 			Vector setpos = new Vector(20, 20);
+			Vector size = new Vector(32, 32);
 			int colcount = 0;
 			int rowcount = 0;
 
@@ -406,26 +486,30 @@ namespace Zitulmyth
 					case ItemName.Apple:
 						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[1].lstCBIdle[0];
 						lstEditorItemPalette[i].label.Content = "りんご";
+						size = new Vector(32, 32);
 						break;
 					case ItemName.BoarMeat:
 						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[4].lstCBIdle[0];
 						lstEditorItemPalette[i].label.Content = "いのししの肉";
+						size = new Vector(32, 32);
 						break;
 					case ItemName.Coin:
 						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[0].lstCBIdle[0];
 						lstEditorItemPalette[i].label.Content = "コイン";
+						size = new Vector(32, 32);
 						break;
 					case ItemName.StarFruit:
 						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[2].lstCBIdle[0];
 						lstEditorItemPalette[i].label.Content = "スターフルーツ";
+						size = new Vector(32, 32);
 						break;
 					case ItemName.TreeBranch:
 						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[3].lstCBIdle[0];
 						lstEditorItemPalette[i].label.Content = "木の枝";
+						size = new Vector(64, 32);
 						break;
 				}
 
-				Vector size = new Vector(64, 64);
 				if (setpos.X + size.X * colcount + 64 >= ctlCanvasEnemyPalette.Width)
 				{
 					colcount = 0;
@@ -471,7 +555,7 @@ namespace Zitulmyth
 			Canvas.SetLeft(imgPaletteCursor[0],pos.X); Canvas.SetTop(imgPaletteCursor[0], pos.Y);
 
 			imgEditorPointerCursor.Source = (sender as Image).Source;
-			
+			imgEditorPointerCursor.Width = imgEditorPointerCursor.Height = 32;
 
 			paletteMode = PaletteMode.Block;
 		
@@ -486,6 +570,11 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(imgPaletteCursor[1], pos.X); Canvas.SetTop(imgPaletteCursor[1], pos.Y);
 
+			imgEditorPointerCursor.Source = (sender as Image).Source;
+			imgEditorPointerCursor.Width = (sender as Image).Width;
+			imgEditorPointerCursor.Height = (sender as Image).Height;
+
+			paletteMode = PaletteMode.Object;
 		}
 
 		private static void EnemyPaletteClick(object sender, RoutedEventArgs e)
@@ -497,6 +586,11 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(imgPaletteCursor[2], pos.X); Canvas.SetTop(imgPaletteCursor[2], pos.Y);
 
+			imgEditorPointerCursor.Source = (sender as Image).Source;
+			imgEditorPointerCursor.Width = (sender as Image).Width;
+			imgEditorPointerCursor.Height = (sender as Image).Height;
+
+			paletteMode = PaletteMode.Enemy;
 		}
 
 		private static void ItemPaletteClick(object sender, RoutedEventArgs e)
@@ -508,25 +602,21 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(imgPaletteCursor[3], pos.X); Canvas.SetTop(imgPaletteCursor[3], pos.Y);
 
+			imgEditorPointerCursor.Source = (sender as Image).Source;
+			imgEditorPointerCursor.Width = (sender as Image).Width;
+			imgEditorPointerCursor.Height = (sender as Image).Height;
+
+			paletteMode = PaletteMode.Item;
 		}
 
-		public static void BlockImageLeftClick(object sender,RoutedEventArgs e)
-		{
-
-		}
-
-		public static void BlockImageRightClick(object sender, RoutedEventArgs e)
-		{
-
-		}
-
+		//Setup Method
+		//blocks setup MainCanvas
 		public static void EditSetupBlockOnMainCanvas(Vector blockpos)
 		{
 			int index = (int)(blockpos.X + (blockpos.Y-1) * 32) - 1;
 			int blockX = (int)blockpos.X -1;
 			int blockY = (int)blockpos.Y -1;
 			Image _image = new Image();
-
 			
 
 			if(stageEditorData.editIndicateStage[index] == BlockType.None)
@@ -565,11 +655,11 @@ namespace Zitulmyth
 				}
 
 				StageData.imgBlock[blockY, blockX] = _image;
+				StageData.indicateStage[blockY, blockX] = blockPaletteSelected;
 
 				if (stageEditorData.editIndicateStage[index] != BlockType.None)
 				{
-					StageData.imgBlock[blockY, blockX].MouseLeftButtonDown += new MouseButtonEventHandler(BlockImageLeftClick);
-
+					
 					MainWindow.mainCanvas.Children.Add(StageData.imgBlock[blockY, blockX]);
 					Canvas.SetTop(StageData.imgBlock[blockY, blockX], blockY * 32);
 					Canvas.SetLeft(StageData.imgBlock[blockY, blockX], blockX * 32);
@@ -578,6 +668,301 @@ namespace Zitulmyth
 			}
 		
 			
+		}
+
+
+		public static void EditRemoveBlockOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+		
+
+			if (stageEditorData.editIndicateStage[index] != BlockType.None)
+			{
+				stageEditorData.editIndicateStage[index] = BlockType.None;
+				MainWindow.mainCanvas.Children.Remove(StageData.imgBlock[blockY, blockX]);
+				StageData.imgBlock[blockY, blockX] = null;
+			}
+
+		}
+
+		//Object setup MainCanvas
+		public static void EditSetupObjectOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+			bool checkflag = false;
+			Image _image = new Image();
+
+			for(int i = 0; i < stageEditorData.objectPosition.Length; i++)
+			{
+				if(blockX * 32 == stageEditorData.objectPosition[i].X &&
+					blockY * 32 == stageEditorData.objectPosition[i].Y )
+				{
+					checkflag = true;
+					break;
+				}
+			}
+
+			if (!checkflag)
+			{
+
+				SystemOperator.EditorObjectDataListConverter(0,true);
+
+				int arraylength =  stageEditorData.objectName.Length - 1;
+
+				stageEditorData.objectName[arraylength] = objectPaletteSelected;
+				stageEditorData.objectPosition[arraylength] = new Vector(blockX*32, blockY*32);
+				stageEditorData.objectWidth[arraylength] = (int)imgEditorPointerCursor.Width;
+				stageEditorData.objectHeight[arraylength] = (int)imgEditorPointerCursor.Height;
+				stageEditorData.objectZindex[arraylength] = ImageZindex.object_back;
+
+				ObjectChecker.lstObject.Add(ObjectChecker.SetObjectData(
+						stageEditorData.objectName[arraylength], stageEditorData.objectPosition[arraylength],
+						stageEditorData.objectWidth[arraylength] /32, stageEditorData.objectHeight[arraylength] /32,
+						stageEditorData.objectZindex[arraylength],
+						false, stageEditorData.objectName[arraylength],false,0));
+
+				int lstobjeIndex = ObjectChecker.lstObject.Count - 1;
+
+				var _imgObject = new Image
+				{
+					Source = ObjectChecker.lstObject[lstobjeIndex].cbSource,
+					Width = ObjectChecker.lstObject[lstobjeIndex].width * 32,
+					Height = ObjectChecker.lstObject[lstobjeIndex].height * 32,
+					Stretch = Stretch.Fill,
+				};
+
+				ObjectChecker.lstObject[ObjectChecker.lstObject.Count - 1].imgObject = _imgObject;
+				
+				MainWindow.mainCanvas.Children.Add(ObjectChecker.lstObject[lstobjeIndex].imgObject);
+				Canvas.SetTop(ObjectChecker.lstObject[lstobjeIndex].imgObject, blockY * 32);
+				Canvas.SetLeft(ObjectChecker.lstObject[lstobjeIndex].imgObject, blockX * 32);
+				Canvas.SetZIndex(ObjectChecker.lstObject[lstobjeIndex].imgObject, ImageZindex.object_back);
+
+				ListViewObjectDataUpdate();
+
+			}
+		}
+
+		public static void EditRemoveObjectOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+			
+			for (int i = 0; i < stageEditorData.objectPosition.Length; i++)
+			{
+				if (blockX * 32 == stageEditorData.objectPosition[i].X &&
+					blockY * 32 == stageEditorData.objectPosition[i].Y)
+				{
+					SystemOperator.EditorObjectDataListConverter(i, false);
+
+					MainWindow.mainCanvas.Children.Remove(ObjectChecker.lstObject[i].imgObject);
+					ObjectChecker.lstObject.RemoveAt(i);
+					ListViewObjectDataUpdate();
+					break;
+				}
+			}
+		}
+
+		public static void ListViewObjectDataUpdate()
+		{
+			lstListViewObjectData.Clear();
+			for (int i = 0; i < stageEditorData.objectName.Length; i++)
+			{
+				lstListViewObjectData.Add(new EditorListViewObjectData
+				{
+					id = i,
+					objectName = stageEditorData.objectName[i].ToString(),
+					objectPosition = stageEditorData.objectPosition[i],
+					objectWidth = stageEditorData.objectWidth[i],
+					objectHeight = stageEditorData.objectHeight[i],
+					objectZindex = stageEditorData.objectZindex[i],
+					objectTriggerAction = stageEditorData.objectTriggerAction[i],
+					objectTriggerTarget = stageEditorData.objectTriggerTarget[i].ToString(),
+					objectTriggerType = stageEditorData.objectTriggerType[i],
+					objectTalkID = stageEditorData.objectTalkID[i],
+
+				});
+			}
+
+			ctlListViewObject.ItemsSource = lstListViewObjectData;
+			ctlListViewObject.Items.Refresh();
+			ctlListViewObject.DataContext = lstListViewObjectData;
+		}
+
+		//Enemy setup MainCanvas
+		public static void EditSetupEnemyOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+			bool checkflag = false;
+			Image _image = new Image();
+
+			for (int i = 0; i < stageEditorData.enemyPosition.Length; i++)
+			{
+				if (blockX * 32 == stageEditorData.enemyPosition[i].X &&
+					blockY * 32 == stageEditorData.enemyPosition[i].Y)
+				{
+					checkflag = true;
+					break;
+				}
+			}
+
+			if (!checkflag)
+			{
+
+				SystemOperator.EditorEnemyDataListConverter(0, true);
+
+				int arraylength = stageEditorData.enemyName.Length - 1;
+
+				stageEditorData.enemyName[arraylength] = enemyPaletteSelected;
+				stageEditorData.enemyPosition[arraylength] = new Vector(blockX * 32, blockY * 32);
+				stageEditorData.enemyDirection[arraylength] = false;
+
+				SpawnEnemy.lstEnemyData.Add(SpawnEnemy.SetEnemyData(
+						stageEditorData.enemyName[arraylength], stageEditorData.enemyPosition[arraylength],
+						stageEditorData.enemyDirection[arraylength]));
+
+				int lstEnemyIndex = SpawnEnemy.lstEnemyData.Count - 1;
+
+				MainWindow.mainCanvas.Children.Add(SpawnEnemy.lstEnemyData[lstEnemyIndex].imgEnemy);
+				Canvas.SetTop(SpawnEnemy.lstEnemyData[lstEnemyIndex].imgEnemy, blockY * 32);
+				Canvas.SetLeft(SpawnEnemy.lstEnemyData[lstEnemyIndex].imgEnemy, blockX * 32);
+				Canvas.SetZIndex(SpawnEnemy.lstEnemyData[lstEnemyIndex].imgEnemy, ImageZindex.enemy);
+
+				ListViewEnemyDataUpdate();
+
+			}
+		}
+
+		public static void EditRemoveEnemyOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+
+			for (int i = 0; i < stageEditorData.enemyPosition.Length; i++)
+			{
+				if (blockX * 32 == stageEditorData.enemyPosition[i].X &&
+					blockY * 32 == stageEditorData.enemyPosition[i].Y)
+				{
+					SystemOperator.EditorEnemyDataListConverter(i, false);
+
+					MainWindow.mainCanvas.Children.Remove(SpawnEnemy.lstEnemyData[i].imgEnemy);
+					SpawnEnemy.lstEnemyData.RemoveAt(i);
+					ListViewEnemyDataUpdate();
+					break;
+				}
+			}
+		}
+
+		public static void ListViewEnemyDataUpdate()
+		{
+			lstListViewEnemyData.Clear();
+			for (int i = 0; i < stageEditorData.enemyName.Length; i++)
+			{
+				lstListViewEnemyData.Add(new EditorListViewEnemyData
+				{
+					id = i,
+					enemyName = stageEditorData.enemyName[i].ToString(),
+					enemyPosition = stageEditorData.enemyPosition[i],
+					enemyDirection = stageEditorData.enemyDirection[i],
+
+				});
+			}
+
+			ctlListViewEnemy.ItemsSource = lstListViewEnemyData;
+			ctlListViewEnemy.Items.Refresh();
+			ctlListViewEnemy.DataContext = lstListViewEnemyData;
+		}
+
+		//Item setup MainCanvas
+		public static void EditSetupItemOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+			bool checkflag = false;
+			Image _image = new Image();
+
+			for (int i = 0; i < stageEditorData.itemPosition.Length; i++)
+			{
+				if (blockX * 32 == stageEditorData.itemPosition[i].X &&
+					blockY * 32 == stageEditorData.itemPosition[i].Y)
+				{
+					checkflag = true;
+					break;
+				}
+			}
+
+			if (!checkflag)
+			{
+
+				SystemOperator.EditorItemDataListConverter(0, true);
+
+				int arraylength = stageEditorData.itemName.Length - 1;
+
+				stageEditorData.itemName[arraylength] = itemPaletteSelected;
+				stageEditorData.itemPosition[arraylength] = new Vector(blockX * 32, blockY * 32);
+
+				Item.lstItemData.Add(Item.SetItemData(
+						stageEditorData.itemName[arraylength], stageEditorData.itemPosition[arraylength]));
+
+				int lstItemIndex = Item.lstItemData.Count - 1;
+
+				MainWindow.mainCanvas.Children.Add(Item.lstItemData[lstItemIndex].imgItem);
+				Canvas.SetTop(Item.lstItemData[lstItemIndex].imgItem, blockY * 32);
+				Canvas.SetLeft(Item.lstItemData[lstItemIndex].imgItem, blockX * 32);
+				Canvas.SetZIndex(Item.lstItemData[lstItemIndex].imgItem, ImageZindex.item);
+
+				ListViewItemDataUpdate();
+
+			}
+		}
+
+		public static void EditRemoveItemOnMainCanvas(Vector blockpos)
+		{
+			int index = (int)(blockpos.X + (blockpos.Y - 1) * 32) - 1;
+			int blockX = (int)blockpos.X - 1;
+			int blockY = (int)blockpos.Y - 1;
+
+			for (int i = 0; i < stageEditorData.itemPosition.Length; i++)
+			{
+				if (blockX * 32 == stageEditorData.itemPosition[i].X &&
+					blockY * 32 == stageEditorData.itemPosition[i].Y)
+				{
+					SystemOperator.EditorItemDataListConverter(i, false);
+
+					MainWindow.mainCanvas.Children.Remove(Item.lstItemData[i].imgItem);
+					Item.lstItemData.RemoveAt(i);
+					ListViewItemDataUpdate();
+					break;
+				}
+			}
+		}
+
+		public static void ListViewItemDataUpdate()
+		{
+			lstListViewItemData.Clear();
+			for (int i = 0; i < stageEditorData.itemName.Length; i++)
+			{
+				lstListViewItemData.Add(new EditorListViewItemData
+				{
+					id = i,
+					itemName = stageEditorData.itemName[i].ToString(),
+					itemPosition = stageEditorData.itemPosition[i],
+
+				});
+			}
+
+			ctlListViewItem.ItemsSource = lstListViewItemData;
+			ctlListViewItem.Items.Refresh();
+			ctlListViewItem.DataContext = lstListViewItemData;
 		}
 	}
 

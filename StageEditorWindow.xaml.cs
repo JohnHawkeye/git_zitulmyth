@@ -83,6 +83,9 @@ namespace Zitulmyth
 		public static Canvas ctlCanvasObjectPalette;
 		public static Canvas ctlCanvasEnemyPalette;
 		public static Canvas ctlCanvasItemPalette;
+		public static ListView ctlListViewObject;
+		public static ListView ctlListViewEnemy;
+		public static ListView ctlListViewItem;
 
 		public StageEditorWindow()
 		{
@@ -195,6 +198,10 @@ namespace Zitulmyth
 			ctlTextPlayerPosX = txbPlayerStartX;
 			ctlTextPlayerPosY = txbPlayerStartY;
 
+			ctlListViewObject = lsvObjectList;
+			ctlListViewEnemy = lsvEnemyList;
+			ctlListViewItem = lsvItemList;
+
 			ImageData.ImageLoadEditorMode();
 
 
@@ -220,11 +227,11 @@ namespace Zitulmyth
 			txbPlayerStartY.Text = stageEditorData.editPlayerStartPosition.Y.ToString();
 
 			stageEditorData.lstEditClearCondition = StageManager.lstClearCondition;
-			StageEditorOperator.lstEditorClearConditions.Clear();
+			lstListViewClearConditions.Clear();
 
 			for (int i = 0; i<stageEditorData.lstEditClearCondition.Count;i++)
 			{
-				StageEditorOperator.lstEditorClearConditions.Add(new EditorClearCondition {
+				lstListViewClearConditions.Add(new EditorListViewClearCondition {
 
 					id= i,
 					targetName = stageEditorData.lstEditClearCondition[i].conditionName.ToString(),
@@ -236,9 +243,9 @@ namespace Zitulmyth
 					targetTime = stageEditorData.lstEditClearCondition[i].targetTime});
 			}
 
-			lsvClearCondition.ItemsSource = StageEditorOperator.lstEditorClearConditions;
+			lsvClearCondition.ItemsSource = lstListViewClearConditions;
 			lsvClearCondition.Items.Refresh();
-			lsvClearCondition.DataContext = StageEditorOperator.lstEditorClearConditions;
+			lsvClearCondition.DataContext = lstListViewClearConditions;
 
 			stageEditorData.editRespqwnEnemy = StageManager.respawnEnemy;
 			ckbEnemyRespawn.IsChecked = (bool)stageEditorData.editRespqwnEnemy;
@@ -274,6 +281,7 @@ namespace Zitulmyth
 				stageEditorData.objectTalkID[i] = ObjectChecker.lstObject[i].talkID;
 			}
 
+			ListViewObjectDataUpdate();
 
 			stageEditorData.enemyName = new EnemyName[SpawnEnemy.lstEnemyData.Count];
 			stageEditorData.enemyPosition = new Vector[SpawnEnemy.lstEnemyData.Count];
@@ -286,6 +294,8 @@ namespace Zitulmyth
 				stageEditorData.enemyDirection[i] = SpawnEnemy.lstEnemyData[i].direction;
 			}
 
+			ListViewEnemyDataUpdate();
+
 			stageEditorData.itemName = new ItemName[Item.lstItemData.Count];
 			stageEditorData.itemPosition = new Vector[Item.lstItemData.Count];
 
@@ -294,7 +304,8 @@ namespace Zitulmyth
 				stageEditorData.itemName[i] = Item.lstItemData[i].itemName;
 				stageEditorData.itemPosition[i] = Item.lstItemData[i].position;
 			}
-			
+
+			ListViewItemDataUpdate();
 		}
 
 		private void txbPlayerStartX_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -331,5 +342,6 @@ namespace Zitulmyth
 			blockPaletteSelected = BlockType.None;
 
 		}
+
 	}
 }
