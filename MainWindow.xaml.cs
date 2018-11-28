@@ -27,7 +27,7 @@ namespace Zitulmyth
 		public bool isDeactivated;
 
 		//timer
-		private Timer timerFrameUpdate;
+		public static Timer timerFrameUpdate;
 		public static int countTime = 0;
 		private int lastTime;
 		private int nowTime;
@@ -45,8 +45,10 @@ namespace Zitulmyth
 		public static bool titleStrSwitch = true;
 
 		//window settings
+		public static bool isOpenEventEditorWindow = false;
+		
 		public static StageEditorWindow stageEditor = new StageEditorWindow();
-		public static EventEditorWindow eventEditor = new EventEditorWindow();
+		public static EventEditorWindow eventEditor;
 
 		public static int gameWindowWidth = 1024;
 		public static int gameWindowHeight = 768;
@@ -62,17 +64,16 @@ namespace Zitulmyth
 		{
 			this.InitializeComponent();
 
-			this.timerFrameUpdate = new Timer(15);
-			this.timerFrameUpdate.Elapsed += FrameUpdateTimer_Update;
-			this.timerFrameUpdate.Start();
+			timerFrameUpdate = new Timer(15);
+			timerFrameUpdate.Elapsed += FrameUpdateTimer_Update;
+			timerFrameUpdate.Start();
 
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			
-
 			this.InitGame();
+			
 		}
 
 		private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -256,7 +257,7 @@ namespace Zitulmyth
 							countTime = 0;
 							GameTransition.gameTransition = GameTransitionType.EditMode;
 							btnViewStageEditorWindow.IsEnabled = true;
-							btnViewEventWindow.IsEnabled = true;
+
 							lblMode.Content = "ゲームモード：エディット";
 						}
 					}
@@ -415,13 +416,12 @@ namespace Zitulmyth
 		{
 			closeMainWindow = true;
 			stageEditor.Close();
-			eventEditor.Close();
-		}
 
-		private void btnViewEventWindow_Click(object sender, RoutedEventArgs e)
-		{
-			eventEditor.Show();
-			eventEditor.Focus();
+			if (isOpenEventEditorWindow)
+			{
+				eventEditor.Close();
+			}
+			
 		}
 
 		private void GameWindow_Activated(object sender, EventArgs e)
@@ -432,12 +432,6 @@ namespace Zitulmyth
 		private void GameWindow_Deactivated(object sender, EventArgs e)
 		{
 			isDeactivated = true;
-		}
-
-		private void btnViewStageEditorWindow_Click(object sender, RoutedEventArgs e)
-		{
-			stageEditor.Show();
-			stageEditor.Focus();
 		}
 
 		private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -600,6 +594,12 @@ namespace Zitulmyth
 		private void Canvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
 		{
 			isMouseRightClicked = false;
+		}
+
+		private void btnViewStageEditorWindow_Click(object sender, RoutedEventArgs e)
+		{
+			stageEditor.Show();
+			stageEditor.Focus();
 		}
 	}
 }

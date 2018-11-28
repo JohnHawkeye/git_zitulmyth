@@ -12,9 +12,8 @@
 			<Canvas x:Name="CaMana" Width="512" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 		</StackPanel>
 		<Label x:Name="lblGameMode" Content="ゲームモード：タイトル" Canvas.Left="-74" Canvas.Top="-50" Width="428" Foreground="White" FontSize="18"/>
-		<StackPanel x:Name="stpSubView" Canvas.Left="-56" Canvas.Top="790" Orientation="Horizontal" Width="434" Height="51">
+		<StackPanel x:Name="stpSubView" Canvas.Top="790" Orientation="Horizontal" Width="434" Height="40">
 			<Button x:Name="btnViewStageEditorWindow" Content="ステージエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewStageEditorWindow_Click" Focusable="False" IsEnabled="False"/>
-			<Button x:Name="btnViewEventWindow" Content="イベントエディタ" Width="142" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Click="btnViewEventWindow_Click" Focusable="False" IsEnabled="False" Margin="32,0,0,0"/>
 		</StackPanel>
 		<Label x:Name="DebugLabelA" Content="Label" Width="221" Background="White" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Canvas.Left="537" Canvas.Top="791"/>
 		<Label x:Name="lblDebugPos" Content="Label" Canvas.Left="815" Canvas.Top="790" Background="White" Foreground="Black" Width="253"/>

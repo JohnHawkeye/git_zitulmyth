@@ -80,11 +80,11 @@ namespace Zitulmyth
 					break;
 
 				case BgmName.Opening:
-					bgm.Source = new Uri(dirpath + "\\opening.mp3", UriKind.Absolute);
+					bgm.Source = new Uri(dirpath + "\\Assets\\opening.mp3", UriKind.Absolute);
 					break;
 
 				case BgmName.Darkness:
-					bgm.Source = new Uri(dirpath + "\\darkness.wav", UriKind.Absolute);
+					bgm.Source = new Uri(dirpath + "\\Assets\\darkness.wav", UriKind.Absolute);
 					break;
 			}
 		}
@@ -99,19 +99,19 @@ namespace Zitulmyth
 					break;
 
 				case SeName.Player_Damage:
-					seListenerPlayer.Source = new Uri(dirpath + "\\player_damage.wav", UriKind.Absolute);
+					seListenerPlayer.Source = new Uri(dirpath + "\\Assets\\player_damage.wav", UriKind.Absolute);
 					break;
 
 				case SeName.Fog:
-					seListenerEnemy.Source = new Uri(dirpath + "\\fog.wav", UriKind.Absolute);
+					seListenerEnemy.Source = new Uri(dirpath + "\\Assets\\fog.wav", UriKind.Absolute);
 					break;
 
 				case SeName.Item_Get:
-					seListenerObject.Source = new Uri(dirpath + "\\itemget.wav", UriKind.Absolute);
+					seListenerObject.Source = new Uri(dirpath + "\\Assets\\itemget.wav", UriKind.Absolute);
 					break;
 
 				case SeName.Shock:
-					seListenerEnemy.Source = new Uri(dirpath + "\\shock.wav", UriKind.Absolute);
+					seListenerEnemy.Source = new Uri(dirpath + "\\Assets\\shock.wav", UriKind.Absolute);
 					break;
 			}
 

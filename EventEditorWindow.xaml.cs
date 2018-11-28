@@ -124,7 +124,7 @@ namespace Zitulmyth
 			{
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
 
-				FileStream fs = new FileStream("json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
+				FileStream fs = new FileStream("Assets/json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
 				try
 				{
 					json.WriteObject(fs, propertyEventData);
@@ -136,63 +136,53 @@ namespace Zitulmyth
 			}
 
 		}
-
-		private void btnJsonRead_Click(object sender, RoutedEventArgs e)
-		{
-			DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
-
-			FileStream fs = new FileStream("json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Open);
-
-			try
-			{
-				propertyEventData.Clear();
-				propertyEventData = (List<EventDataProperty>)json.ReadObject(fs);
-
-				for(int i = 0; i < propertyEventData.Count; i++)
-				{
-					propertyEventData[i].ID = i;
-				}
-
-				dgEventData.ItemsSource = propertyEventData;
-			}
-			finally
-			{
-				fs.Close();
-			}
-
-		}
-
-		private void StageLoad()
-		{
-			//remove
-			StageInit.StageBlockRemove(MainWindow.mainCanvas);
-			StageInit.StageObjectsRemove(MainWindow.mainCanvas);
-			StageInit.StageEnemyRemove(MainWindow.mainCanvas);
-			StageInit.StageItemRemove(MainWindow.mainCanvas);
-
-			StageManager.lstClearCondition.Clear();
-
-			//init
-
-			ImageData.ImageLoadAfterSecond();
-
-			StageInit.InitBlockData();
-			StageDataSetting.SetData();
-
-			StageInit.StageBlockSet(MainWindow.mainCanvas);
-			StageManager.StageObjectsSetting(MainWindow.mainCanvas);
-		}
-
+		
 		private void EventEditor_Loaded(object sender, RoutedEventArgs e)
 		{
-			StageManager.stageNum = 0;
-
-			StageLoad();
 
 			strEventCommand = Enum.GetNames(typeof(EventCommandEnum));
 			strObjectName = Enum.GetNames(typeof(ObjectName));
 
 			OptionControlSetting();
+
+			string fileName = "Assets/json/event/event" + StageManager.stageNum.ToString() + ".json";
+
+			if (File.Exists(fileName))
+			{
+
+				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
+
+				FileStream fs = new FileStream("Assets/json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Open);
+
+				try
+				{
+					propertyEventData.Clear();
+					propertyEventData = (List<EventDataProperty>)json.ReadObject(fs);
+
+					for (int i = 0; i < propertyEventData.Count; i++)
+					{
+						propertyEventData[i].ID = i;
+					}
+
+					dgEventData.ItemsSource = propertyEventData;
+				}
+				finally
+				{
+					fs.Close();
+				}
+
+			}
+			else
+			{
+				MessageBox.Show("イベントファイルが存在しないか、読み込めません。\nウィンドウを閉じます。", "ファイルの確認", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+				MainWindow.isOpenEventEditorWindow = false;
+				MainWindow.stageEditor.IsEnabled = true;
+				MainWindow.eventEditor.Close();
+			}
+
+
+
 		}
 		
 		private void dgEventData_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
@@ -1097,22 +1087,18 @@ namespace Zitulmyth
 			}
 		}
 
-		private void EventEditor_Closed(object sender, EventArgs e)
-		{
-		}
-
 		private void EventEditor_Closing(object sender, CancelEventArgs e)
 		{
-			if (!MainWindow.closeMainWindow)
-			{
-				e.Cancel = true;
-				this.Visibility = Visibility.Hidden;
-			}
-			else
-			{
-				e.Cancel = false;
-			}
-		
+			MainWindow.isOpenEventEditorWindow = false;
+			MainWindow.stageEditor.IsEnabled = true;
+		}
+
+		private void btnCloseWindow_Click(object sender, RoutedEventArgs e)
+		{
+			MainWindow.isOpenEventEditorWindow = false;
+			MainWindow.stageEditor.IsEnabled = true;
+
+			MainWindow.eventEditor.Close();
 		}
 	}
 	

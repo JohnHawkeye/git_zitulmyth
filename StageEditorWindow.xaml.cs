@@ -20,6 +20,7 @@ using Zitulmyth.Enums;
 using Zitulmyth.Data;
 using static Zitulmyth.StageEditorOperator;
 
+
 namespace Zitulmyth
 {
 	[DataContract]
@@ -87,6 +88,9 @@ namespace Zitulmyth
 		public static ListView ctlListViewEnemy;
 		public static ListView ctlListViewItem;
 
+		private string[] strClearConditionName;
+		private string[] strObjectName;
+
 		public StageEditorWindow()
 		{
 			InitializeComponent();
@@ -130,7 +134,9 @@ namespace Zitulmyth
 		{
 			int targetStageNum = int.Parse(txbStageNum.Text);
 
-			if (targetStageNum < 3)
+			string fileName = "Assets/json/stage/stage" + (targetStageNum + 1).ToString() + ".json";
+
+			if (File.Exists(fileName))
 			{
 				targetStageNum++;
 				txbStageNum.Text = targetStageNum.ToString();
@@ -140,6 +146,79 @@ namespace Zitulmyth
 
 				EditorPlayerPaletteSetting();
 			}
+			else
+			{
+				MessageBoxResult result =
+				MessageBox.Show("ステージ" + (targetStageNum + 1).ToString() + "番のファイルがありません。\n新規ステージを作成しますか？", "ファイルの確認",
+				MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+				if (result == MessageBoxResult.Yes)
+				{
+					StageEditorData createNewStageFile = new StageEditorData();
+
+					DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<StageEditorData>));
+
+					FileStream fs = new FileStream("Assets/json/stage/stage" + (targetStageNum + 1).ToString() + ".json", FileMode.Create);
+
+					try
+					{
+						CreateNewStageFile(createNewStageFile);
+
+						json.WriteObject(fs, createNewStageFile);
+
+						
+					}
+					finally
+					{
+						fs.Close();
+					}
+
+					if (File.Exists(fileName))
+					{
+						targetStageNum++;
+						txbStageNum.Text = targetStageNum.ToString();
+
+						StageLoad();
+						StageEditorDataSetting();
+
+						EditorPlayerPaletteSetting();
+					}
+				}
+			}
+
+		}
+
+		private void CreateNewStageFile(StageEditorData sed)
+		{
+
+			sed.editPlayerStartPosition = new Vector(0,0);
+			sed.editRespqwnEnemy = false;
+			
+			for (int i = 0; i < 24; i++)
+			{
+				for (int j = 0; j < 32; j++)
+				{
+					sed.editIndicateStage[i * 32 + j] = BlockType.None;
+				}
+			}
+
+			sed.objectName = new ObjectName[] { };
+			sed.objectPosition = new Vector[] { };
+			sed.objectWidth = new int[] { };
+			sed.objectHeight = new int[] { };
+			sed.objectZindex = new int[] { };
+			sed.objectTriggerAction = new bool[] { };
+			sed.objectTriggerTarget = new ObjectName[] { };
+			sed.objectTriggerType = new bool[] { };
+			sed.objectTalkID = new int[] { };
+
+			sed.enemyName = new EnemyName[] { };
+			sed.enemyPosition = new Vector[] { };
+			sed.enemyDirection = new bool[] { };
+					   		
+			sed.itemName = new ItemName[] { };
+			sed.itemPosition = new Vector[] { };
+
 		}
 
 		private void StageLoad()
@@ -169,14 +248,15 @@ namespace Zitulmyth
 		{
 
 			MessageBoxResult result =
-				MessageBox.Show("ステージ" + StageManager.stageNum.ToString() + "番のデータを保存しますか？", "JSONファイルの書き込み",
+				MessageBox.Show("ステージ" + StageManager.stageNum.ToString() + "番のデータを上書きします。\nよろしいですか？", "データの上書き",
 				MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
 			if (result == MessageBoxResult.Yes)
 			{
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<StageEditorData>));
 
-				FileStream fs = new FileStream("json/stage/stage" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
+				FileStream fs = new FileStream("Assets/json/stage/stage" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
+
 				try
 				{
 					json.WriteObject(fs, stageEditorData);
@@ -201,6 +281,9 @@ namespace Zitulmyth
 			ctlListViewObject = lsvObjectList;
 			ctlListViewEnemy = lsvEnemyList;
 			ctlListViewItem = lsvItemList;
+
+			strClearConditionName = Enum.GetNames(typeof(StageClearConditionName));
+			strObjectName = Enum.GetNames(typeof(ObjectName));
 
 			ImageData.ImageLoadEditorMode();
 
@@ -227,25 +310,8 @@ namespace Zitulmyth
 			txbPlayerStartY.Text = stageEditorData.editPlayerStartPosition.Y.ToString();
 
 			stageEditorData.lstEditClearCondition = StageManager.lstClearCondition;
-			lstListViewClearConditions.Clear();
+			ListViewClearConditionUpdate();
 
-			for (int i = 0; i<stageEditorData.lstEditClearCondition.Count;i++)
-			{
-				lstListViewClearConditions.Add(new EditorListViewClearCondition {
-
-					id= i,
-					targetName = stageEditorData.lstEditClearCondition[i].conditionName.ToString(),
-
-					targetKillNum = stageEditorData.lstEditClearCondition[i].targetNumKill,
-					targetReach = stageEditorData.lstEditClearCondition[i].isReach,
-					targetVector = stageEditorData.lstEditClearCondition[i].targetPoint,
-					targetTalkFlag = stageEditorData.lstEditClearCondition[i].targetTalkFlag,
-					targetTime = stageEditorData.lstEditClearCondition[i].targetTime});
-			}
-
-			lsvClearCondition.ItemsSource = lstListViewClearConditions;
-			lsvClearCondition.Items.Refresh();
-			lsvClearCondition.DataContext = lstListViewClearConditions;
 
 			stageEditorData.editRespqwnEnemy = StageManager.respawnEnemy;
 			ckbEnemyRespawn.IsChecked = (bool)stageEditorData.editRespqwnEnemy;
@@ -308,6 +374,31 @@ namespace Zitulmyth
 			ListViewItemDataUpdate();
 		}
 
+		private void ListViewClearConditionUpdate()
+		{
+			lstListViewClearConditions.Clear();
+
+			for (int i = 0; i < stageEditorData.lstEditClearCondition.Count; i++)
+			{
+				lstListViewClearConditions.Add(new EditorListViewClearCondition
+				{
+
+					id = i,
+					targetName = stageEditorData.lstEditClearCondition[i].conditionName.ToString(),
+					targetKillNum = stageEditorData.lstEditClearCondition[i].targetNumKill,
+					targetReach = stageEditorData.lstEditClearCondition[i].isReach,
+					targetVector = stageEditorData.lstEditClearCondition[i].targetPoint,
+					targetTalkFlag = stageEditorData.lstEditClearCondition[i].targetTalkFlag,
+					targetTime = stageEditorData.lstEditClearCondition[i].targetTime
+
+				});
+			}
+
+			lsvClearCondition.ItemsSource = lstListViewClearConditions;
+			lsvClearCondition.Items.Refresh();
+			lsvClearCondition.DataContext = lstListViewClearConditions;
+		}
+
 		private void txbPlayerStartX_PreviewTextInput(object sender, TextCompositionEventArgs e)
 		{
 			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
@@ -343,5 +434,160 @@ namespace Zitulmyth
 
 		}
 
+		private void ckbEnemyRespawn_Checked(object sender, RoutedEventArgs e)
+		{
+			stageEditorData.editRespqwnEnemy = true;
+		}
+
+		private void ckbEnemyRespawn_Unchecked(object sender, RoutedEventArgs e)
+		{
+			stageEditorData.editRespqwnEnemy = false;
+		}
+
+		private void textBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+		}
+
+		private void textBox1_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+		}
+
+		private void textBox2_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+		}
+
+		private void textBox3_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+		}
+
+		private void textBox4_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+		}
+
+		private void btnSettingAdd_Click(object sender, RoutedEventArgs e)
+		{
+			stageEditorData.lstEditClearCondition.Add(new StageClearCondition { });
+			ListViewClearConditionUpdate();
+		}
+
+		private void btnSettingRemove_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsvClearCondition.SelectedIndex >= 0)
+			{
+				stageEditorData.lstEditClearCondition.RemoveAt(lsvClearCondition.SelectedIndex);
+				ListViewClearConditionUpdate();
+			}
+			
+		}
+
+		private void lsvClearCondition_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			int row = lsvClearCondition.SelectedIndex;
+
+			if (row >= 0)
+			{
+				cmbClearConditionName.ItemsSource = strClearConditionName;
+				cmbClearConditionName.SelectedItem = stageEditorData.lstEditClearCondition[row].conditionName.ToString();
+				txbKillNum.Text = stageEditorData.lstEditClearCondition[row].targetNumKill.ToString();
+				txbTargetPosX.Text = stageEditorData.lstEditClearCondition[row].targetPoint.X.ToString();
+				txbTargetPosY.Text = stageEditorData.lstEditClearCondition[row].targetPoint.Y.ToString();
+				txbTalkFlagId.Text = stageEditorData.lstEditClearCondition[row].targetTalkFlag.ToString();
+				txbTime.Text = stageEditorData.lstEditClearCondition[row].targetTime.ToString();
+			}
+
+		}
+
+		private void btnSettingUpdate_Click(object sender, RoutedEventArgs e)
+		{
+			int row = lsvClearCondition.SelectedIndex;
+
+			if(row >= 0)
+			{
+				stageEditorData.lstEditClearCondition[row].conditionName = 
+					(StageClearConditionName)Enum.Parse(typeof(StageClearConditionName),cmbClearConditionName.SelectedItem.ToString());
+
+				stageEditorData.lstEditClearCondition[row].targetNumKill = int.Parse(txbKillNum.Text);
+				stageEditorData.lstEditClearCondition[row].targetPoint = new Vector(int.Parse(txbTargetPosX.Text),int.Parse(txbTargetPosY.Text));
+				stageEditorData.lstEditClearCondition[row].targetTalkFlag = int.Parse(txbTalkFlagId.Text);
+				stageEditorData.lstEditClearCondition[row].targetTime = int.Parse(txbTime.Text);
+
+				ListViewClearConditionUpdate();
+
+			}
+		}
+
+		private void lsvObjectList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			int row = lsvObjectList.SelectedIndex;
+
+			if (row >= 0)
+			{
+				if(stageEditorData.objectZindex[row] == 5)
+				{
+					rdbZindexBack.IsChecked = true;
+				}
+				else
+				{
+					rdbZindexFront.IsChecked = true;	//11
+				}
+
+				cmbObjectTargetName.ItemsSource = strObjectName;
+				cmbObjectTargetName.SelectedItem = stageEditorData.objectTriggerTarget[row].ToString();
+
+				ckbAction.IsChecked = (bool)stageEditorData.objectTriggerAction[row];
+				ckbTriggerType.IsChecked = (bool)stageEditorData.objectTriggerType[row];
+				txbObjectTalkID.Text = stageEditorData.objectTalkID[row].ToString();
+				
+			}
+		}
+
+		private void txbObjectTalkID_PreviewTextInput(object sender, TextCompositionEventArgs e)
+		{
+			e.Handled = !new Regex("[0-9]").IsMatch(e.Text);
+		}
+
+		private void btnObjectUpdate_Click(object sender, RoutedEventArgs e)
+		{
+			int row = lsvObjectList.SelectedIndex;
+
+			if (row >= 0)
+			{
+				if (rdbZindexBack.IsChecked == true)
+				{
+					stageEditorData.objectZindex[row] = 5;
+				}
+				else
+				{
+					stageEditorData.objectZindex[row] = 11;
+				}
+
+				stageEditorData.objectTriggerTarget[row] =
+					(ObjectName)Enum.Parse(typeof(ObjectName), cmbObjectTargetName.SelectedItem.ToString());
+
+				stageEditorData.objectTriggerAction[row] = (bool)ckbAction.IsChecked;
+				stageEditorData.objectTriggerType[row] = (bool)ckbTriggerType.IsChecked;
+				stageEditorData.objectTalkID[row] = int.Parse(txbObjectTalkID.Text);
+
+				ListViewObjectDataUpdate();
+
+			}
+		}
+
+		private void btnEventWindowOpen_Click(object sender, RoutedEventArgs e)
+		{
+
+			MainWindow.stageEditor.IsEnabled = false;
+			MainWindow.isOpenEventEditorWindow = true;
+
+			MainWindow.eventEditor = new EventEditorWindow();
+			MainWindow.eventEditor.Show();
+			MainWindow.eventEditor.Focus();
+
+		}
 	}
 }
