@@ -49,6 +49,8 @@ namespace Zitulmyth
 		
 		public static StageEditorWindow stageEditor = new StageEditorWindow();
 		public static EventEditorWindow eventEditor;
+		public static MaterialBrowser materialBrowser;
+		public static ImageManagerWindow imageManager;
 
 		public static int gameWindowWidth = 1024;
 		public static int gameWindowHeight = 768;
@@ -256,7 +258,10 @@ namespace Zitulmyth
 							mainCanvas.Children.Remove(ImageData.imgTitle[0]); mainCanvas.Children.Remove(ImageData.imgTitle[1]);
 							countTime = 0;
 							GameTransition.gameTransition = GameTransitionType.EditMode;
+							timerFrameUpdate.Stop();
 							btnViewStageEditorWindow.IsEnabled = true;
+							btnViewMaterialBrowser.IsEnabled = true;
+							btnViewImageManager.IsEnabled = true;
 
 							lblMode.Content = "ゲームモード：エディット";
 						}
@@ -351,7 +356,7 @@ namespace Zitulmyth
 						lblMode.Content = "ゲームモード：ステージ準備";
 						GameTransition.gameTransition = GameTransitionType.StageInit;
 //debug stagechange
-					//	StageManager.stageNum = 2;
+						StageManager.stageNum = 2;
 					}
 					
 					break;
@@ -600,6 +605,20 @@ namespace Zitulmyth
 		{
 			stageEditor.Show();
 			stageEditor.Focus();
+		}
+
+		private void btnViewMaterialBrowser_Click(object sender, RoutedEventArgs e)
+		{
+			materialBrowser = new MaterialBrowser();
+			materialBrowser.ShowDialog();
+			materialBrowser.Focus();
+		}
+
+		private void btnViewImageManager_Click(object sender, RoutedEventArgs e)
+		{
+			imageManager = new ImageManagerWindow();
+			imageManager.ShowDialog();
+			imageManager.Focus();
 		}
 	}
 }

@@ -327,6 +327,7 @@ namespace Zitulmyth
 							Sound.SoundEffectPlayer(SeName.Player_Damage);
 						}
 					}
+
 					fallingStart = false;
 					isGround = true;
 					jumpCount = 0;

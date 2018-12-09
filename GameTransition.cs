@@ -47,6 +47,7 @@ namespace Zitulmyth
 	public class GameTransition
 	{
 		public static GameTransitionType gameTransition = GameTransitionType.Title;
+		public static bool growthEnemy;
 
 		public static bool endSplashLogo = false;
 		private static int splashLogoPhase = 0;
@@ -62,7 +63,7 @@ namespace Zitulmyth
 		
 		public static bool eventBalloonIsOpen = false;
 
-		public static Image eventTargetImage;
+		public static Image eventTargetImage = new Image();
 		public static bool charaRenderStart = false;
 		public static int charaRenderIndex = 0;
 		public static double renderRateTotal = 0;
@@ -71,7 +72,7 @@ namespace Zitulmyth
 		public static int screenFadeIndex = 0;
 		public static double screenFadeTotal = 0;
 
-		public static Vector eventCharaMoveDis;
+		public static Vector eventCharaMoveDis = new Vector(0,0);
 		public static int eventCharaMoveSpd;
 		public static int charaMoveIndex = 0;
 		public static bool charaMoveStart;
@@ -227,6 +228,14 @@ namespace Zitulmyth
 					{
 						gameTransition = GameTransitionType.StageEnd;
 						MainWindow.lblMode.Content = "ゲームモード：ステージ終了";
+					}
+					else
+					{
+						if (growthEnemy)
+						{	
+							SpawnEnemy.SpawnSelect(canvas, EnemyName.Zigitu01);
+							growthEnemy = false;
+						}
 					}
 
 					break;

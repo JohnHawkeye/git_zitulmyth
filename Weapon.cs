@@ -308,7 +308,8 @@ namespace Zitulmyth
 					Vector p2 = new Vector(Canvas.GetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy), Canvas.GetTop(SpawnEnemy.lstEnemyData[i].imgEnemy));
 					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].pixSize.X, SpawnEnemy.lstEnemyData[i].pixSize.Y);
 
-					if (CollisionCheck.Collision(p1, p2, size1, size2))
+					if (CollisionCheck.Collision(p1, p2, size1, size2)&&
+						SpawnEnemy.lstEnemyData[i].state != EnemyState.Death)
 					{
 
 						canvas.Children.Remove(ImageData.imgSubWeapon[0]);
@@ -326,31 +327,13 @@ namespace Zitulmyth
 
 						if (SpawnEnemy.lstEnemyData[i].life <= 0)
 						{
-							bool popOn = false;
-							EnemyName name = EnemyName.Zigitu01;
 
-							if (SpawnEnemy.lstEnemyData[i].deathEvent == EnemyDeathEvent.Pop)
-							{
-								if (GameTransition.gameTransition == GameTransitionType.StageDuring)
-								{
-									popOn = true;
-								}
+							SpawnEnemy.lstEnemyData[i].isWaiting = false;
+							SpawnEnemy.lstEnemyData[i].state = EnemyState.Death;
 
-							}
-
-							canvas.Children.Remove(SpawnEnemy.lstEnemyData[i].imgEnemy);
-							SpawnEnemy.lstEnemyData.RemoveAt(i);
-							StageManager.numKillEnemy++;
-							Console.WriteLine(StageManager.numKillEnemy);
-
-							if (popOn)
-							{
-								if (StageManager.numKillEnemy < 10)
-								{
-									SpawnEnemy.SpawnSelect(canvas, name);
-								}
-
-							}
+							SpawnEnemy.EnemyDeathItemDrop(canvas, SpawnEnemy.lstEnemyData[i].name, SpawnEnemy.lstEnemyData[i].position);
+							
+							
 						}
 
 						break;

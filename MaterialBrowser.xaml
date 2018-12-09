@@ -1,0 +1,29 @@
+﻿<Window x:Class="Zitulmyth.MaterialBrowser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zitulmyth"
+        mc:Ignorable="d"
+        Title="素材管理" Height="514" Width="640" Background="Black" FontSize="14" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+	<Grid Width="616" VerticalAlignment="Top">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="498*"/>
+			<RowDefinition Height="73*"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="223*"/>
+			<ColumnDefinition Width="245*"/>
+			<ColumnDefinition Width="148*"/>
+		</Grid.ColumnDefinitions>
+		<ListBox x:Name="lsbFolder" ItemsSource="{Binding}" HorizontalAlignment="Left" Height="390" Margin="10,20,0,10" VerticalAlignment="Center" Width="200" SelectionChanged="lsbFolder_SelectionChanged">
+
+		</ListBox>
+		<ListBox x:Name="lsbFile" ItemsSource="{Binding Path=fileName}" HorizontalAlignment="Left" Height="390" Margin="0,20,0,10" VerticalAlignment="Center" Width="220" Grid.Column="1"/>
+		<Button x:Name="btnImport" Content="インポート" Grid.Column="2" HorizontalAlignment="Left" Height="42" Margin="0,20,0,0" VerticalAlignment="Top" Width="128" Click="btnImport_Click"/>
+		<Button x:Name="btnDelete" Content="削除" Grid.Column="2" HorizontalAlignment="Left" Height="42" Margin="0,80,0,0" VerticalAlignment="Top" Width="128" Click="btnDelete_Click"/>
+		<Button x:Name="btnCloseWindow" Content="閉じる" Grid.Column="2" HorizontalAlignment="Left" Height="42" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="128" Click="btnCloseWindow_Click" FontSize="14"/>
+		<Button x:Name="btnSelect" Content="選択" Grid.Column="2" HorizontalAlignment="Left" Height="42" Margin="0,196,0,0" VerticalAlignment="Top" Width="128" Click="btnSelect_Click" Visibility="Hidden"/>
+
+	</Grid>
+</Window>

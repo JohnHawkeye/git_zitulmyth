@@ -174,11 +174,31 @@ namespace Zitulmyth
 			}
 			else
 			{
-				MessageBox.Show("イベントファイルが存在しないか、読み込めません。\nウィンドウを閉じます。", "ファイルの確認", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-				MainWindow.isOpenEventEditorWindow = false;
-				MainWindow.stageEditor.IsEnabled = true;
-				MainWindow.eventEditor.Close();
+				propertyEventData.Clear();
+				propertyEventData.Add(new EventDataProperty { });
+				for (int i = 0; i < propertyEventData.Count; i++)
+				{
+					propertyEventData[i].ID = i;
+				}
+
+				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
+
+				FileStream fs = new FileStream("Assets/json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
+				try
+				{
+					json.WriteObject(fs, propertyEventData);
+
+					MessageBox.Show("ステージ" + StageManager.stageNum.ToString() + "のイベントファイルが存在しないため、\nイベントファイルを新規作成しました。",
+									"イベントファイルの作成", MessageBoxButton.OK, MessageBoxImage.Information);
+				}
+				finally
+				{
+					fs.Close();
+				}
+
+				dgEventData.ItemsSource = propertyEventData;
+
 			}
 
 

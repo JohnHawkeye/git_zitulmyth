@@ -463,6 +463,12 @@ namespace Zitulmyth
 			{
 				if(lstEnemyData[i].isDeath)
 				{
+					if (lstEnemyData[i].name == EnemyName.Zigitu01)
+					{
+						GameTransition.growthEnemy = true;
+
+					}
+
 					canvas.Children.Remove(lstEnemyData[i].imgEnemy);
 					lstEnemyData.RemoveAt(i);
 					StageManager.numKillEnemy++;

@@ -581,6 +581,8 @@ namespace Zitulmyth
 		private void btnEventWindowOpen_Click(object sender, RoutedEventArgs e)
 		{
 
+			paletteMode = PaletteMode.None;
+
 			MainWindow.stageEditor.IsEnabled = false;
 			MainWindow.isOpenEventEditorWindow = true;
 
