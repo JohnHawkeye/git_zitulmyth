@@ -15,7 +15,7 @@
 			
 		</TreeView>
 		<ScrollViewer Grid.Column="1" HorizontalAlignment="Left" Height="475" Margin="10,84,0,0" VerticalAlignment="Top" Width="550">
-			<Canvas Height="768" Width="1024" Margin="8,8,0,0"/>
+			<Canvas x:Name="cvsImagePreview" Height="768" Width="1024" Margin="8,8,0,0"/>
 		</ScrollViewer>
 		<Canvas Grid.Column="1" Height="32" Margin="10,10,0,0" VerticalAlignment="Top" Width="550" Background="#FFB9B9B9" HorizontalAlignment="Left">
 			<Label x:Name="label" Content="・カテゴリ：" HorizontalAlignment="Left" Background="{x:Null}" Height="22" Padding="5,2,5,5" Width="65" Canvas.Left="10" Margin="0" VerticalAlignment="Center" Canvas.Top="6"/>

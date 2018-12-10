@@ -17,7 +17,6 @@
 			<ColumnDefinition Width="148*"/>
 		</Grid.ColumnDefinitions>
 		<ListBox x:Name="lsbFolder" ItemsSource="{Binding}" HorizontalAlignment="Left" Height="390" Margin="10,20,0,10" VerticalAlignment="Center" Width="200" SelectionChanged="lsbFolder_SelectionChanged">
-
 		</ListBox>
 		<ListBox x:Name="lsbFile" ItemsSource="{Binding Path=fileName}" HorizontalAlignment="Left" Height="390" Margin="0,20,0,10" VerticalAlignment="Center" Width="220" Grid.Column="1"/>
 		<Button x:Name="btnImport" Content="インポート" Grid.Column="2" HorizontalAlignment="Left" Height="42" Margin="0,20,0,0" VerticalAlignment="Top" Width="128" Click="btnImport_Click"/>
