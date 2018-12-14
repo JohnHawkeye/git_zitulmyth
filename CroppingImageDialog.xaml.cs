@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Zitulmyth
 {
@@ -25,7 +26,10 @@ namespace Zitulmyth
 		private Line lineH = new Line();
 		private Line lineV = new Line();
 
+		private BitmapImage bmiOriginalImage = new BitmapImage();
 		private Image imgOriginalImage = new Image();
+		private int maxWidth;
+		private int maxHeight;
 
 		public Vector clickPosition = new Vector();
 
@@ -64,6 +68,30 @@ namespace Zitulmyth
 			cvsDesk.Children.Add(lineH);
 			cvsDesk.Children.Add(lineV);
 			//
+
+			if (File.Exists("Assets/" + MainWindow.imageManager.tbkFileName.Text.ToString()))
+			{
+				bmiOriginalImage = new BitmapImage(
+					new Uri("Assets/" + MainWindow.imageManager.tbkFileName.Text.ToString(), UriKind.Relative));
+				maxWidth = bmiOriginalImage.PixelWidth;
+				maxHeight = bmiOriginalImage.PixelHeight;
+
+				imgOriginalImage.Source = bmiOriginalImage;
+				imgOriginalImage.Width = maxWidth;
+				imgOriginalImage.Height = maxHeight;
+				cvsDesk.Width = maxWidth;
+				cvsDesk.Height = maxHeight;
+
+				cvsDesk.Children.Add(imgOriginalImage);
+			}
+
+			tbxStartX.Text = MainWindow.imageManager.croppingRange.X.ToString();
+			tbxStartY.Text = MainWindow.imageManager.croppingRange.Y.ToString();
+			tbxWidth.Text = MainWindow.imageManager.croppingRange.Width.ToString();
+			tbxHeight.Text = MainWindow.imageManager.croppingRange.Height.ToString();
+			CursorSetting(int.Parse(tbxStartX.Text), int.Parse(tbxStartY.Text),
+					int.Parse(tbxWidth.Text), int.Parse(tbxHeight.Text));
+
 		}
 
 		private void tbxStartX_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -266,9 +294,9 @@ namespace Zitulmyth
 				{
 					tbxStartX.Text = "0";
 				}
-				if (int.Parse(tbxStartX.Text) > 1024)
+				if (int.Parse(tbxStartX.Text) > maxWidth)
 				{
-					tbxStartX.Text = "1024";
+					tbxStartX.Text = maxWidth.ToString();
 				}
 
 				CursorSetting(int.Parse(tbxStartX.Text), int.Parse(tbxStartY.Text),
@@ -284,9 +312,9 @@ namespace Zitulmyth
 				{
 					tbxStartY.Text = "0";
 				}
-				if (int.Parse(tbxStartY.Text) > 1024)
+				if (int.Parse(tbxStartY.Text) > maxHeight)
 				{
-					tbxStartY.Text = "1024";
+					tbxStartY.Text = maxHeight.ToString();
 				}
 
 				CursorSetting(int.Parse(tbxStartX.Text), int.Parse(tbxStartY.Text),
@@ -302,7 +330,11 @@ namespace Zitulmyth
 				{
 					tbxWidth.Text = "0";
 				}
-				
+
+				if (int.Parse(tbxStartX.Text) + int.Parse(tbxWidth.Text)>maxWidth)
+				{
+					tbxWidth.Text = (int.Parse(tbxWidth.Text)-(int.Parse(tbxStartX.Text) + int.Parse(tbxWidth.Text) - maxWidth)).ToString();
+				}
 
 				CursorSetting(int.Parse(tbxStartX.Text), int.Parse(tbxStartY.Text),
 					int.Parse(tbxWidth.Text), int.Parse(tbxHeight.Text));
@@ -313,9 +345,14 @@ namespace Zitulmyth
 		{
 			if (e.Key == Key.Return)
 			{
-				if (int.Parse(tbxWidth.Text) < 0)
+				if (int.Parse(tbxHeight.Text) < 0)
 				{
-					tbxWidth.Text = "0";
+					tbxHeight.Text = "0";
+				}
+
+				if (int.Parse(tbxStartY.Text) + int.Parse(tbxHeight.Text) > maxHeight)
+				{
+					tbxHeight.Text = (int.Parse(tbxHeight.Text) - (int.Parse(tbxStartY.Text) + int.Parse(tbxHeight.Text) - maxHeight)).ToString();
 				}
 
 				CursorSetting(int.Parse(tbxStartX.Text), int.Parse(tbxStartY.Text),
@@ -361,6 +398,16 @@ namespace Zitulmyth
 		private void ckbSnap_Click(object sender, RoutedEventArgs e)
 		{
 			SnapLineDraw();
+		}
+
+		private void cvsDesk_MouseLeave(object sender, MouseEventArgs e)
+		{
+			mouseLeftClick = false;
+		}
+
+		private void btnCropping_Click(object sender, RoutedEventArgs e)
+		{
+			
 		}
 	}
 }

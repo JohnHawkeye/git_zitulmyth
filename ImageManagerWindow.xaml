@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="画像管理" Height="598" Width="800" Background="Black" ResizeMode="NoResize" Icon="Assets/item.png" Loaded="Window_Loaded">
+        Title="画像管理" Height="598" Width="800" Background="Black" ResizeMode="NoResize" Icon="Assets/item.png" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="112*"/>
@@ -25,7 +25,7 @@
 			<Button x:Name="btnPatternNameUpdate" Content="変更" Canvas.Left="367" Canvas.Top="6" Width="50" Click="btnPatternNameUpdate_Click"/>
 		</Canvas>
 		<Canvas Grid.Column="1" Height="32" Margin="10,47,0,0" VerticalAlignment="Top" Width="550" Background="#FFB9B9B9" HorizontalAlignment="Left">
-			<Label x:Name="label1" Content="・画像ファイル：" HorizontalAlignment="Left" Background="{x:Null}" Height="22" Padding="5,2,5,5" Width="90" Canvas.Left="10" Margin="0" VerticalAlignment="Center" Canvas.Top="6"/>
+			<Label x:Name="label1" Content="・画像ファイル：" HorizontalAlignment="Left" Background="{x:Null}" Height="22" Padding="5,2,5,5" Width="90" Canvas.Left="10" Margin="0" VerticalAlignment="Center" Canvas.Top="6" />
 			<TextBlock x:Name="tbkFileName" HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" Text="Filename" VerticalAlignment="Center" Width="256" Padding="5,2,0,0" Canvas.Left="105" Canvas.Top="5" RenderTransformOrigin="1.172,0.364" Background="White"/>
 			<Button x:Name="btnImageRefer" Content="..." HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="32" Canvas.Left="366" Canvas.Top="4" Click="btnImageRefer_Click"/>
 		</Canvas>

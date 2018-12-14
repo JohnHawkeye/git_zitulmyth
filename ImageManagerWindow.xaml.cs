@@ -34,15 +34,15 @@ namespace Zitulmyth
 		public string patternName;
 		public List<Int32Rect> cropRange = new List<Int32Rect>();
 	}
-	
+
 	public partial class ImageManagerWindow : Window
 	{
 		public CroppingImageDialog croppingDialog;
 		public Int32Rect croppingRange;
 
-		private string parentName;
+		public string parentName;
 		private string childName;
-		private int patternListIndex = 0;
+		public int patternListIndex = 0;
 		private int namingNum = 0;
 		private string namingStr = "新規パターン";
 
@@ -56,7 +56,7 @@ namespace Zitulmyth
 		private TreeViewItem tviBlock = new TreeViewItem();
 		private TreeViewItem tviScenery = new TreeViewItem();
 		private TreeViewItem tviSystem = new TreeViewItem();
-		
+
 		private List<TreeViewItem> tviChildPlayer = new List<TreeViewItem>();
 		private List<TreeViewItem> tviChildEnemy = new List<TreeViewItem>();
 		private List<TreeViewItem> tviChildObject = new List<TreeViewItem>();
@@ -80,26 +80,34 @@ namespace Zitulmyth
 		private void ImageCategoryAdding()
 		{
 
-			
 
-			lstPatternPlayer.Add(new ImagePattern { patternName="Idle",fileName = "vtulp01.png",
-				cropRange = new List<Int32Rect> {new Int32Rect(0,0,32,64), new Int32Rect(32, 0, 32, 64) }});
-			lstPatternPlayer.Add(new ImagePattern { patternName = "A",fileName = "vtulp01.png",
-				cropRange = new List<Int32Rect> { new Int32Rect(0, 0, 32, 64) } });
+
+			lstPatternPlayer.Add(new ImagePattern
+			{
+				patternName = "Idle",
+				fileName = "vtulp00.png",
+				cropRange = new List<Int32Rect> { new Int32Rect(0, 0, 32, 64), new Int32Rect(32, 0, 32, 64) }
+			});
+			lstPatternPlayer.Add(new ImagePattern
+			{
+				patternName = "A",
+				fileName = "vtulp01.png",
+				cropRange = new List<Int32Rect> { new Int32Rect(0, 0, 32, 64) }
+			});
 			lstPatternPlayer.Add(new ImagePattern { patternName = "C" });
 			lstPatternPlayer.Add(new ImagePattern { patternName = "D" });
 
-			
+
 			tviPlyer.Header = CategoryName.Player.ToString();
 			ImagePatternAdding(lstPatternPlayer, tviChildPlayer, tviPlyer);
 			tviPlyer.IsExpanded = true;
-			
+
 
 			tviEnemy.Header = CategoryName.Enemy.ToString();
 			ImagePatternAdding(lstPatternEnemy, tviChildEnemy, tviEnemy);
 			tviEnemy.IsExpanded = true;
 
-			
+
 			tviObject.Header = CategoryName.Object.ToString();
 			ImagePatternAdding(lstPatternObject, tviChildObject, tviObject);
 			tviObject.IsExpanded = true;
@@ -132,17 +140,17 @@ namespace Zitulmyth
 			trvCategory.Items.Add(tviBlock);
 			trvCategory.Items.Add(tviScenery);
 			trvCategory.Items.Add(tviSystem);
-			
+
 		}
 
-		private void ImagePatternAdding (List<ImagePattern> imagePattern,List<TreeViewItem> tvichild,TreeViewItem treeViewItem)
+		private void ImagePatternAdding(List<ImagePattern> imagePattern, List<TreeViewItem> tvichild, TreeViewItem treeViewItem)
 		{
 			tvichild.Clear();
 
-			for(int i = 0; i < imagePattern.Count; i++)
+			for (int i = 0; i < imagePattern.Count; i++)
 			{
 
-				tvichild.Add(new TreeViewItem {Header= imagePattern[i].patternName });
+				tvichild.Add(new TreeViewItem { Header = imagePattern[i].patternName });
 				treeViewItem.Items.Add(tvichild[i]);
 
 			}
@@ -184,7 +192,7 @@ namespace Zitulmyth
 			}
 		}
 
-		private List<ImagePattern> ChildSelector()
+		public List<ImagePattern> ChildSelector()
 		{
 			CategoryName cn = (CategoryName)Enum.Parse(typeof(CategoryName), parentName, false);
 
@@ -192,31 +200,31 @@ namespace Zitulmyth
 			{
 				case CategoryName.Player:
 					return lstPatternPlayer;
-					
+
 
 				case CategoryName.Enemy:
 					return lstPatternEnemy;
 
 				case CategoryName.Object:
 					return lstPatternObject;
-				
+
 				case CategoryName.Npc:
-					return lstPatternNpc;			
+					return lstPatternNpc;
 
 				case CategoryName.Item:
-					return lstPatternItem;			
+					return lstPatternItem;
 
 				case CategoryName.Block:
-					return lstPatternBlock;		
+					return lstPatternBlock;
 
 				case CategoryName.Scenery:
-					return lstPatternScenery;			
+					return lstPatternScenery;
 
 				case CategoryName.System:
-					return lstPatternSystem;	
+					return lstPatternSystem;
 
 				default:
-					return lstPatternPlayer;			
+					return lstPatternPlayer;
 			}
 		}
 
@@ -224,7 +232,7 @@ namespace Zitulmyth
 		{
 
 			PatternListLoading(ChildSelector(), parentName);
-			
+
 			tbkCategory.Text = parentName;
 
 			txbPattern.IsEnabled = true;
@@ -232,11 +240,11 @@ namespace Zitulmyth
 			btnImageRefer.IsEnabled = true;
 		}
 
-		private void PatternListLoading(List<ImagePattern> imgptn,string folderName)
+		public void PatternListLoading(List<ImagePattern> imgptn, string folderName)
 		{
-			for(int i = 0; i < imgptn.Count; i++)
+			for (int i = 0; i < imgptn.Count; i++)
 			{
-				if(childName == imgptn[i].patternName)
+				if (childName == imgptn[i].patternName)
 				{
 					patternListIndex = i;
 					break;
@@ -252,33 +260,37 @@ namespace Zitulmyth
 
 			BitmapImage previewBitmap = new BitmapImage();
 			CroppedBitmap previewCropped = new CroppedBitmap();
-			previewBitmap = new BitmapImage(
-				new Uri("Assets/"+ folderName +"/"+ imgptn[patternListIndex].fileName, UriKind.Relative));
 
-			for (int i = 0; i < previewImage.Count; i++) 
+			for (int i = 0; i < previewImage.Count; i++)
 			{
 				cvsImagePreview.Children.Remove(previewImage[i]);
 			}
 
-			previewImage.Clear();
-			for(int i = 0; i < imgptn[patternListIndex].cropRange.Count; i++)
-			{
-				previewCropped = new CroppedBitmap(previewBitmap, imgptn[patternListIndex].cropRange[i]);
-				int w = imgptn[patternListIndex].cropRange[i].Width;
-				int h = imgptn[patternListIndex].cropRange[i].Height;
-				previewImage.Add(new Image { Source = previewCropped, Width = w, Height = h });
-				cvsImagePreview.Children.Add(previewImage[i]);
-				previewImage[i].MouseLeftButtonDown += new MouseButtonEventHandler(PreviewImageClickOpenDialog);
-				Canvas.SetLeft(previewImage[i], marginLeft + i* imageSize);
-				Canvas.SetTop(previewImage[i], marginTop + rowCount* imageSize);
-				colCount++;
-				if (colCount % 4 == 0)
-					rowCount++;
+			if (File.Exists("Assets/" + imgptn[patternListIndex].fileName))
+			{				
+				previewBitmap = new BitmapImage(
+					new Uri("Assets/" + imgptn[patternListIndex].fileName, UriKind.Relative));
+
+				previewImage.Clear();
+				for (int i = 0; i < imgptn[patternListIndex].cropRange.Count; i++)
+				{
+					previewCropped = new CroppedBitmap(previewBitmap, imgptn[patternListIndex].cropRange[i]);
+					int w = imgptn[patternListIndex].cropRange[i].Width;
+					int h = imgptn[patternListIndex].cropRange[i].Height;
+					previewImage.Add(new Image {Tag = i, Source = previewCropped, Width = w, Height = h });
+					cvsImagePreview.Children.Add(previewImage[i]);
+					previewImage[i].MouseLeftButtonDown += new MouseButtonEventHandler(PreviewImageClickOpenDialog);
+					Canvas.SetLeft(previewImage[i], marginLeft + i * imageSize);
+					Canvas.SetTop(previewImage[i], marginTop + rowCount * imageSize);
+					colCount++;
+					if (colCount % 4 == 0)
+						rowCount++;
+				}
 			}
 
 			previewBitmap = new BitmapImage(new Uri("Assets/icon/icon_newpattern.png", UriKind.Relative));
-			previewImage.Add(new Image { Source = previewBitmap, Width = imageSize, Height = imageSize });
-			cvsImagePreview.Children.Add(previewImage[previewImage.Count-1]);
+			previewImage.Add(new Image {Tag = "new", Source = previewBitmap, Width = imageSize, Height = imageSize });
+			cvsImagePreview.Children.Add(previewImage[previewImage.Count - 1]);
 			previewImage[previewImage.Count - 1].MouseLeftButtonDown += new MouseButtonEventHandler(PreviewImageClickOpenDialog);
 			Canvas.SetLeft(previewImage[previewImage.Count - 1], marginLeft + colCount * imageSize);
 			Canvas.SetTop(previewImage[previewImage.Count - 1], marginTop + rowCount * imageSize);
@@ -298,13 +310,13 @@ namespace Zitulmyth
 			tbkFileName.Text = "-";
 			btnImageRefer.IsEnabled = false;
 
-			for(int i = 0; i < previewImage.Count; i++)
+			for (int i = 0; i < previewImage.Count; i++)
 			{
 				cvsImagePreview.Children.Remove(previewImage[i]);
 			}
 
 			previewImage.Clear();
-			
+
 		}
 
 		private void PatternDataWrite(List<ImagePattern> imgptn)
@@ -312,7 +324,7 @@ namespace Zitulmyth
 
 			DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<ImagePattern>));
 
-			FileStream fs = new FileStream("Assets/json/crop/"+ parentName +".json", FileMode.Create);
+			FileStream fs = new FileStream("Assets/json/crop/" + parentName + ".json", FileMode.Create);
 
 			try
 			{
@@ -330,18 +342,18 @@ namespace Zitulmyth
 		{
 			bool flag = false;
 
-			for(int i =0;i < imgptn.Count; i++)
+			for (int i = 0; i < imgptn.Count; i++)
 			{
-				if(patternListIndex != i)
+				if (patternListIndex != i)
 				{
 					if (txbPattern.Text == imgptn[i].patternName)
 					{
-						MessageBox.Show("同じパターン名があります。\n違う名前に設定してください。","パターン名",MessageBoxButton.OK,MessageBoxImage.Information);
+						MessageBox.Show("同じパターン名があります。\n違う名前に設定してください。", "パターン名", MessageBoxButton.OK, MessageBoxImage.Information);
 						flag = true;
 						break;
 					}
 				}
-				
+
 			}
 
 			return flag;
@@ -361,7 +373,7 @@ namespace Zitulmyth
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			
+
 		}
 
 		private void btnImageRefer_Click(object sender, RoutedEventArgs e)
@@ -373,11 +385,12 @@ namespace Zitulmyth
 
 		private void trvCategory_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
-			
-			 TreeViewItem item = (TreeViewItem)e.NewValue;
+
+			TreeViewItem item = (TreeViewItem)e.NewValue;
 			tbkCategory.Text = item.Header.ToString();
 
-			if (item.Parent.GetType().Equals(typeof(TreeViewItem))){
+			if (item.Parent.GetType().Equals(typeof(TreeViewItem)))
+			{
 
 				TreeViewItem parentitem = (TreeViewItem)item.Parent;
 				Console.WriteLine(parentitem.Header.ToString() + " , " + item.Header.ToString());
@@ -394,14 +407,25 @@ namespace Zitulmyth
 			{
 				PatternNonSelected();
 			}
-			
+
 		}
 
 		private void PreviewImageClickOpenDialog(object sender, RoutedEventArgs e)
 		{
-			croppingRange = new Int32Rect(0,0,0,0);
+			Console.WriteLine(((Image)sender).Tag);
+
+			if(((Image)sender).Tag.GetType() == typeof(int))
+			{
+				croppingRange = ChildSelector()[patternListIndex].cropRange[(int)((Image)sender).Tag];
+			}
+			else
+			{
+				croppingRange = new Int32Rect(0, 0, 1, 1);
+			}
+
 			croppingDialog = new CroppingImageDialog();
 			croppingDialog.ShowDialog();
+
 		}
 
 		private void btnPatternNameUpdate_Click(object sender, RoutedEventArgs e)
@@ -423,7 +447,7 @@ namespace Zitulmyth
 				TreeViewItem item = (TreeViewItem)trvCategory.SelectedItem;
 				parentName = item.Header.ToString();
 
-				
+
 				for (int i = 0; i < ChildSelector().Count; i++)
 				{
 					if (namingStr == ChildSelector()[i].patternName)
@@ -432,15 +456,15 @@ namespace Zitulmyth
 						namingNum++;
 						break;
 					}
-					
+
 				}
 
-				ChildSelector().Add(new ImagePattern {patternName = namingStr,fileName="" });
+				ChildSelector().Add(new ImagePattern { patternName = namingStr, fileName = "" });
 
 				TreeViewItem newItem = new TreeViewItem();
-				newItem.Header = ChildSelector()[ChildSelector().Count-1].patternName;
+				newItem.Header = ChildSelector()[ChildSelector().Count - 1].patternName;
 				ParentSelector().Items.Add(newItem);
-				
+
 			}
 		}
 
@@ -448,14 +472,14 @@ namespace Zitulmyth
 		{
 			TreeViewItem selected = (TreeViewItem)trvCategory.SelectedItem;
 
-			if(selected != null)
+			if (selected != null)
 			{
 				if (trvCategory.Items.IndexOf(selected) <= -1)
 				{
 
 					MessageBoxResult result =
-						MessageBox.Show("パターン "+ selected.Header.ToString() +" を削除しますか？",
-							"パターンの削除",MessageBoxButton.YesNo, MessageBoxImage.Warning);
+						MessageBox.Show("パターン " + selected.Header.ToString() + " を削除しますか？",
+							"パターンの削除", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
 					if (result == MessageBoxResult.Yes)
 					{
@@ -471,9 +495,11 @@ namespace Zitulmyth
 								break;
 							}
 						}
-					}	
+					}
 				}
 			}
 		}
+
+
 	}
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="画像のトリミング" Height="666" Width="800" Background="Black" ResizeMode="NoResize">
+        Title="画像のトリミング" Height="666" Width="800" Background="Black" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="67*"/>
@@ -13,7 +13,7 @@
 			<RowDefinition Height="58*"/>
 		</Grid.RowDefinitions>
 		<ScrollViewer HorizontalAlignment="Left" Height="491" Margin="10,10,0,0" VerticalAlignment="Top" Width="774" Grid.Row="1" HorizontalScrollBarVisibility="Auto">
-			<Canvas x:Name="cvsDesk" Height="1024" Width="1024" Background="#FF555555" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="cvsDesk_MouseLeftButtonDown" MouseLeftButtonUp="cvsDesk_MouseLeftButtonUp" MouseMove="cvsDesk_MouseMove" Cursor="Cross"/>
+			<Canvas x:Name="cvsDesk" Height="1024" Width="1024" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="cvsDesk_MouseLeftButtonDown" MouseLeftButtonUp="cvsDesk_MouseLeftButtonUp" MouseMove="cvsDesk_MouseMove" Cursor="Cross" Background="#FF4D4D4D" MouseLeave="cvsDesk_MouseLeave"/>
 		</ScrollViewer>
 		<Canvas HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" VerticalAlignment="Top" Width="774" Background="#FFD4D4D4">
 			<Label x:Name="label" Content="X:" Canvas.Left="10" Canvas.Top="6" Height="24" Width="22" VerticalContentAlignment="Center" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -26,7 +26,7 @@
 			<TextBox x:Name="tbxHeight" Height="24" Canvas.Left="357" TextWrapping="Wrap" Text="1" Canvas.Top="8" Width="64" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" PreviewTextInput="tbxHeight_PreviewTextInput" KeyDown="tbxHeight_KeyDown"/>
 			<CheckBox x:Name="ckbSnap" Content="スナップ" Canvas.Left="461" Canvas.Top="13" IsChecked="True" Checked="ckbSnap_Checked" Click="ckbSnap_Click" ToolTip="16ピクセルごとにスナップします"/>
 		</Canvas>
-		<Button x:Name="btnCropping" Content="トリミング" HorizontalAlignment="Center" Margin="347,13" Grid.Row="2" Width="100" VerticalAlignment="Center" Height="32"/>
+		<Button x:Name="btnCropping" Content="トリミング" HorizontalAlignment="Center" Margin="347,13" Grid.Row="2" Width="100" VerticalAlignment="Center" Height="32" Click="btnCropping_Click"/>
 
 	</Grid>
 </Window>

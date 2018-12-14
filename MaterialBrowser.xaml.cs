@@ -240,7 +240,12 @@ namespace Zitulmyth
 		{
 			if(lsbFile.SelectedIndex >= 0)
 			{
-				MainWindow.imageManager.tbkFileName.Text = lstFileName[lsbFile.SelectedIndex].fileName.ToString();
+				MainWindow.imageManager.tbkFileName.Text = lstFolder[lsbFolder.SelectedIndex].ToString() +"/"+ lstFileName[lsbFile.SelectedIndex].fileName.ToString();
+				MainWindow.imageManager.ChildSelector()[MainWindow.imageManager.patternListIndex].fileName = MainWindow.imageManager.tbkFileName.Text;
+
+				MainWindow.imageManager.ChildSelector()[MainWindow.imageManager.patternListIndex].cropRange.Clear();
+				MainWindow.imageManager.PatternListLoading(MainWindow.imageManager.ChildSelector(), MainWindow.imageManager.parentName);
+				
 				this.Close();
 			}
 			
