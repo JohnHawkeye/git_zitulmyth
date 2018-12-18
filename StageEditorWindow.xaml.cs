@@ -32,6 +32,9 @@ namespace Zitulmyth
 		public Vector editPlayerStartPosition;
 
 		[DataMember]
+		public string scenemyName;
+
+		[DataMember]
 		public List<StageClearCondition> lstEditClearCondition = new List<StageClearCondition>();
 
 		[DataMember]
@@ -88,12 +91,15 @@ namespace Zitulmyth
 		public static ListView ctlListViewEnemy;
 		public static ListView ctlListViewItem;
 
+		private List<string> lstSceneryName;
+
 		private string[] strClearConditionName;
 		private string[] strObjectName;
 
 		public StageEditorWindow()
 		{
 			InitializeComponent();
+
 		}
 
 		private void StageEditorWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -234,9 +240,7 @@ namespace Zitulmyth
 			//init
 
 			StageManager.stageNum = int.Parse(txbStageNum.Text);
-
-			ImageData.ImageLoadAfterSecond();
-
+			
 			StageInit.InitBlockData();
 			StageDataSetting.SetData();
 
@@ -270,6 +274,8 @@ namespace Zitulmyth
 
 		private void StageEditorWindow_Loaded(object sender, RoutedEventArgs e)
 		{
+			ImageData.SpriteReading();
+
 			ctlGridMain = grdMain;
 			ctlCanvasBlockPalette = cavBlockPalette;
 			ctlCanvasObjectPalette = cavObjectPalette;
@@ -285,8 +291,8 @@ namespace Zitulmyth
 			strClearConditionName = Enum.GetNames(typeof(StageClearConditionName));
 			strObjectName = Enum.GetNames(typeof(ObjectName));
 
-			ImageData.ImageLoadEditorMode();
-
+			lstSceneryName = ImageData.PatternNameListCreating(CategoryName.Scenery);
+			cmbSceneryName.ItemsSource = lstSceneryName;
 
 			StageManager.stageNum = 0;
 			StageLoad();
@@ -308,6 +314,20 @@ namespace Zitulmyth
 			stageEditorData.editPlayerStartPosition = StageData.startPlayerPosition;
 			txbPlayerStartX.Text = stageEditorData.editPlayerStartPosition.X.ToString();
 			txbPlayerStartY.Text = stageEditorData.editPlayerStartPosition.Y.ToString();
+
+			stageEditorData.scenemyName = StageData.sceneryImageName;
+
+			if(stageEditorData.scenemyName == null)
+			{
+				cmbSceneryName.SelectedIndex = 0;
+			}
+			else
+			{
+				cmbSceneryName.SelectedItem = StageData.sceneryImageName;
+			}
+
+		
+			
 
 			stageEditorData.lstEditClearCondition = StageManager.lstClearCondition;
 			ListViewClearConditionUpdate();
@@ -587,9 +607,14 @@ namespace Zitulmyth
 			MainWindow.isOpenEventEditorWindow = true;
 
 			MainWindow.eventEditor = new EventEditorWindow();
-			MainWindow.eventEditor.Show();
-			MainWindow.eventEditor.Focus();
+			MainWindow.eventEditor.ShowDialog();
 
+		}
+
+		private void cmbSceneryName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+		
+			stageEditorData.scenemyName = cmbSceneryName.SelectedItem.ToString();
 		}
 	}
 }

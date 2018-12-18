@@ -95,9 +95,13 @@ namespace Zitulmyth
 			this.GetNowTime();
 			lastTime = nowTime;
 
+			ImageData.SpriteReading();
+
 			StageDataSetting.SetData();
-			ImageData.ImageLoadFirst();
+			ImageData.SystemImagesReading();
 			Sound.SoundEffectLoad(Canvas);
+
+			ImageData.bmiNoImage = new BitmapImage(new Uri("Assets/icon/noimg.png", UriKind.Relative));
 
 			SplashLogoOpen();
 
@@ -271,8 +275,7 @@ namespace Zitulmyth
 					if (GameTransition.gameTransition == GameTransitionType.StageDuring &&
 						!isDeactivated)
 					{
-						Animator.AnimationObject();
-						Animator.AnimationItem();
+						//Animator.AnimationItem();
 
 
 						if (ObjectChecker.isTrigger && !TalkCommander.isTalk)
@@ -298,7 +301,7 @@ namespace Zitulmyth
 						Item.FallingItems();
 						EnemyBehavior.EnemyAction();
 
-						Animator.AnimationEnemy();
+						//Animator.AnimationEnemy();
 
 						SubWeapon.SubWeaponPosUpdate(Canvas);
 

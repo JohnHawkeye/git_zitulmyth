@@ -43,7 +43,7 @@ namespace Zitulmyth
 					item = new ItemData
 						{
 							itemName = ItemName.Coin,
-							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.Coin), Width = 32, Height = 32 },
+							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item,"Coin"), Width = 32, Height = 32 },
 							position = targetpos,
 							weight = 6,	width = 1,height = 1,expirationTime = 1000,totalTime = 0,
 						};
@@ -55,7 +55,7 @@ namespace Zitulmyth
 					item = new ItemData
 						{
 							itemName = ItemName.Apple,
-							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.Apple), Width = 32, Height = 32 },
+							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "Apple"), Width = 32, Height = 32 },
 							position = targetpos,
 							weight = 4,width = 1,height = 1,expirationTime = 1000,totalTime = 0
 						};
@@ -66,7 +66,7 @@ namespace Zitulmyth
 					item = new ItemData
 						{
 							itemName = ItemName.StarFruit,
-							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.StarFruit), Width = 32, Height = 32 },
+							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "StarFruit"), Width = 32, Height = 32 },
 							position = targetpos,
 							weight = 4,width= 1,height=1,	expirationTime = 1000,	totalTime = 0
 						};
@@ -76,7 +76,7 @@ namespace Zitulmyth
 					item = new ItemData
 						{
 							itemName = ItemName.TreeBranch,
-							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.TreeBranch), Width = 64, Height = 32 },
+							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "TreeBranch"), Width = 64, Height = 32 },
 							position = targetpos,
 							weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
 						};
@@ -86,7 +86,7 @@ namespace Zitulmyth
 					item = new ItemData
 						{
 							itemName = ItemName.BoarMeat,
-							imgItem = new Image { Source = ImageData.ItemImageInitSet(ItemName.BoarMeat), Width = 32, Height = 32 },
+							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "BoarMeat"), Width = 32, Height = 32 },
 							position = targetpos,
 							weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
 						};

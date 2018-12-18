@@ -80,7 +80,7 @@ namespace Zitulmyth
 			}
 			
 
-			imgMainWeapon.Source = ImageData.cbMainWeapon;
+			imgMainWeapon.Source = ImageData.ImageSourceSelector(CategoryName.Item, "WeaponTreeB");
 			
 			rtMainWeapon.CenterX = 16;
 			rtMainWeapon.CenterY = 16;
@@ -234,7 +234,7 @@ namespace Zitulmyth
 			{
 				var _imgSubWeapon = new Image()
 				{
-					Source = ImageData.cbSubWeapon,
+					Source = ImageData.ImageSourceSelector(CategoryName.Item, "BlueKnife"),
 					Width = 32,
 					Height = 32,
 					Name = "sw0",

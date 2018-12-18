@@ -245,7 +245,9 @@ namespace Zitulmyth
 
 				MainWindow.imageManager.ChildSelector()[MainWindow.imageManager.patternListIndex].cropRange.Clear();
 				MainWindow.imageManager.PatternListLoading(MainWindow.imageManager.ChildSelector(), MainWindow.imageManager.parentName);
-				
+
+				MainWindow.imageManager.PatternDataWrite();
+
 				this.Close();
 			}
 			

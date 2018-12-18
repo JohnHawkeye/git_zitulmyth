@@ -193,11 +193,6 @@ namespace Zitulmyth
 
 				case GameTransitionType.StageInit:
 
-					if (StageManager.stageNum >= 1)
-					{
-						ImageData.ImageLoadAfterSecond();
-					}
-
 					StageInit.InitBlockData();
 					StageDataSetting.SetData();
 
@@ -362,7 +357,6 @@ namespace Zitulmyth
 						case EventCommandEnum.CharaFadeIn:
 
 							ImageData.imgPlayer.Opacity = 0;
-							ImageData.imgPlayer.Source = ImageData.cbPlayer[StageEvent.listEvent[eventCount].imgIndex];
 							ImageData.imgPlayer.Width = 32;
 							ImageData.imgPlayer.Height = 64;
 
@@ -378,14 +372,23 @@ namespace Zitulmyth
 							switch (StageEvent.listEvent[eventCount].targetImgType)
 							{
 								case TargetImageType.IMG_Player:
-									ImageData.imgPlayer.Source = CbSelector();
+									ImageData.imgPlayer.Source = 
+										ImageData.ImageSourceSelector(StageEvent.listEvent[eventCount].categoryName,
+																		StageEvent.listEvent[eventCount].patternName);
 									break;
 								case TargetImageType.IMG_Enemy:
-									SpawnEnemy.lstEnemyData[0].imgEnemy.Source = CbSelector();
+
+									//
+									SpawnEnemy.lstEnemyData[0].imgEnemy.Source =
+										ImageData.ImageSourceSelector(StageEvent.listEvent[eventCount].categoryName,
+																		StageEvent.listEvent[eventCount].patternName);
 									break;
 								case TargetImageType.IMG_Object:
 
-									SelectObjectImage().Source = CbSelector();
+									SelectObjectImage().Source =
+
+										ImageData.ImageSourceSelector(StageEvent.listEvent[eventCount].categoryName,
+																		StageEvent.listEvent[eventCount].patternName);
 
 									break;
 								case TargetImageType.IMG_Item:
@@ -496,6 +499,11 @@ namespace Zitulmyth
 				eventTimer.Start();
 
 			}
+		}
+
+		public static void ChangeImage()
+		{
+
 		}
 
 		public static void CharaRender()
@@ -640,43 +648,6 @@ namespace Zitulmyth
 
 		}
 
-		public static CroppedBitmap CbSelector()
-		{
-			CroppedBitmap getCB;
-
-			switch (StageEvent.listEvent[eventCount].targetCBSource)
-			{
-				case TargetCBSource.CB_Empty:
-					getCB = ImageData.cbEmpty;
-					break;
-
-				case TargetCBSource.CB_Player:
-					getCB = ImageData.cbPlayer[StageEvent.listEvent[eventCount].imgIndex];
-					break;
-
-				case TargetCBSource.CB_Enemy:
-					getCB = ImageData.lstCBEnemy[0].lstCBSpawn[StageEvent.listEvent[eventCount].imgIndex];
-					break;
-
-				case TargetCBSource.CB_Item:
-					getCB = ImageData.lstCBItem[0].lstCBIdle[StageEvent.listEvent[eventCount].imgIndex];
-					break;
-
-				case TargetCBSource.CB_Npc:
-					getCB = ImageData.cbNpc[StageEvent.listEvent[eventCount].imgIndex];
-					break;
-
-				case TargetCBSource.CB_Object:
-					getCB = ImageData.cbObject[StageEvent.listEvent[eventCount].imgIndex];
-					break;
-
-				default:
-					getCB = ImageData.cbEmpty;
-					break;
-			}
-
-			return getCB;
-		}
 
 	}
 

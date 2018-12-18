@@ -35,31 +35,36 @@ namespace Zitulmyth
 					{
 						case BlockType.GreenGround:
 
-							_image = new Image { Source = ImageData.cbBlocks[0, 1], Width = 32, Height = 32,};
+							_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "GreenGround"),
+													Width = 32, Height = 32,};
 							
 							break;
 
 						case BlockType.WoodPlatform:
 
-							_image = new Image{Source = ImageData.cbPlatform[1],Width = 32,Height = 32,};
+							_image = new Image{Source = ImageData.ImageSourceSelector(CategoryName.Block, "WoodPlat"),
+													Width = 32,Height = 32,};
 							
 							break;
 
 						case BlockType.LadderTop:
 
-							_image = new Image{Source = ImageData.cbLadder[0],Width = 32,Height = 32, };
+							_image = new Image{Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderTop") ,
+													Width = 32,Height = 32, };
 							
 							break;
 
 						case BlockType.LadderMid:
 
-							_image = new Image{Source = ImageData.cbLadder[1],Width = 32,Height = 32,};
+							_image = new Image{Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderMid"),
+													Width = 32,Height = 32,};
 						
 							break;
 
 						case BlockType.LadderBottom:
 
-							_image = new Image { Source = ImageData.cbLadder[2], Width = 32, Height = 32, };
+							_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderBtm"),
+													Width = 32, Height = 32, };
 					
 							break;
 

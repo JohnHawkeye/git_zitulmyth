@@ -262,28 +262,28 @@ namespace Zitulmyth
 
 				if (!playerDirection)
 				{
-					ImageData.imgPlayer.Source = ImageData.cbPlayer[1];
+					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player,"moveL");
 				}
 				else
 				{
-					ImageData.imgPlayer.Source = ImageData.cbPlayer[0];
+					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "moveR");
 				}
 
 				if (isSquat)
 				{
 					if (!playerDirection)
 					{
-						ImageData.imgPlayer.Source = ImageData.cbPlayer[5];
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "squatL");
 					}
 					else
 					{
-						ImageData.imgPlayer.Source = ImageData.cbPlayer[4];
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "squatR");
 					}
 				}
 
 				if (isLadder && (KeyController.keyUp || KeyController.keyDown))
 				{
-					ImageData.imgPlayer.Source = ImageData.cbPlayer[6];
+					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "ladder");
 				}
 			}
 

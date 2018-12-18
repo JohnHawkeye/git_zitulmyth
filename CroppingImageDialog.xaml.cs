@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.IO;
+using static Zitulmyth.MainWindow;
 
 namespace Zitulmyth
 {
@@ -407,7 +408,26 @@ namespace Zitulmyth
 
 		private void btnCropping_Click(object sender, RoutedEventArgs e)
 		{
-			
+			imageManager.croppingRange.X = int.Parse(tbxStartX.Text);
+			imageManager.croppingRange.Y = int.Parse(tbxStartY.Text);
+			imageManager.croppingRange.Width = int.Parse(tbxWidth.Text);
+			imageManager.croppingRange.Height = int.Parse(tbxHeight.Text);
+
+			if(!imageManager.isNewPattern)
+			{
+				imageManager.ChildSelector()[imageManager.patternListIndex].cropRange[imageManager.croppingIndex] =
+					imageManager.croppingRange;
+			}
+			else
+			{
+				imageManager.ChildSelector()[imageManager.patternListIndex].cropRange.Add(imageManager.croppingRange);
+			}
+
+			imageManager.PatternListLoading(imageManager.ChildSelector(), imageManager.parentName);
+
+			imageManager.PatternDataWrite();
+
+			this.Close();
 		}
 	}
 }

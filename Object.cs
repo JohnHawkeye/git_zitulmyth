@@ -76,35 +76,35 @@ namespace Zitulmyth
 					break;
 
 				case ObjectName.Npc_Ilsona:
-					cb = ImageData.cbNpc[0];
+					cb = ImageData.ImageSourceSelector(CategoryName.Npc,"IrusonaIdleR");
 					break;
 
 				case ObjectName.Npc_Opsa:
-					cb = ImageData.cbNpc[0];
+					cb = ImageData.ImageSourceSelector(CategoryName.Npc, "OpsaIdleR");
 					break;
 
 				case ObjectName.Npc_Yeeda:
-					cb = ImageData.cbNpc[0];
+					cb = ImageData.ImageSourceSelector(CategoryName.Npc, "YeedaIdleR");
 					break;
 
 				case ObjectName.Obj_CampFire:
-					cb = ImageData.cbObject[2];
+					cb = ImageData.ImageSourceSelector(CategoryName.Object, "FireCamp");
 					break;
 
 				case ObjectName.Obj_Chair:
-					cb = ImageData.cbObject[0];
+					cb = ImageData.ImageSourceSelector(CategoryName.Object, "chair");
 					break;
 
 				case ObjectName.Obj_Huton:
-					cb = ImageData.cbObject[2];
+					cb = ImageData.ImageSourceSelector(CategoryName.Object, "huton");
 					break;
 
 				case ObjectName.Obj_Table:
-					cb = ImageData.cbObject[1];
+					cb = ImageData.ImageSourceSelector(CategoryName.Object, "table");
 					break;
 
 				case ObjectName.Player:
-					cb = ImageData.cbPlayer[0];
+					cb = ImageData.ImageSourceSelector(CategoryName.Player, "moveR");
 					break;
 			}
 

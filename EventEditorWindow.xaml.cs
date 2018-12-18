@@ -52,9 +52,9 @@ namespace Zitulmyth
 		[DataMember]
 		public ObjectName objectName { get; set; }
 		[DataMember]
-		public TargetCBSource targetCBSource { get; set; }
+		public CategoryName categoryName { get; set; }
 		[DataMember]
-		public int imgIndex { get; set; }
+		public string patternName { get; set; }
 		[DataMember]
 		public Vector moveDistance { get; set; }
 		[DataMember]
@@ -80,6 +80,8 @@ namespace Zitulmyth
 		private List<EventDataProperty> propertyEventData = new List<EventDataProperty>();
 		private string[] strEventCommand;
 		private string[] strObjectName;
+		private string[] strCategoryName;
+		private List<string> lstPatternName = new List<string>();
 		private int loadingCount = 0;
 		
 		private TextBox txbOptValue = new TextBox();
@@ -88,7 +90,6 @@ namespace Zitulmyth
 		private TextBox txbOptMessage = new TextBox();
 		private TextBox txbOptStartX = new TextBox();
 		private TextBox txbOptStartY = new TextBox();
-		private TextBox txbOptImgIndex = new TextBox();
 		private TextBox txbOptDistanceX = new TextBox();
 		private TextBox txbOptDistanceY = new TextBox();
 		private TextBox txbOptSpeed = new TextBox();
@@ -104,8 +105,10 @@ namespace Zitulmyth
 		private ComboBox cmbOptSeName = new ComboBox();
 		private ComboBox cmbOptTargetImage = new ComboBox();
 		private ComboBox cmbOptObjectName = new ComboBox();
-		private ComboBox cmbOptTargetCB = new ComboBox();
 		private ComboBox cmbOptColor = new ComboBox();
+		private ComboBox cmbOptCategoryName = new ComboBox();
+		private ComboBox cmbOptPatternName = new ComboBox();
+
 
 
 		public EventEditorWindow()
@@ -142,6 +145,7 @@ namespace Zitulmyth
 
 			strEventCommand = Enum.GetNames(typeof(EventCommandEnum));
 			strObjectName = Enum.GetNames(typeof(ObjectName));
+			strCategoryName = Enum.GetNames(typeof(CategoryName));
 
 			OptionControlSetting();
 
@@ -276,8 +280,18 @@ namespace Zitulmyth
 				case "CharaImageChange":
 					cmbOptTargetImage.SelectedItem = propertyEventData[row].targetImgType.ToString();
 					cmbOptObjectName.SelectedItem = propertyEventData[row].objectName.ToString();
-					cmbOptTargetCB.SelectedItem = propertyEventData[row].targetCBSource.ToString();
-					txbOptImgIndex.Text = propertyEventData[row].imgIndex.ToString();
+
+				
+					cmbOptCategoryName.SelectedItem = propertyEventData[row].categoryName.ToString();
+					if(propertyEventData[row].patternName == null)
+					{
+						cmbOptPatternName.SelectedIndex = 0;
+					}
+					else
+					{
+						cmbOptPatternName.SelectedItem = propertyEventData[row].patternName.ToString();
+					}
+					
 
 					break;
 
@@ -417,13 +431,16 @@ namespace Zitulmyth
 					cmbOptObjectName.Margin = new Thickness(184+128+20, 6, 0, 0);
 					Grid.SetRow(cmbOptObjectName, 0);
 
-					grdOption.Children.Add(cmbOptTargetCB);
-					cmbOptTargetCB.Margin = new Thickness(184, 6, 0, 0);
-					Grid.SetRow(cmbOptTargetCB, 1);
+					grdOption.Children.Add(cmbOptCategoryName);
+					cmbOptCategoryName.Margin = new Thickness(184, 6, 0, 0);
+					cmbOptCategoryName.SelectionChanged += new SelectionChangedEventHandler(CategoryChosedPatternReading);
+					Grid.SetRow(cmbOptCategoryName, 1);
 
-					grdOption.Children.Add(txbOptImgIndex);
-					txbOptImgIndex.Margin = new Thickness(184 + 20 + 128, 6, 0, 0);
-					Grid.SetRow(txbOptImgIndex, 1);
+
+
+					grdOption.Children.Add(cmbOptPatternName);
+					cmbOptPatternName.Margin = new Thickness(184 + 20 + 128, 6, 0, 0);
+					Grid.SetRow(cmbOptPatternName, 1);
 					break;
 
 				case "ScreenFadeIn":
@@ -487,7 +504,6 @@ namespace Zitulmyth
 			grdOption.Children.Remove(txbOptMessage);
 			grdOption.Children.Remove(txbOptStartX);
 			grdOption.Children.Remove(txbOptStartY);
-			grdOption.Children.Remove(txbOptImgIndex);
 			grdOption.Children.Remove(txbOptDistanceX);
 			grdOption.Children.Remove(txbOptDistanceY);
 			grdOption.Children.Remove(txbOptSpeed);
@@ -503,10 +519,11 @@ namespace Zitulmyth
 			grdOption.Children.Remove(cmbOptSeName);
 			grdOption.Children.Remove(cmbOptTargetImage);
 			grdOption.Children.Remove(cmbOptObjectName);
-			grdOption.Children.Remove(cmbOptTargetCB);
 			grdOption.Children.Remove(cmbOptColor);
+			grdOption.Children.Remove(cmbOptCategoryName);
+			grdOption.Children.Remove(cmbOptPatternName);
 
-	}
+		}
 
 		public void OptionControlSetting()
 		{
@@ -588,19 +605,6 @@ namespace Zitulmyth
 				Height = 26,
 				FontSize = 16,
 				ToolTip = "StartPositionY"
-			};
-
-			txbOptImgIndex = new TextBox
-			{
-
-				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Top,
-				HorizontalContentAlignment = HorizontalAlignment.Right,
-				Text = "0",
-				Width = 56,
-				Height = 26,
-				FontSize = 16,
-				ToolTip = "ImageIndex"
 			};
 
 			txbOptDistanceX = new TextBox
@@ -803,22 +807,6 @@ namespace Zitulmyth
 
 			};
 
-			cmbOptTargetCB = new ComboBox
-			{
-
-				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Top,
-				HorizontalContentAlignment = HorizontalAlignment.Left,
-				VerticalContentAlignment = VerticalAlignment.Top,
-
-				Width = 128,
-				Height = 26,
-				FontSize = 16,
-				ToolTip = "TargetCBImage",
-				ItemsSource = new string[] { "CB_Empty", "CB_Player", "CB_Enemy", "CB_Item", "CB_Npc", "CB_Object" },
-
-			};
-
 			cmbOptColor = new ComboBox
 			{
 
@@ -833,7 +821,50 @@ namespace Zitulmyth
 				ToolTip = "Color",
 				ItemsSource = new string[]{ "White", "Black" },
 			};
-			
+
+			cmbOptCategoryName = new ComboBox
+			{
+
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Top,
+				HorizontalContentAlignment = HorizontalAlignment.Left,
+				VerticalContentAlignment = VerticalAlignment.Top,
+
+				Width = 128,
+				Height = 26,
+				FontSize = 16,
+				ToolTip = "カテゴリを選んでください",
+				ItemsSource = strCategoryName,
+
+			};
+
+			cmbOptPatternName = new ComboBox
+			{
+
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Top,
+				HorizontalContentAlignment = HorizontalAlignment.Left,
+				VerticalContentAlignment = VerticalAlignment.Top,
+
+				Width = 128,
+				Height = 26,
+				FontSize = 16,
+				ToolTip = "変更したい画像のパターンを選択してください。",
+				ItemsSource = { },
+
+			};
+
+		}
+
+		private void CategoryChosedPatternReading(object sender, SelectionChangedEventArgs e)
+		{
+
+			CategoryName cn = (CategoryName)Enum.Parse(typeof(CategoryName), ((ComboBox)sender).SelectedItem.ToString());
+			lstPatternName.Clear();
+			lstPatternName = ImageData.PatternNameListCreating(cn);
+
+			cmbOptPatternName.ItemsSource = lstPatternName;
+
 		}
 
 		private void btnUpdate_Click(object sender, RoutedEventArgs e)
@@ -944,11 +975,11 @@ namespace Zitulmyth
 					propertyEventData[row].objectName =
 						(ObjectName)Enum.Parse(typeof(ObjectName), cmbOptObjectName.SelectedItem.ToString());
 
-					propertyEventData[row].targetCBSource =
-						(TargetCBSource)Enum.Parse(typeof(TargetCBSource), cmbOptTargetCB.SelectedItem.ToString());
+					propertyEventData[row].categoryName =
+						(CategoryName)Enum.Parse(typeof(CategoryName), cmbOptCategoryName.SelectedItem.ToString());
 
-					propertyEventData[row].imgIndex = int.Parse(txbOptImgIndex.Text);
-					
+					propertyEventData[row].patternName =cmbOptPatternName.SelectedItem.ToString();
+
 					break;
 
 				case "ScreenFadeIn":

@@ -495,7 +495,8 @@ namespace Zitulmyth
 						pixSize = new Vector(32, 64), position = setpos,
 						triggerAreaPos = new Vector(32, 64),triggerAreaSize = new Vector(0,0),triggerAreaOffset = new Vector(0, 0),
 						widthblock = 1,heightblock = 2,
-						imgEnemy = new Image(){ Source = ImageData.lstCBEnemy[0].lstCBSpawn[0],Width = 32,Height = 64},
+						imgEnemy = new Image(){ Source = ImageData.ImageSourceSelector(CategoryName.Enemy, "ZigituIdle"),
+												Width = 32,Height = 64},
 						deathEvent = EnemyDeathEvent.Pop,
 					};
 
@@ -511,7 +512,9 @@ namespace Zitulmyth
 						pixSize = new Vector(64, 32), position = setpos,
 						triggerAreaPos = new Vector(64, 32), triggerAreaSize = new Vector(5, 1), triggerAreaOffset = new Vector(0, 0),
 						widthblock = 2, heightblock = 1,
-						imgEnemy = new Image() { Source = (!dir) ? ImageData.lstCBEnemy[1].lstCBIdle[1] : ImageData.lstCBEnemy[1].lstCBIdle[0], Width = 64, Height = 32 },
+						imgEnemy = new Image() { Source = (!dir) ? ImageData.ImageSourceSelector(CategoryName.Enemy, "BoarIdleL") :
+																	ImageData.ImageSourceSelector(CategoryName.Enemy, "BoarIdleR"),
+												Width = 64, Height = 32 },
 						deathEvent = EnemyDeathEvent.Pop,
 
 					};

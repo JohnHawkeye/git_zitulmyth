@@ -18,20 +18,21 @@
 			<TabItem Header="ステージ設定">
 				<Grid Background="#FFE5E5E5">
 					<Grid.RowDefinitions>
-						<RowDefinition Height="10*"/>
-						<RowDefinition Height="10*"/>
-						<RowDefinition Height="97*"/>
+						<RowDefinition Height="50*"/>
+						<RowDefinition Height="38*"/>
+						<RowDefinition Height="46*"/>
+						<RowDefinition Height="451*"/>
 					</Grid.RowDefinitions>
 					<Label x:Name="label" Content="・プレイヤーのスタート位置：" Margin="10,10,0,0" Height="26" Width="140" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 					<TextBox x:Name="txbPlayerStartX" Height="22" Margin="150,14,0,0" TextWrapping="Wrap" Text="0" Width="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" VerticalAlignment="Top" HorizontalAlignment="Left" PreviewTextInput="txbPlayerStartX_PreviewTextInput" IsEnabled="False"/>
 					<TextBox x:Name="txbPlayerStartY" Height="22" Margin="222,14,0,0" TextWrapping="Wrap" Text="0" Width="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" HorizontalAlignment="Left" VerticalAlignment="Top" PreviewTextInput="txbPlayerStartY_PreviewTextInput" IsEnabled="False"/>
 					<Label x:Name="label_Copy" Content="," Margin="205,14,0,0" Height="26" Width="17" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-					<Label x:Name="label_Copy1" Content="・エネミーのリスポーン：" Margin="10,10,0,0" Height="26" Width="119" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1"/>
-					<CheckBox x:Name="ckbEnemyRespawn" Content="" HorizontalAlignment="Left" Margin="150,16,0,0" Grid.Row="1" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="15" Width="20" Checked="ckbEnemyRespawn_Checked" Unchecked="ckbEnemyRespawn_Unchecked"/>
-					<Label x:Name="label_Copy2" Content="・クリア条件リスト：" Margin="10,10,0,0" Height="26" Width="119" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2"/>
-					<Button x:Name="btnSettingAdd" Content="追加" HorizontalAlignment="Right" Margin="0,0,16,434" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Height="24" Click="btnSettingAdd_Click"/>
+					<Label x:Name="label_Copy1" Content="・エネミーのリスポーン：" Margin="10,0,0,0" Height="26" Width="119" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
+					<CheckBox x:Name="ckbEnemyRespawn" Content="" HorizontalAlignment="Left" Margin="150,0,0,0" Grid.Row="1" VerticalAlignment="Center" VerticalContentAlignment="Center" Height="15" Width="20" Checked="ckbEnemyRespawn_Checked" Unchecked="ckbEnemyRespawn_Unchecked"/>
+					<Label x:Name="label_Copy2" Content="・クリア条件リスト：" Margin="10,10,0,0" Height="26" Width="119" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3"/>
+					<Button x:Name="btnSettingAdd" Content="追加" HorizontalAlignment="Right" Margin="0,0,16,407" Grid.Row="3" VerticalAlignment="Bottom" Width="75" Height="24" Click="btnSettingAdd_Click"/>
 					<Button x:Name="btnStartPositionClickSet" Content="設置" HorizontalAlignment="Left" Margin="287,15,0,0" VerticalAlignment="Top" Width="56" Click="btnStartPositionClickSet_Click" Height="20"/>
-					<ListView x:Name="lsvClearCondition" HorizontalAlignment="Left" Height="160" Margin="150,20,0,0" Grid.Row="2" VerticalAlignment="Top" Width="369" SelectionChanged="lsvClearCondition_SelectionChanged">
+					<ListView x:Name="lsvClearCondition" HorizontalAlignment="Left" Height="160" Margin="150,20,0,0" Grid.Row="3" VerticalAlignment="Top" Width="369" SelectionChanged="lsvClearCondition_SelectionChanged">
 						<ListView.View>
 							<GridView>
 								<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=id}"/>
@@ -43,7 +44,7 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
-					<GroupBox x:Name="groupBox" Header="オプション設定" HorizontalAlignment="Left" Height="235" Margin="150,198,0,0" Grid.Row="2" VerticalAlignment="Top" Width="460">
+					<GroupBox x:Name="groupBox" Header="オプション設定" HorizontalAlignment="Left" Height="235" Margin="150,198,0,0" Grid.Row="3" VerticalAlignment="Top" Width="460">
 						<Grid HorizontalAlignment="Left" Height="208" VerticalAlignment="Center" Width="450" Margin="0,6,-2,-1">
 							<Grid.RowDefinitions>
 								<RowDefinition/>
@@ -72,7 +73,9 @@
 							<Button x:Name="btnSettingUpdate" Content="適用" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Center" Width="75" Height="24" Grid.Column="2" Grid.Row="4" Click="btnSettingUpdate_Click"/>
 						</Grid>
 					</GroupBox>
-					<Button x:Name="btnSettingRemove" Content="削除" HorizontalAlignment="Right" Margin="0,0,16,397" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Height="24" Click="btnSettingRemove_Click"/>
+					<Button x:Name="btnSettingRemove" Content="削除" HorizontalAlignment="Right" Margin="0,0,16,368" Grid.Row="3" VerticalAlignment="Bottom" Width="75" Height="24" Click="btnSettingRemove_Click"/>
+					<Label x:Name="label_Copy3" Content="・背景：" Margin="10,0,0,0" Height="26" Width="119" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"/>
+					<ComboBox x:Name="cmbSceneryName"  HorizontalAlignment="Left" Margin="150,12,0,12" Grid.Row="2" VerticalAlignment="Center" Width="128" SelectionChanged="cmbSceneryName_SelectionChanged"/>
 				</Grid>
 			</TabItem>
 			<TabItem Header="ブロック">

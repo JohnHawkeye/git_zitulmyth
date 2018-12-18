@@ -50,7 +50,8 @@ namespace Zitulmyth
 			Canvas.SetLeft(ImageData.imgPlayer,StageData.startPlayerPosition.X);
 			Canvas.SetTop(ImageData.imgPlayer, StageData.startPlayerPosition.Y);
 
-			StageData.imgScenery = new Image { Source = ImageData.cbScenery, Width = 1024, Height = 768, };
+			StageData.imgScenery = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Scenery,StageData.sceneryImageName), Width = 1024, Height = 768, };
+
 			canvas.Children.Add(StageData.imgScenery);
 			Canvas.SetLeft(StageData.imgScenery, 0);
 			Canvas.SetTop(StageData.imgScenery, 0);
@@ -82,8 +83,6 @@ namespace Zitulmyth
 				Canvas.SetTop(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.Y);
 				Canvas.SetZIndex(Item.lstItemData[i].imgItem, ImageZindex.item);
 			}
-
-		//	ImageData.Serializer();
 
 			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{

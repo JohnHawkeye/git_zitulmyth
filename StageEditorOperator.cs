@@ -156,7 +156,7 @@ namespace Zitulmyth
 		public static void EditorImageDataSetting()
 		{
 			imgEditorPlayer.Width = 32; imgEditorPlayer.Height = 64;
-			imgEditorPlayer.Source = ImageData.cbPlayer[0];
+			imgEditorPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "moveR");
 			MainWindow.mainCanvas.Children.Add(imgEditorPlayer);
 
 			imgEditorPointerCursor.Width = imgEditorPointerCursor.Height = 32;
@@ -221,27 +221,31 @@ namespace Zitulmyth
 				switch (blockEnum[i])
 				{
 					case BlockType.GreenGround:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbBlocks[0, 1];
+						lstEditorBlockPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Block, "GreenGround");
 						lstEditorBlockPalette[i].label.Content = "草の地面";
 						break;
 					case BlockType.InvisibleBlock:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbEmpty;
+						lstEditorBlockPalette[i].image.Source = ImageData.cbInvisibleBlock;
 						lstEditorBlockPalette[i].label.Content = "透明ブロック";
 						break;
 					case BlockType.InvisiblePlat:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbEmpty;
+						lstEditorBlockPalette[i].image.Source = ImageData.cbInvisiblePlat;
 						lstEditorBlockPalette[i].label.Content = "透明プラット";
 						break;
 					case BlockType.LadderBottom:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbLadder[2];
+						lstEditorBlockPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Block, "LadderBtm");
 						lstEditorBlockPalette[i].label.Content = "はしご下";
 						break;
 					case BlockType.LadderMid:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbLadder[1];
+						lstEditorBlockPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Block, "LadderMid");
 						lstEditorBlockPalette[i].label.Content = "はしご中";
 						break;
 					case BlockType.LadderTop:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbLadder[0];
+						lstEditorBlockPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Block, "LadderTop");
 						lstEditorBlockPalette[i].label.Content = "はしご上";
 						break;
 					case BlockType.None:
@@ -249,7 +253,8 @@ namespace Zitulmyth
 						lstEditorBlockPalette[i].label.Content = "なし";
 						break;
 					case BlockType.WoodPlatform:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbPlatform[0];
+						lstEditorBlockPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Block, "WoodPlat");
 						lstEditorBlockPalette[i].label.Content = "木のプラット";
 						break;
 				}
@@ -316,38 +321,45 @@ namespace Zitulmyth
 						lstEditorObjectPalette[i].label.Content = "トリガーエリア";
 						break;
 					case ObjectName.Npc_Ilsona:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbNpc[4];
+						lstEditorObjectPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Npc, "IrusonaIdleR");
 						lstEditorObjectPalette[i].label.Content = "イルソナ";
 
 						size = new Vector(64, 64);
 						break;
 					case ObjectName.Npc_Opsa:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbNpc[0];
+						lstEditorObjectPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Npc, "OpsaIdleR");
 						lstEditorObjectPalette[i].label.Content = "オプサ";
 						size = new Vector(32, 64);
 						break;
 					case ObjectName.Npc_Yeeda:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbNpc[2];
+						lstEditorObjectPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Npc, "YeedaIdleR");
 						lstEditorObjectPalette[i].label.Content = "イェーダ";
 						size = new Vector(32, 64);
 						break;
 					case ObjectName.Obj_CampFire:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[2];
+						lstEditorObjectPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Object, "FireCamp");
 						lstEditorObjectPalette[i].label.Content = "たきび";
 						size = new Vector(96, 64);
 						break;
 					case ObjectName.Obj_Chair:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[6];
+						lstEditorObjectPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Object, "chair");
 						lstEditorObjectPalette[i].label.Content = "いす";
 						size = new Vector(32, 64);
 						break;
 					case ObjectName.Obj_Huton:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[8];
+						lstEditorObjectPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Object, "huton");
 						lstEditorObjectPalette[i].label.Content = "ふとん";
 						size = new Vector(64, 32);
 						break;
 					case ObjectName.Obj_Table:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbObject[7];
+						lstEditorObjectPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Object, "table");
 						lstEditorObjectPalette[i].label.Content = "テーブル";
 						size = new Vector(64, 32);
 						break;
@@ -412,13 +424,15 @@ namespace Zitulmyth
 				switch (enemyEnum[i])
 				{
 					case EnemyName.Boar:
-						lstEditorEnemyPalette[i].image.Source = ImageData.lstCBEnemy[1].lstCBIdle[0];
+						lstEditorEnemyPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Enemy, "BoarIdleL");
 						lstEditorEnemyPalette[i].label.Content = "いのしし";
 						size = new Vector(64, 32);
 
 						break;
 					case EnemyName.Zigitu01:
-						lstEditorEnemyPalette[i].image.Source = ImageData.lstCBEnemy[0].lstCBIdle[0];
+						lstEditorEnemyPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Enemy, "ZigituIdle");
 						lstEditorEnemyPalette[i].label.Content = "ズィギツ";
 						size = new Vector(32, 64);
 						break;
@@ -484,27 +498,32 @@ namespace Zitulmyth
 				switch (itemEnum[i])
 				{
 					case ItemName.Apple:
-						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[1].lstCBIdle[0];
+						lstEditorItemPalette[i].image.Source = 
+							ImageData.ImageSourceSelector(CategoryName.Item,"Apple");
 						lstEditorItemPalette[i].label.Content = "りんご";
 						size = new Vector(32, 32);
 						break;
 					case ItemName.BoarMeat:
-						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[4].lstCBIdle[0];
+						lstEditorItemPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Item, "BoarMeat");
 						lstEditorItemPalette[i].label.Content = "いのししの肉";
 						size = new Vector(32, 32);
 						break;
 					case ItemName.Coin:
-						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[0].lstCBIdle[0];
+						lstEditorItemPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Item, "Coin");
 						lstEditorItemPalette[i].label.Content = "コイン";
 						size = new Vector(32, 32);
 						break;
 					case ItemName.StarFruit:
-						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[2].lstCBIdle[0];
+						lstEditorItemPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Item, "StarFruit");
 						lstEditorItemPalette[i].label.Content = "スターフルーツ";
 						size = new Vector(32, 32);
 						break;
 					case ItemName.TreeBranch:
-						lstEditorItemPalette[i].image.Source = ImageData.lstCBItem[3].lstCBIdle[0];
+						lstEditorItemPalette[i].image.Source =
+							ImageData.ImageSourceSelector(CategoryName.Item, "TreeBranch");
 						lstEditorItemPalette[i].label.Content = "木の枝";
 						size = new Vector(64, 32);
 						break;
@@ -626,23 +645,28 @@ namespace Zitulmyth
 				switch (stageEditorData.editIndicateStage[index])
 				{
 					case BlockType.GreenGround:
-						_image = new Image { Source = ImageData.cbBlocks[0, 1], Width = 32, Height = 32, };
+						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "GreenGround"),
+												Width = 32, Height = 32, };
 						break;
 
 					case BlockType.WoodPlatform:
-						_image = new Image { Source = ImageData.cbPlatform[1], Width = 32, Height = 32, };
+						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "WoodPlat"),
+												Width = 32, Height = 32, };
 						break;
 
 					case BlockType.LadderTop:
-						_image = new Image { Source = ImageData.cbLadder[0], Width = 32, Height = 32, };
+						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderTop"),
+												Width = 32, Height = 32, };
 						break;
 
 					case BlockType.LadderMid:
-						_image = new Image { Source = ImageData.cbLadder[1], Width = 32, Height = 32, };
+						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderMid"),
+												Width = 32, Height = 32, };
 						break;
 
 					case BlockType.LadderBottom:
-						_image = new Image { Source = ImageData.cbLadder[2], Width = 32, Height = 32, };
+						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderBtm"),
+												Width = 32, Height = 32, };
 						break;
 
 					case BlockType.InvisibleBlock:

@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="イベントエディタ" Height="761.8" Width="640" Background="Black" Top="0" Left="1198" ResizeMode="NoResize" WindowStyle="ToolWindow" ShowInTaskbar="False" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="EventEditor_Loaded" Foreground="White" BorderThickness="0" Closing="EventEditor_Closing">
-	<StackPanel x:Name="stpMain" Height="1019" Margin="18,18,18,0" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
+        Title="イベントエディタ" Height="760" Width="640" Background="Black" Top="0" Left="1198" ResizeMode="NoResize" WindowStyle="ToolWindow" ShowInTaskbar="False" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="EventEditor_Loaded" Foreground="White" BorderThickness="0" Closing="EventEditor_Closing" WindowStartupLocation="CenterScreen">
+	<StackPanel x:Name="stpMain" Height="710" Margin="17,18,17,0" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
 		<DataGrid x:Name="dgEventData" HorizontalAlignment="Center" Height="378" VerticalAlignment="Top" Width="600" CanUserSortColumns="False" CanUserReorderColumns="False" ScrollViewer.CanContentScroll="False" RenderTransformOrigin="0.49,0.507" IsSynchronizedWithCurrentItem="False" AlternatingRowBackground="#FFBDBDBD" AlternationCount="1" IsReadOnly="True" SelectedCellsChanged="dgEventData_SelectedCellsChanged" SelectionMode="Single" LoadingRow="dgEventData_LoadingRow"/>
-		<StackPanel x:Name="stpOption" Height="334">
+		<StackPanel x:Name="stpOption" Height="340">
 			<Border BorderBrush="#FFB2B2B2" BorderThickness="2" Height="180" HorizontalAlignment="Center" VerticalAlignment="Top" Width="580" Margin="10,10,10,0">
 				<Grid x:Name="grdOption" Margin="0,0,0,-2">
 					<Grid.RowDefinitions>
@@ -39,51 +39,5 @@
 				</StackPanel>
 			</Border>
 		</StackPanel>
-		<Grid Height="255" IsEnabled="False" Margin="0,47,0,0">
-			<Grid.RowDefinitions>
-				<RowDefinition/>
-				<RowDefinition/>
-				<RowDefinition/>
-				<RowDefinition/>
-				<RowDefinition/>
-			</Grid.RowDefinitions>
-			<TextBox
-	Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbValue" Margin="10,8,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16"/>
-			<CheckBox
-	Width="94" VerticalAlignment="Top" RenderTransformOrigin="0.917,0.716" Padding="0" x:Name="chbKeyLock" Height="26" HorizontalAlignment="Left" FontSize="16" FlowDirection="RightToLeft" Foreground="White" Content="：KeyLock" Margin="10,10,0,0" Grid.Row="3" VerticalContentAlignment="Center"/>
-			<ComboBox
-	Width="128" VerticalAlignment="Top" x:Name="cmbBgmName" Margin="79,7,0,0" HorizontalAlignment="Left" FontSize="16"/>
-			<ComboBox
-	Width="128" VerticalAlignment="Top" x:Name="cmbSeName" Margin="229,8,0,0" HorizontalAlignment="Left" FontSize="16"/>
-			<TextBox Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbBalloonPosX" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Margin="10,10,0,0" Grid.Row="1"/>
-			<TextBox Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbBalloonPosY" Margin="79,10,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Grid.Row="1"/>
-			<TextBox Width="512" VerticalAlignment="Top" TextWrapping="Wrap" x:Name="txbBalloonMessage" Margin="37,8,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Grid.Row="2" MaxLength="35"/>
-			<TextBox Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbStartPosX" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Margin="174,10,0,0" Grid.Row="1"/>
-			<TextBox Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbStartPosY" Margin="243,10,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Grid.Row="1"/>
-			<TextBox Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbDistanceX" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Margin="336,10,0,0" Grid.Row="1"/>
-			<TextBox Width="50" VerticalAlignment="Top" Text="1000" TextWrapping="Wrap" x:Name="txbDistanceY" Margin="405,10,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16" Grid.Row="1"/>
-			<CheckBox
-	   Width="111" VerticalContentAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.917,0.716" Padding="0" x:Name="chbEnterClose" Height="26" HorizontalAlignment="Left" FontSize="16" FlowDirection="RightToLeft" Foreground="White" Content="：EnterClose" Margin="130,10,0,0" Grid.Row="3"/>
-			<ComboBox
-	   Width="128" VerticalAlignment="Top" x:Name="cmbTargetImage" Margin="10,14,0,0" HorizontalAlignment="Left" FontSize="16" Grid.Row="4"/>
-			<ComboBox
-	   Width="128" VerticalAlignment="Top" x:Name="cmbObjectName" Margin="147,14,0,0" HorizontalAlignment="Left" FontSize="16" Grid.Row="4"/>
-			<ComboBox
-	   Width="128" VerticalAlignment="Top" x:Name="cmbTargetCB" Margin="280,14,0,0" HorizontalAlignment="Left" FontSize="16" Grid.Row="4"/>
-			<TextBox
-	   Width="50" VerticalAlignment="Top" Text="0" TextWrapping="Wrap" x:Name="txbImageIndex" Margin="374,7,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16"/>
-			<TextBox
-	   Width="50" VerticalAlignment="Top" Text="0" TextWrapping="Wrap" x:Name="txbSpeed" Margin="444,7,0,0" Height="26" HorizontalContentAlignment="Right" HorizontalAlignment="Left" FontSize="16"/>
-			<CheckBox
-	   Width="111" VerticalContentAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.917,0.716" Padding="0" x:Name="chbDirection" Height="26" HorizontalAlignment="Left" FontSize="16" FlowDirection="RightToLeft" Foreground="White" Content="：Direction" Margin="246,10,0,0" Grid.Row="3"/>
-			<CheckBox
-	   Width="111" VerticalContentAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.917,0.716" Padding="0" x:Name="chbFadeType" Height="26" HorizontalAlignment="Left" FontSize="16" FlowDirection="RightToLeft" Foreground="White" Content="：FadeType" Margin="362,10,0,0" Grid.Row="3"/>
-			<CheckBox
-	   Width="111" VerticalContentAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.917,0.716" Padding="0" x:Name="chbUiVisibility" Height="26" HorizontalAlignment="Left" FontSize="16" FlowDirection="RightToLeft" Foreground="White" Content="：UiVisibility" Margin="473,10,0,0" Grid.Row="3"/>
-			<ComboBox
-	   Width="128" VerticalAlignment="Top" x:Name="cmbColor" Margin="421,14,0,0" HorizontalAlignment="Left" FontSize="16" Grid.Row="4"/>
-			<CheckBox
-	   Width="111" VerticalContentAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.917,0.716" Padding="0" x:Name="chbEventOnly" Height="26" HorizontalAlignment="Left" FontSize="16" FlowDirection="RightToLeft" Foreground="White" Content="：EventOnly" Margin="473,9,0,0" Grid.Row="1"/>
-		</Grid>
 	</StackPanel>
 </Window>
