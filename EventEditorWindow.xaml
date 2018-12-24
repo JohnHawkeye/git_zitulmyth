@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="イベントエディタ" Height="760" Width="640" Background="Black" Top="0" Left="1198" ResizeMode="NoResize" WindowStyle="ToolWindow" ShowInTaskbar="False" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="EventEditor_Loaded" Foreground="White" BorderThickness="0" Closing="EventEditor_Closing" WindowStartupLocation="CenterScreen">
+        Title="イベントエディタ" Height="760" Width="640" Background="Black" Top="0" Left="1198" ResizeMode="NoResize" WindowStyle="ToolWindow" ShowInTaskbar="False" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="EventEditor_Loaded" Foreground="White" BorderThickness="0" Closing="EventEditor_Closing" WindowStartupLocation="CenterScreen" Topmost="True">
 	<StackPanel x:Name="stpMain" Height="710" Margin="17,18,17,0" Width="600" HorizontalAlignment="Center" VerticalAlignment="Top">
 		<DataGrid x:Name="dgEventData" HorizontalAlignment="Center" Height="378" VerticalAlignment="Top" Width="600" CanUserSortColumns="False" CanUserReorderColumns="False" ScrollViewer.CanContentScroll="False" RenderTransformOrigin="0.49,0.507" IsSynchronizedWithCurrentItem="False" AlternatingRowBackground="#FFBDBDBD" AlternationCount="1" IsReadOnly="True" SelectedCellsChanged="dgEventData_SelectedCellsChanged" SelectionMode="Single" LoadingRow="dgEventData_LoadingRow"/>
 		<StackPanel x:Name="stpOption" Height="340">

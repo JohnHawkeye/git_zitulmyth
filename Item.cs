@@ -27,6 +27,23 @@ namespace Zitulmyth
 		BoarMeat,
 	}
 
+	public class ItemData
+	{
+
+		public ItemName itemName;
+		public Image imgItem;
+		public Vector position;
+		public int width;
+		public int height;
+		public int weight;
+		public int expirationTime;
+		public int totalTime;
+
+		public int keyFlame;
+		public int totalAnimTime;
+
+	}
+
 	public class Item
 	{
 
@@ -131,21 +148,4 @@ namespace Zitulmyth
 		}
 	}
 
-	public class ItemData
-	{
-
-		public ItemName itemName;
-		public Image imgItem;
-		public Vector position;
-		public int width;
-		public int height;
-		public int weight;
-		public int expirationTime;
-		public int totalTime;
-
-		public int keyFlame;
-		public int totalAnimTime;
-		
-
-	}
 }

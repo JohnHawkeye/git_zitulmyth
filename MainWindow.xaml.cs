@@ -66,7 +66,7 @@ namespace Zitulmyth
 		{
 			this.InitializeComponent();
 
-			timerFrameUpdate = new Timer(15);
+			timerFrameUpdate = new Timer(40);
 			timerFrameUpdate.Elapsed += FrameUpdateTimer_Update;
 			timerFrameUpdate.Start();
 
@@ -97,11 +97,14 @@ namespace Zitulmyth
 
 			ImageData.SpriteReading();
 
+			StageManager.stageNum = 0;
+			StageOrder.OrderListInit();
 			StageDataSetting.SetData();
+
 			ImageData.SystemImagesReading();
 			Sound.SoundEffectLoad(Canvas);
-
-			ImageData.bmiNoImage = new BitmapImage(new Uri("Assets/icon/noimg.png", UriKind.Relative));
+			
+			Animator.CBDataSettings();
 
 			SplashLogoOpen();
 
@@ -140,6 +143,14 @@ namespace Zitulmyth
 
 			Canvas.Children.Add(ImageData.imgHandCursor);
 			Canvas.SetZIndex(ImageData.imgHandCursor, ImageZindex.handCursor);
+
+			canScreenFade.Width = 1024;
+			canScreenFade.Height = 768;
+			canScreenFade.Visibility = Visibility.Hidden;
+			Canvas.Children.Add(canScreenFade);
+			Canvas.SetLeft(canScreenFade, 0);
+			Canvas.SetTop(canScreenFade, 0);
+			Canvas.SetZIndex(canScreenFade, ImageZindex.fade);
 
 
 			StageInit.InitPlayer(Canvas);
@@ -198,7 +209,7 @@ namespace Zitulmyth
 					elapsedTime = nowTime - lastTime;
 
 //debug
-					DebugLabelA.Content = ObjectChecker.isTrigger.ToString();
+					DebugLabelA.Content = SystemOperator.moveCommonAmountX + " ,"+ SystemOperator.moveCommonAmountY;
 										
 
 					if (elapsedTime < 0)
@@ -275,8 +286,8 @@ namespace Zitulmyth
 					if (GameTransition.gameTransition == GameTransitionType.StageDuring &&
 						!isDeactivated)
 					{
-						//Animator.AnimationItem();
-
+						Animator.AnimationItem();
+						Animator.AnimationObject();
 
 						if (ObjectChecker.isTrigger && !TalkCommander.isTalk)
 						{
@@ -294,14 +305,16 @@ namespace Zitulmyth
 						}
 
 						//first action,last Processing including deletion of list
+						SystemOperator.moveCommonAmountX = 0;
+						SystemOperator.moveCommonAmountY = 0;
 
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
 
 						Item.FallingItems();
-						EnemyBehavior.EnemyAction();
 
-						//Animator.AnimationEnemy();
+						EnemyBehavior.EnemyAction();
+						Animator.AnimationEnemy();
 
 						SubWeapon.SubWeaponPosUpdate(Canvas);
 
@@ -358,8 +371,7 @@ namespace Zitulmyth
 						countTime = 0;
 						lblMode.Content = "ゲームモード：ステージ準備";
 						GameTransition.gameTransition = GameTransitionType.StageInit;
-//debug stagechange
-						StageManager.stageNum = 2;
+
 					}
 					
 					break;

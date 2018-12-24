@@ -98,6 +98,7 @@ namespace Zitulmyth
 					if (playerPos.X - SystemOperator.BlockPerSecond() * moveSpeed > 0)
 					{
 						playerPos.X -= SystemOperator.BlockPerSecond() * moveSpeed;
+						SystemOperator.moveCommonAmountX = moveSpeed;
 					}
 					playerDirection = false;
 				}
@@ -112,6 +113,7 @@ namespace Zitulmyth
 					if (playerPos.X + SystemOperator.BlockPerSecond() * moveSpeed < 992)
 					{
 						playerPos.X += SystemOperator.BlockPerSecond() * moveSpeed;
+						SystemOperator.moveCommonAmountX = moveSpeed;
 					}
 					playerDirection = true;
 
@@ -136,6 +138,7 @@ namespace Zitulmyth
 					if (playerPos.Y - SystemOperator.BlockPerSecond() * moveSpeed > 0)
 					{
 						playerPos.Y -= SystemOperator.BlockPerSecond() * moveSpeed;
+						SystemOperator.moveCommonAmountY = moveSpeed;
 					}
 				}
 
@@ -151,6 +154,7 @@ namespace Zitulmyth
 					if (playerPos.Y + SystemOperator.BlockPerSecond() * moveSpeed < 768)
 					{
 						playerPos.Y += SystemOperator.BlockPerSecond() * moveSpeed;
+						SystemOperator.moveCommonAmountY = moveSpeed;
 					}
 				}
 
@@ -159,6 +163,7 @@ namespace Zitulmyth
 					if (playerPos.Y + SystemOperator.BlockPerSecond() * moveSpeed < 768)
 					{
 						playerPos.Y += SystemOperator.BlockPerSecond() * moveSpeed;
+						SystemOperator.moveCommonAmountY = moveSpeed;
 					}
 				}
 
@@ -207,8 +212,10 @@ namespace Zitulmyth
 				if (jumpTotalLength < jumpMaxHeight)
 				{
 					playerPos.Y -= SystemOperator.BlockPerSecond() * jumpPower;
+					SystemOperator.moveCommonAmountY = jumpPower;
 
 					jumpTotalLength += SystemOperator.BlockPerSecond() * jumpPower;
+					
 				}
 				else
 				{
@@ -303,7 +310,7 @@ namespace Zitulmyth
 				{
 					if(!isKnockBack)
 					playerPos.Y += SystemOperator.BlockPerSecond() * weight;
-
+					SystemOperator.moveCommonAmountY = weight;
 
 					if (!fallingStart)
 					{

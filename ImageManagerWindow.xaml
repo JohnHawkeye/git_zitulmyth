@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="画像管理" Height="642" Width="800" Background="Black" ResizeMode="NoResize" Icon="Assets/item.png" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="画像管理" Height="642" Width="800" Background="Black" ResizeMode="NoResize" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="567*"/>

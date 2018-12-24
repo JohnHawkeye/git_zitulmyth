@@ -131,7 +131,7 @@ namespace Zitulmyth
 				if (rtMainWeapon.Angle >= 180 - 45)
 				{
 
-					double temp = PlayerStatus.meleeSpeed;
+					double temp = SystemOperator.BlockPerSecond() * PlayerStatus.meleeSpeed;
 
 
 					rtMainWeapon.Angle -= Math.Round(temp, 0);
@@ -274,14 +274,14 @@ namespace Zitulmyth
 				{
 					if (!subWeaponDirection)
 					{
-						posX -= subWeaponSpeed;
+						posX -= SystemOperator.BlockPerSecond() * subWeaponSpeed;
 					}
 					else
 					{
-						posX += subWeaponSpeed;
+						posX += SystemOperator.BlockPerSecond() * subWeaponSpeed;
 					}
 
-					subWeaponTotalDistance += subWeaponSpeed;
+					subWeaponTotalDistance += (int) SystemOperator.BlockPerSecond() * subWeaponSpeed;
 					Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
 					Canvas.SetZIndex(ImageData.imgSubWeapon[0], ImageZindex.subWeapon);
 				}

@@ -248,10 +248,20 @@ namespace Zitulmyth
 				case GameTransitionType.StageNext:
 
 					StageManager.stageNum++;
+					if(StageManager.stageNum >= StageOrder.lstStageOrder.Count)
+					{
+						MainWindow.timerFrameUpdate.Stop();
+
+						MessageBox.Show("すべてのステージが終わりました。ゲームを終了します。", "ゲームの終了", MessageBoxButton.OK, MessageBoxImage.Information);
+
+						Application.Current.Shutdown();
+					}
+
 
 					StageInit.StageBlockRemove(canvas);
 					StageInit.StageObjectsRemove(canvas);
 					StageInit.StageEnemyRemove(canvas);
+					growthEnemy = false;
 					StageInit.StageItemRemove(canvas);
 
 					StageManager.lstClearCondition.Clear();
@@ -399,8 +409,7 @@ namespace Zitulmyth
 
 						case EventCommandEnum.ScreenFadeIn:
 
-							MainWindow.canScreenFade.Width = 1024;
-							MainWindow.canScreenFade.Height = 768;
+							
 
 							switch (StageEvent.listEvent[eventCount].color)
 							{
@@ -415,10 +424,7 @@ namespace Zitulmyth
 							
 							MainWindow.canScreenFade.Opacity = 0;
 
-							canvas.Children.Add(MainWindow.canScreenFade);
-							Canvas.SetLeft(MainWindow.canScreenFade, 0);
-							Canvas.SetTop(MainWindow.canScreenFade, 0);
-							Canvas.SetZIndex(MainWindow.canScreenFade, ImageZindex.fade);
+							MainWindow.canScreenFade.Visibility = Visibility.Visible;
 
 							screenFadeTotal = 0;
 							screenFadeIndex = eventCount;
@@ -557,7 +563,7 @@ namespace Zitulmyth
 				{
 					MainWindow.canScreenFade.Opacity = 0;
 
-					canvas.Children.Remove(MainWindow.canScreenFade);
+					MainWindow.canScreenFade.Visibility = Visibility.Hidden;
 
 					screenFadeStart = false;
 				}

@@ -120,14 +120,14 @@ namespace Zitulmyth
 		{
 
 			MessageBoxResult result =
-				MessageBox.Show("イベント" + StageManager.stageNum.ToString() + "番のデータを保存しますか？","JSONファイルの書き込み",
+				MessageBox.Show("イベントデータを上書きしますか？","データの上書き",
 				MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
 			if(result == MessageBoxResult.Yes)
 			{
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
 
-				FileStream fs = new FileStream("Assets/json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
+				FileStream fs = new FileStream("Assets/json/event/event_" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName, FileMode.Create);
 				try
 				{
 					json.WriteObject(fs, propertyEventData);
@@ -148,15 +148,15 @@ namespace Zitulmyth
 			strCategoryName = Enum.GetNames(typeof(CategoryName));
 
 			OptionControlSetting();
-
-			string fileName = "Assets/json/event/event" + StageManager.stageNum.ToString() + ".json";
+			
+			string fileName = "Assets/json/event/event_" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName;
 
 			if (File.Exists(fileName))
 			{
 
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
 
-				FileStream fs = new FileStream("Assets/json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Open);
+				FileStream fs = new FileStream("Assets/json/event/event_" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName, FileMode.Open);
 
 				try
 				{
@@ -179,29 +179,9 @@ namespace Zitulmyth
 			else
 			{
 
-				propertyEventData.Clear();
-				propertyEventData.Add(new EventDataProperty { });
-				for (int i = 0; i < propertyEventData.Count; i++)
-				{
-					propertyEventData[i].ID = i;
-				}
+				MessageBox.Show("イベントファイルが読み込めません。","読み込みエラー", MessageBoxButton.OK, MessageBoxImage.Information);
 
-				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
-
-				FileStream fs = new FileStream("Assets/json/event/event" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
-				try
-				{
-					json.WriteObject(fs, propertyEventData);
-
-					MessageBox.Show("ステージ" + StageManager.stageNum.ToString() + "のイベントファイルが存在しないため、\nイベントファイルを新規作成しました。",
-									"イベントファイルの作成", MessageBoxButton.OK, MessageBoxImage.Information);
-				}
-				finally
-				{
-					fs.Close();
-				}
-
-				dgEventData.ItemsSource = propertyEventData;
+				this.Close();
 
 			}
 

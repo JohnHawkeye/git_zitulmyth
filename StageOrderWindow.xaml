@@ -1,0 +1,32 @@
+﻿<Window x:Class="Zitulmyth.StageOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zitulmyth"
+        mc:Ignorable="d"
+        Title="ステージリストの編集" Height="640" Width="512" Background="Black" Loaded="Window_Loaded">
+	<Grid Margin="0">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="277*"/>
+			<RowDefinition Height="30*"/>
+		</Grid.RowDefinitions>
+		<ListView x:Name="lsvStageOrder" HorizontalAlignment="Left" Height="512" Margin="32,32,0,0" VerticalAlignment="Top" Width="320">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=id}"/>
+					<GridViewColumn Header="ステージ名" DisplayMemberBinding="{Binding Path=name}"/>
+					<GridViewColumn Header="ステージファイル名" DisplayMemberBinding="{Binding Path=stageFileName}"/>
+					<GridViewColumn Header="イベントファイル名" DisplayMemberBinding="{Binding Path=eventFileName}"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+		<Button x:Name="btnItemUp" Content="▲" HorizontalAlignment="Left" Height="32" Margin="377,64,0,0" VerticalAlignment="Top" Width="64"/>
+		<Button x:Name="btnItemDown" Content="▼" HorizontalAlignment="Left" Height="32" Margin="377,112,0,0" VerticalAlignment="Top" Width="64"/>
+		<Button x:Name="btnRefer" Content="参照" HorizontalAlignment="Left" Height="32" Margin="377,433,0,0" VerticalAlignment="Top" Width="96"/>
+		<Button x:Name="btnDelete" Content="削除" HorizontalAlignment="Left" Height="32" Margin="377,491,0,0" VerticalAlignment="Top" Width="96"/>
+		<TextBox x:Name="txbStageName" HorizontalAlignment="Left" Height="32" Margin="32,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="なまえ" VerticalAlignment="Center" Width="320" VerticalContentAlignment="Center"/>
+		<Button x:Name="btnNewStage" Content="新規" HorizontalAlignment="Left" Height="32" Margin="377,0,0,0" VerticalAlignment="Center" Width="96" Grid.Row="1" Click="btnNewStage_Click" IsEnabled="False"/>
+
+	</Grid>
+</Window>

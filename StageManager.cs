@@ -20,6 +20,14 @@ namespace Zitulmyth
 		TimeElapsed,
 	}
 
+	public class StageOrderList
+	{
+		public int id;
+		public string name;
+		public string stageFileName;
+		public string eventFileName;
+	}
+
 	public class StageClearCondition
 	{
 		public StageClearConditionName conditionName;

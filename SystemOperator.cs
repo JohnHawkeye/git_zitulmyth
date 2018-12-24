@@ -35,6 +35,14 @@ namespace Zitulmyth
 		public static int timeSeed = Environment.TickCount;
 		public static Random randomNum;
 
+		public static double moveCommonAmountX;
+		public static double moveCommonAmountY;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+
 		public static double BlockPerSecond()
 		{
 			double temp;

@@ -78,6 +78,8 @@ namespace Zitulmyth
 	public partial class StageEditorWindow : Window
 	{
 
+		public StageOrderWindow stageOrderWindow;
+
 		public static StageEditorData stageEditorData = new StageEditorData();
 
 		public static Grid ctlGridMain;
@@ -122,74 +124,26 @@ namespace Zitulmyth
 
 		private void btnStageNumDecrease_Click(object sender, RoutedEventArgs e)
 		{
-			int targetStageNum = int.Parse(txbStageNum.Text);
-
-			if (targetStageNum > 0)
+			if (StageManager.stageNum > 0)
 			{
-				targetStageNum--;
-				txbStageNum.Text = targetStageNum.ToString();
-
+				StageManager.stageNum--;
 				StageLoad();
-				StageEditorDataSetting();
 
+				StageEditorDataSetting();
 				EditorPlayerPaletteSetting();
 			}
 		}
 
 		private void btnStageNumIncrease_Click(object sender, RoutedEventArgs e)
 		{
-			int targetStageNum = int.Parse(txbStageNum.Text);
 
-			string fileName = "Assets/json/stage/stage" + (targetStageNum + 1).ToString() + ".json";
-
-			if (File.Exists(fileName))
+			if ( StageManager.stageNum < StageOrder.lstStageOrder.Count - 1)
 			{
-				targetStageNum++;
-				txbStageNum.Text = targetStageNum.ToString();
-
+				StageManager.stageNum++;
 				StageLoad();
+
 				StageEditorDataSetting();
-
 				EditorPlayerPaletteSetting();
-			}
-			else
-			{
-				MessageBoxResult result =
-				MessageBox.Show("ステージ" + (targetStageNum + 1).ToString() + "番のファイルがありません。\n新規ステージを作成しますか？", "ファイルの確認",
-				MessageBoxButton.YesNo, MessageBoxImage.Information);
-
-				if (result == MessageBoxResult.Yes)
-				{
-					StageEditorData createNewStageFile = new StageEditorData();
-
-					DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<StageEditorData>));
-
-					FileStream fs = new FileStream("Assets/json/stage/stage" + (targetStageNum + 1).ToString() + ".json", FileMode.Create);
-
-					try
-					{
-						CreateNewStageFile(createNewStageFile);
-
-						json.WriteObject(fs, createNewStageFile);
-
-						
-					}
-					finally
-					{
-						fs.Close();
-					}
-
-					if (File.Exists(fileName))
-					{
-						targetStageNum++;
-						txbStageNum.Text = targetStageNum.ToString();
-
-						StageLoad();
-						StageEditorDataSetting();
-
-						EditorPlayerPaletteSetting();
-					}
-				}
 			}
 
 		}
@@ -236,13 +190,12 @@ namespace Zitulmyth
 			StageInit.StageItemRemove(MainWindow.mainCanvas);
 
 			StageManager.lstClearCondition.Clear();
-
-			//init
-
-			StageManager.stageNum = int.Parse(txbStageNum.Text);
 			
 			StageInit.InitBlockData();
+			
+			//StageData loding of JSONfile.
 			StageDataSetting.SetData();
+			txkStageName.Text = StageOrder.lstStageOrder[StageManager.stageNum].name;
 
 			StageInit.StageBlockSet(MainWindow.mainCanvas);
 			StageManager.StageObjectsSetting(MainWindow.mainCanvas);
@@ -252,14 +205,14 @@ namespace Zitulmyth
 		{
 
 			MessageBoxResult result =
-				MessageBox.Show("ステージ" + StageManager.stageNum.ToString() + "番のデータを上書きします。\nよろしいですか？", "データの上書き",
+				MessageBox.Show("ステージ [ " + StageOrder.lstStageOrder[StageManager.stageNum].name + " ] のデータを上書きします。\nよろしいですか？", "データの上書き",
 				MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
 			if (result == MessageBoxResult.Yes)
 			{
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<StageEditorData>));
 
-				FileStream fs = new FileStream("Assets/json/stage/stage" + StageManager.stageNum.ToString() + ".json", FileMode.Create);
+				FileStream fs = new FileStream("Assets/json/stage/" + StageOrder.lstStageOrder[StageManager.stageNum].stageFileName, FileMode.Create);
 
 				try
 				{
@@ -326,8 +279,6 @@ namespace Zitulmyth
 				cmbSceneryName.SelectedItem = StageData.sceneryImageName;
 			}
 
-		
-			
 
 			stageEditorData.lstEditClearCondition = StageManager.lstClearCondition;
 			ListViewClearConditionUpdate();
@@ -615,6 +566,12 @@ namespace Zitulmyth
 		{
 		
 			stageEditorData.scenemyName = cmbSceneryName.SelectedItem.ToString();
+		}
+
+		private void btnStageOrder_Click(object sender, RoutedEventArgs e)
+		{
+			stageOrderWindow = new StageOrderWindow();
+			stageOrderWindow.ShowDialog();
 		}
 	}
 }

@@ -5,16 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="ステージエディタ" Height="780" Width="666" Closing="StageEditorWindow_Closing" Background="Black" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="ToolWindow" Left="1200" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="StageEditorWindow_Loaded">
+        Title="ステージエディタ" Height="780" Width="666" Closing="StageEditorWindow_Closing" Background="Black" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="ToolWindow" Left="1200" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="StageEditorWindow_Loaded" Topmost="True">
 	<Grid x:Name="grdMain" Margin="0">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="29*"/>
-			<RowDefinition Height="47*"/>
-			<RowDefinition Height="632*"/>
-			<RowDefinition Height="44*"/>
+			<RowDefinition Height="49*"/>
+			<RowDefinition Height="657*"/>
+			<RowDefinition Height="46*"/>
 		</Grid.RowDefinitions>
-		<Menu x:Name="menu" Margin="0" Background="#FF4D4D4D"/>
-		<TabControl x:Name="tbcEditSelect" Margin="14,0" Grid.Row="2" Background="White" HorizontalAlignment="Center" VerticalAlignment="Top" Height="613" Width="632" SelectionChanged="tbcEditSelect_SelectionChanged">
+		<TabControl x:Name="tbcEditSelect" Margin="14,0" Grid.Row="1" Background="White" HorizontalAlignment="Center" VerticalAlignment="Top" Height="613" Width="632" SelectionChanged="tbcEditSelect_SelectionChanged">
 			<TabItem Header="ステージ設定">
 				<Grid Background="#FFE5E5E5">
 					<Grid.RowDefinitions>
@@ -171,11 +169,11 @@
 				</Grid>
 			</TabItem>
 		</TabControl>
-		<Label x:Name="label1" Content="＊ステージ：" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" FontSize="16" Height="31" Width="89"/>
-		<Button x:Name="btnStageNumDecrease" Content="◀" HorizontalAlignment="Left" Margin="94,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="24" Height="20" Click="btnStageNumDecrease_Click"/>
-		<Button x:Name="btnStageNumIncrease" Content="▶" HorizontalAlignment="Left" Margin="178,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="24" Height="20" Click="btnStageNumIncrease_Click"/>
-		<TextBox x:Name="txbStageNum" HorizontalAlignment="Left" Height="24" Margin="123,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="50" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" IsEnabled="False"/>
-		<Button x:Name="btnJsonWrite" Content="上書き保存" HorizontalAlignment="Left" VerticalAlignment="Center" Height="34" Width="114" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="1" FontSize="14" Margin="532,0,0,10" Click="btnJsonWrite_Click" Grid.Row="3"/>
-		<Button x:Name="btnEventWindowOpen" Content="イベント編集" HorizontalAlignment="Left" Margin="560,12,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="btnEventWindowOpen_Click" Height="24"/>
+		<Button x:Name="btnStageNumDecrease" Content="◀" HorizontalAlignment="Left" Margin="16,0,0,0" VerticalAlignment="Center" Width="24" Height="20" Click="btnStageNumDecrease_Click"/>
+		<Button x:Name="btnStageNumIncrease" Content="▶" HorizontalAlignment="Left" Margin="188,0,0,0" VerticalAlignment="Center" Width="24" Height="20" Click="btnStageNumIncrease_Click"/>
+		<Button x:Name="btnJsonWrite" Content="上書き保存" HorizontalAlignment="Left" VerticalAlignment="Center" Height="34" Width="114" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="1" FontSize="14" Margin="532,0,0,10" Click="btnJsonWrite_Click" Grid.Row="2"/>
+		<Button x:Name="btnEventWindowOpen" Content="イベント編集" HorizontalAlignment="Left" Margin="560,0,0,0" VerticalAlignment="Center" Width="75" Click="btnEventWindowOpen_Click" Height="24"/>
+		<Button x:Name="btnStageOrder" Content="リスト編集" HorizontalAlignment="Left" Height="24" Margin="240,0,0,0" VerticalAlignment="Center" Width="85" Click="btnStageOrder_Click"/>
+		<TextBlock x:Name="txkStageName" HorizontalAlignment="Left" Height="20" Margin="50,0,0,0" TextWrapping="Wrap" Text="ステージ名" VerticalAlignment="Center" Width="128" Foreground="Black" Background="White" Padding="2,2,0,0"/>
 	</Grid>
 </Window>

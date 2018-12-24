@@ -739,13 +739,13 @@ namespace Zitulmyth
 
 				stageEditorData.objectName[arraylength] = objectPaletteSelected;
 				stageEditorData.objectPosition[arraylength] = new Vector(blockX*32, blockY*32);
-				stageEditorData.objectWidth[arraylength] = (int)imgEditorPointerCursor.Width;
-				stageEditorData.objectHeight[arraylength] = (int)imgEditorPointerCursor.Height;
+				stageEditorData.objectWidth[arraylength] = (int)imgEditorPointerCursor.Width/32;
+				stageEditorData.objectHeight[arraylength] = (int)imgEditorPointerCursor.Height/32;
 				stageEditorData.objectZindex[arraylength] = ImageZindex.object_back;
 
 				ObjectChecker.lstObject.Add(ObjectChecker.SetObjectData(
 						stageEditorData.objectName[arraylength], stageEditorData.objectPosition[arraylength],
-						stageEditorData.objectWidth[arraylength] /32, stageEditorData.objectHeight[arraylength] /32,
+						stageEditorData.objectWidth[arraylength] , stageEditorData.objectHeight[arraylength],
 						stageEditorData.objectZindex[arraylength],
 						false, stageEditorData.objectName[arraylength],false,0));
 

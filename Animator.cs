@@ -29,88 +29,90 @@ namespace Zitulmyth
 		Death,
 	}
 
+	public class CBEnemyData
+	{
+		public EnemyName name;
+
+		public List<CroppedBitmap> idleL = new List<CroppedBitmap>();
+		public List<CroppedBitmap> spawnL = new List<CroppedBitmap>();
+		public List<CroppedBitmap> moveL = new List<CroppedBitmap>();
+		public List<CroppedBitmap> attackL = new List<CroppedBitmap>();
+		public List<CroppedBitmap> damageL = new List<CroppedBitmap>();
+		public List<CroppedBitmap> deathL = new List<CroppedBitmap>();
+
+		public List<CroppedBitmap> idleR = new List<CroppedBitmap>();
+		public List<CroppedBitmap> spawnR = new List<CroppedBitmap>();
+		public List<CroppedBitmap> moveR = new List<CroppedBitmap>();
+		public List<CroppedBitmap> attackR = new List<CroppedBitmap>();
+		public List<CroppedBitmap> damageR = new List<CroppedBitmap>();
+		public List<CroppedBitmap> deathR = new List<CroppedBitmap>();
+
+	}
+
 	public class Animator
 	{
-
-		private const int patternNum = 4;
 		private static int keyFlameTime = 800;
-		private static CroppedBitmap[] cbAnimCell = new CroppedBitmap[4];
 
-		public static void AnimationObject()
+		private static CBEnemyData cbDataZigitu = new CBEnemyData();
+		private static CBEnemyData cbDataBoar = new CBEnemyData();
+
+		private static List<CroppedBitmap> cbDataCoin = new List<CroppedBitmap>();
+		private static List<CroppedBitmap> cbDataBoarMeat = new List<CroppedBitmap>();
+
+		private static List<CroppedBitmap> cbDataFireCamp = new List<CroppedBitmap>();
+
+		public static void CBDataSettings()
 		{
-			for(int i = 0; i< ObjectChecker.lstObject.Count; i++)
-			{
 
-				if(ObjectChecker.lstObject[i].totalAnimTime < keyFlameTime)
-				{
+			cbDataZigitu.idleL = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
+			cbDataZigitu.spawnL = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
+			cbDataZigitu.moveL = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
+			cbDataZigitu.attackL = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
+			cbDataZigitu.damageL = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
+			cbDataZigitu.deathL = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
+			cbDataZigitu.idleR = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
+			cbDataZigitu.spawnR = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
+			cbDataZigitu.moveR = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
+			cbDataZigitu.attackR = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
+			cbDataZigitu.damageR = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
+			cbDataZigitu.deathR = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
 
-					ObjectChecker.lstObject[i].totalAnimTime += MainWindow.elapsedTime;
+			cbDataBoar.idleL = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleL");
+			cbDataBoar.spawnL = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleL");
+			cbDataBoar.moveL = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleL");
+			cbDataBoar.attackL = AnimationSourceSelector(CategoryName.Enemy, "BoarDashL");
+			cbDataBoar.damageL = AnimationSourceSelector(CategoryName.Enemy, "BoarDamageL");
+			cbDataBoar.deathL = AnimationSourceSelector(CategoryName.Enemy, "BoarDeathL");
+			cbDataBoar.idleR = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleR");
+			cbDataBoar.spawnR = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleR");
+			cbDataBoar.moveR = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleR");
+			cbDataBoar.attackR = AnimationSourceSelector(CategoryName.Enemy, "BoarDashR");
+			cbDataBoar.damageR = AnimationSourceSelector(CategoryName.Enemy, "BoarDamageR");
+			cbDataBoar.deathR = AnimationSourceSelector(CategoryName.Enemy, "BoarDeathR");
 
-				}
-				else
-				{
-					switch (ObjectChecker.lstObject[i].objName)
-					{
-						case ObjectName.Obj_CampFire:
+			cbDataCoin = AnimationSourceSelector(CategoryName.Item, "Coin");
+			cbDataBoarMeat = AnimationSourceSelector(CategoryName.Item, "BoarMeat");
 
-							cbAnimCell[0] = ImageData.cbObject[3];
-							cbAnimCell[1] = ImageData.cbObject[4];
-							cbAnimCell[2] = ImageData.cbObject[5];
-							cbAnimCell[3] = ImageData.cbObject[2];
-
-							break;
-
-						case ObjectName.Npc_Yeeda:
-
-							cbAnimCell[0] =	cbAnimCell[1] = cbAnimCell[2] = cbAnimCell[3] =  ImageData.cbNpc[1];
-
-							break;
-
-						case ObjectName.Empty_Collider:
-
-							cbAnimCell[0] = cbAnimCell[1] = cbAnimCell[2] = cbAnimCell[3] = ImageData.cbDebug[0];
-
-							break;
-					}
-
-					switch (ObjectChecker.lstObject[i].keyFlame)
-					{
-						case 0:
-							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[0];
-							break;
-						case 1:
-							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[1];
-							break;
-						case 2:
-							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[2];
-							break;
-						case 3:
-							ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell[3];
-							break;
-					}
-
-					if (ObjectChecker.lstObject[i].keyFlame != 3)
-					{
-						ObjectChecker.lstObject[i].keyFlame++;
-					}
-					else
-					{
-						ObjectChecker.lstObject[i].keyFlame = 0;
-					}
-
-					ObjectChecker.lstObject[i].totalAnimTime = 0;
-
-
-				}
-
-				
-			}
+			cbDataFireCamp = AnimationSourceSelector(CategoryName.Object, "FireCamp");
 		}
 
 		public static void AnimationEnemy()
 		{
 			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{
+				int keyFlameNum = 0;
+				CBEnemyData animationCells = new CBEnemyData();
+
+				switch (SpawnEnemy.lstEnemyData[i].name)
+				{
+					case EnemyName.Zigitu01:
+						animationCells = cbDataZigitu;
+						break;
+
+					case EnemyName.Boar:
+						animationCells = cbDataBoar;
+						break;
+				}
 
 				if (SpawnEnemy.lstEnemyData[i].totalAnimTime < keyFlameTime)
 				{
@@ -121,47 +123,99 @@ namespace Zitulmyth
 				else
 				{
 
-					CBEnemyData tempCBEnemyData = GetCBEnemyData();
 					CroppedBitmap cbAnimEnemyCell = new CroppedBitmap();
 
 					if (SpawnEnemy.lstEnemyData[i].state == EnemyState.Death)
 					{
-
-						cbAnimEnemyCell = tempCBEnemyData.lstCBDeath[AnimEnemyDirection(i)];
-
+						if (!SpawnEnemy.lstEnemyData[i].direction)
+						{
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.deathL.Count);
+							cbAnimEnemyCell = animationCells.deathL[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.deathL.Count;
+						}
+						else
+						{
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.deathR.Count);
+							cbAnimEnemyCell = animationCells.deathR[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.deathR.Count;
+						}
 					}
 					else
 					{
-						cbAnimEnemyCell = tempCBEnemyData.lstCBIdle[AnimEnemyDirection(i)];
-	
+						if (!SpawnEnemy.lstEnemyData[i].direction)
+						{
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.idleL.Count);
+							cbAnimEnemyCell = animationCells.idleL[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.idleL.Count;
+						}
+						else
+						{
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.idleR.Count);
+							cbAnimEnemyCell = animationCells.idleR[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.idleR.Count;
+						}
+
 
 						if (SpawnEnemy.lstEnemyData[i].isDamage)
 						{
-							cbAnimEnemyCell = tempCBEnemyData.lstCBDamage[AnimEnemyDirection(i)];
+							if (!SpawnEnemy.lstEnemyData[i].direction)
+							{
+								SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageL.Count);
+								cbAnimEnemyCell = animationCells.damageL[SpawnEnemy.lstEnemyData[i].keyFlame];
+								keyFlameNum = animationCells.damageL.Count;
+							}
+							else
+							{
+								SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageR.Count);
+								cbAnimEnemyCell = animationCells.damageR[SpawnEnemy.lstEnemyData[i].keyFlame];
+								keyFlameNum = animationCells.damageR.Count;
+							}
 
 						}
 						else
 						{
 							if (SpawnEnemy.lstEnemyData[i].perceive)
 							{
-								cbAnimEnemyCell = tempCBEnemyData.lstCBDamage[AnimEnemyDirection(i)];
+								if (!SpawnEnemy.lstEnemyData[i].direction)
+								{
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageL.Count);
+									cbAnimEnemyCell = animationCells.damageL[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.damageL.Count;
+								}
+								else
+								{
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageR.Count);
+									cbAnimEnemyCell = animationCells.damageR[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.damageR.Count;
+								}
+
 
 							}
 
 							if (SpawnEnemy.lstEnemyData[i].state == EnemyState.Active)
 							{
-								cbAnimEnemyCell = tempCBEnemyData.lstCBAttack[AnimEnemyDirection(i)];
+								if (!SpawnEnemy.lstEnemyData[i].direction)
+								{
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.attackL.Count);
+									cbAnimEnemyCell = animationCells.attackL[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.attackL.Count;
+								}
+								else
+								{
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.attackR.Count);
+									cbAnimEnemyCell = animationCells.attackR[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.attackR.Count;
+								}
+
 
 							}
 						}
 
 					}
 
-
 					SpawnEnemy.lstEnemyData[i].imgEnemy.Source = cbAnimEnemyCell;
 
-
-					if (SpawnEnemy.lstEnemyData[i].keyFlame != 3)
+					if (SpawnEnemy.lstEnemyData[i].keyFlame < keyFlameNum - 1)
 					{
 						SpawnEnemy.lstEnemyData[i].keyFlame++;
 					}
@@ -172,145 +226,193 @@ namespace Zitulmyth
 
 					SpawnEnemy.lstEnemyData[i].totalAnimTime = 0;
 
-
 				}
 
 
 			}
 		}
-
-		public static CBEnemyData GetCBEnemyData()
-		{
-
-			CBEnemyData temp = ImageData.lstCBEnemy[0];
-
-
-			for(int i = 0; i < ImageData.lstCBEnemy.Count; i++)
-			{
-				if (ImageData.lstCBEnemy[i].name == EnemyName.Boar)
-				{
-					temp = ImageData.lstCBEnemy[i];
-					break;
-				}
-			}
-
-			return temp;
-		}
-
-		public static int AnimEnemyDirection(int index)
-		{
-
-			int temp = 0;
-
-			if (!SpawnEnemy.lstEnemyData[index].direction)
-			{
-				if (SpawnEnemy.lstEnemyData[index].keyFlame == 0 ||
-					SpawnEnemy.lstEnemyData[index].keyFlame == 2)
-				{
-					temp = 1;
-				}
-				else
-				{
-					temp = 3;
-				}
-			}
-			else
-			{
-				if (SpawnEnemy.lstEnemyData[index].keyFlame == 0 ||
-					SpawnEnemy.lstEnemyData[index].keyFlame == 2)
-				{
-					temp = 0;
-				}
-				else
-				{
-					temp = 2;
-				}
-			}
-			
-			return temp;
-		}
-
 
 		public static void AnimationItem()
 		{
-
 			for (int i = 0; i < Item.lstItemData.Count; i++)
 			{
-				if (Item.lstItemData[i].totalAnimTime < keyFlameTime)
+				int keyFlameNum = 0;
+				List<CroppedBitmap> animationCells = new List<CroppedBitmap>();
+				bool noAnim = false;
+
+				switch (Item.lstItemData[i].itemName)
 				{
+					case ItemName.Coin:
+						animationCells = cbDataCoin;
+						break;
 
-					Item.lstItemData[i].totalAnimTime += MainWindow.elapsedTime;
+					case ItemName.BoarMeat:
+						animationCells = cbDataBoarMeat;
+						break;
 
+					default:
+						noAnim = true;
+						break;
 				}
-				else
+
+				if (!noAnim)
 				{
 
-					CBItemData tempCBItemData = GetCBItemData(Item.lstItemData[i].itemName);
-					CroppedBitmap cbAnimItemCell = new CroppedBitmap();
-
-					cbAnimItemCell = tempCBItemData.lstCBIdle[AnimItemDirection(i)];
-
-					Item.lstItemData[i].imgItem.Source = cbAnimItemCell;
-
-
-					if (Item.lstItemData[i].keyFlame != 3)
+					if (Item.lstItemData[i].totalAnimTime < keyFlameTime)
 					{
-						Item.lstItemData[i].keyFlame++;
+
+						Item.lstItemData[i].totalAnimTime += MainWindow.elapsedTime;
+
 					}
 					else
 					{
-						Item.lstItemData[i].keyFlame = 0;
+
+						CroppedBitmap cbAnimCell = new CroppedBitmap();
+
+						Item.lstItemData[i].keyFlame = CellNumCheck(Item.lstItemData[i].keyFlame, animationCells.Count);
+						cbAnimCell = animationCells[Item.lstItemData[i].keyFlame];
+						keyFlameNum = animationCells.Count;
+
+						Item.lstItemData[i].imgItem.Source = cbAnimCell;
+
+						if (Item.lstItemData[i].keyFlame < keyFlameNum - 1)
+						{
+							Item.lstItemData[i].keyFlame++;
+						}
+						else
+						{
+							Item.lstItemData[i].keyFlame = 0;
+						}
+
+						Item.lstItemData[i].totalAnimTime = 0;
+
 					}
-
-					Item.lstItemData[i].totalAnimTime = 0;
-
-
 				}
 
-
 			}
+
+
 		}
 
-		public static CBItemData GetCBItemData(ItemName name)
-		{
-			CBItemData temp = ImageData.lstCBItem[0];
 
-			for (int i = 0; i < ImageData.lstCBItem.Count; i++)
+		public static void AnimationObject()
+		{
+			for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 			{
-				if (ImageData.lstCBItem[i].name == name)
+				int keyFlameNum = 0;
+				List<CroppedBitmap> animationCells = new List<CroppedBitmap>();
+				bool noAnim = false;
+
+				switch (ObjectChecker.lstObject[i].objName)
 				{
-					temp = ImageData.lstCBItem[i];
+					case ObjectName.Obj_CampFire:
+						animationCells = cbDataFireCamp;
+						break;
 
-					if(temp.lstCBIdle.Count < 2)
-					{
-						temp.lstCBIdle.Add(temp.lstCBIdle[0]);
-					}
-
-					break;
+					default:
+						noAnim = true;
+						break;
 				}
-				
-			}
 
-			return temp;
+				if (!noAnim)
+				{
+
+					if (ObjectChecker.lstObject[i].totalAnimTime < keyFlameTime)
+					{
+
+						ObjectChecker.lstObject[i].totalAnimTime += MainWindow.elapsedTime;
+
+					}
+					else
+					{
+
+						CroppedBitmap cbAnimCell = new CroppedBitmap();
+
+						ObjectChecker.lstObject[i].keyFlame = CellNumCheck(ObjectChecker.lstObject[i].keyFlame, animationCells.Count);
+						cbAnimCell = animationCells[ObjectChecker.lstObject[i].keyFlame];
+						keyFlameNum = animationCells.Count;
+
+						ObjectChecker.lstObject[i].imgObject.Source = cbAnimCell;
+
+						if (ObjectChecker.lstObject[i].keyFlame < keyFlameNum - 1)
+						{
+							ObjectChecker.lstObject[i].keyFlame++;
+						}
+						else
+						{
+							ObjectChecker.lstObject[i].keyFlame = 0;
+						}
+
+						ObjectChecker.lstObject[i].totalAnimTime = 0;
+
+					}
+				}
+
+
+
+			}
 		}
 
-
-		public static int AnimItemDirection(int index)
+		private static int CellNumCheck(int keyflame, int cellnum)
 		{
-
-			int temp = 0;
-
-			if (Item.lstItemData[index].keyFlame == 0 ||
-				Item.lstItemData[index].keyFlame == 2)
+			if (keyflame > cellnum - 1)
 			{
-				temp = 0;
+				return 0;
 			}
 			else
 			{
-				temp = 1;
+				return keyflame;
 			}
 
-			return temp;
+		}
+
+		public static List<CroppedBitmap> AnimationSourceSelector(CategoryName category, string target)
+		{
+			switch (category)
+			{
+				case CategoryName.Player:
+					return AnimatiionPatternSelector(ImageData.spritePlayer, target);
+
+				case CategoryName.Enemy:
+					return AnimatiionPatternSelector(ImageData.spriteEnemy, target);
+
+				case CategoryName.Object:
+					return AnimatiionPatternSelector(ImageData.spriteObject, target);
+
+				case CategoryName.Npc:
+					return AnimatiionPatternSelector(ImageData.spriteNpc, target);
+
+				case CategoryName.Item:
+					return AnimatiionPatternSelector(ImageData.spriteItem, target);
+
+				case CategoryName.Block:
+					return AnimatiionPatternSelector(ImageData.spriteBlock, target);
+
+				case CategoryName.Scenery:
+					return AnimatiionPatternSelector(ImageData.spriteScenery, target);
+
+				case CategoryName.System:
+					return AnimatiionPatternSelector(ImageData.spriteSystem, target);
+
+				default:
+					return AnimatiionPatternSelector(ImageData.spritePlayer, target);
+			}
+		}
+		public static List<CroppedBitmap> AnimatiionPatternSelector(List<SpriteSource> sprite, string target)
+		{
+
+			for (int i = 0; i < sprite.Count; i++)
+			{
+				if (sprite[i].patternSource.patternName == target)
+				{
+					return sprite[i].patternSource.croppedBitmap;
+				}
+			}
+
+			List<CroppedBitmap> lstNoImages = new List<CroppedBitmap>();
+			lstNoImages.Add(new CroppedBitmap(ImageData.bmiNoImage, new Int32Rect(0, 0, 32, 32)));
+
+			return lstNoImages;
 		}
 	}
 
