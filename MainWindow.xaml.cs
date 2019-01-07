@@ -51,6 +51,7 @@ namespace Zitulmyth
 		public static EventEditorWindow eventEditor;
 		public static MaterialBrowser materialBrowser;
 		public static ImageManagerWindow imageManager;
+		public static DatabaseWindow databaseWindow;
 
 		public static int gameWindowWidth = 1024;
 		public static int gameWindowHeight = 768;
@@ -277,6 +278,7 @@ namespace Zitulmyth
 							btnViewStageEditorWindow.IsEnabled = true;
 							btnViewMaterialBrowser.IsEnabled = true;
 							btnViewImageManager.IsEnabled = true;
+							btnViewDatabaseWindow.IsEnabled = true;
 
 							lblMode.Content = "ゲームモード：エディット";
 						}
@@ -634,6 +636,13 @@ namespace Zitulmyth
 			imageManager = new ImageManagerWindow();
 			imageManager.ShowDialog();
 			imageManager.Focus();
+		}
+
+		private void btnViewDatabaseWindow_Click(object sender, RoutedEventArgs e)
+		{
+			databaseWindow = new DatabaseWindow();
+			databaseWindow.ShowDialog();
+			
 		}
 	}
 }

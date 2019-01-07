@@ -148,7 +148,7 @@ namespace Zitulmyth
 
 		}
 
-		private void CreateNewStageFile(StageEditorData sed)
+		public void CreateNewStageFile(StageEditorData sed)
 		{
 
 			sed.editPlayerStartPosition = new Vector(0,0);
@@ -181,7 +181,7 @@ namespace Zitulmyth
 
 		}
 
-		private void StageLoad()
+		public void StageLoad()
 		{
 			//remove
 			StageInit.StageBlockRemove(MainWindow.mainCanvas);
@@ -210,7 +210,7 @@ namespace Zitulmyth
 
 			if (result == MessageBoxResult.Yes)
 			{
-				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<StageEditorData>));
+				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(StageEditorData));
 
 				FileStream fs = new FileStream("Assets/json/stage/" + StageOrder.lstStageOrder[StageManager.stageNum].stageFileName, FileMode.Create);
 
@@ -261,7 +261,7 @@ namespace Zitulmyth
 			
 		}
 
-		private void StageEditorDataSetting()
+		public void StageEditorDataSetting()
 		{
 
 			stageEditorData.editPlayerStartPosition = StageData.startPlayerPosition;

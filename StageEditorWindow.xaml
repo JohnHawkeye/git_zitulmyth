@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="ステージエディタ" Height="780" Width="666" Closing="StageEditorWindow_Closing" Background="Black" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="ToolWindow" Left="1200" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="StageEditorWindow_Loaded" Topmost="True">
+        Title="ステージエディタ" Height="780" Width="666" Closing="StageEditorWindow_Closing" Background="Black" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="ToolWindow" Left="1200" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="StageEditorWindow_Loaded">
 	<Grid x:Name="grdMain" Margin="0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="49*"/>

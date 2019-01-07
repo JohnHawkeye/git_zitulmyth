@@ -1,0 +1,22 @@
+﻿<Window x:Class="Zitulmyth.SpriteViewerDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zitulmyth"
+        mc:Ignorable="d"
+        Title="画像の選択" Height="600" Width="800" Background="Black" Loaded="Window_Loaded">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="521*"/>
+			<RowDefinition Height="48*"/>
+		</Grid.RowDefinitions>
+		<ListBox x:Name="lsbSprite" HorizontalAlignment="Left" Height="501" Margin="10,10,0,0" VerticalAlignment="Top" Width="198" SelectionChanged="lsbSprite_SelectionChanged"/>
+		<ScrollViewer x:Name="slvPreview" HorizontalAlignment="Left" Height="501" Margin="241,10,0,0" VerticalAlignment="Top" Width="541">
+			<Image x:Name="imgPreview" Height="64" Width="64" HorizontalAlignment="Center" VerticalAlignment="Center" Source="Assets/icon/noimg.png"/>
+		</ScrollViewer>
+		<Button x:Name="btnOk" Content="選択" HorizontalAlignment="Right" Height="28" Margin="0,0,128,0" Grid.Row="1" VerticalAlignment="Center" Width="96" Click="btnOk_Click"/>
+		<Button x:Name="btnCancel" Content="キャンセル" HorizontalAlignment="Right" Height="28" Margin="0,0,16,0" Grid.Row="1" VerticalAlignment="Center" Width="96" Click="btnCancel_Click"/>
+
+	</Grid>
+</Window>

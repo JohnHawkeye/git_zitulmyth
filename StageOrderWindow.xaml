@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="ステージリストの編集" Height="640" Width="512" Background="Black" Loaded="Window_Loaded">
+        Title="ステージリストの編集" Height="640" Width="512" Background="Black" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
 	<Grid Margin="0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="277*"/>
@@ -21,12 +21,12 @@
 				</GridView>
 			</ListView.View>
 		</ListView>
-		<Button x:Name="btnItemUp" Content="▲" HorizontalAlignment="Left" Height="32" Margin="377,64,0,0" VerticalAlignment="Top" Width="64"/>
-		<Button x:Name="btnItemDown" Content="▼" HorizontalAlignment="Left" Height="32" Margin="377,112,0,0" VerticalAlignment="Top" Width="64"/>
-		<Button x:Name="btnRefer" Content="参照" HorizontalAlignment="Left" Height="32" Margin="377,433,0,0" VerticalAlignment="Top" Width="96"/>
-		<Button x:Name="btnDelete" Content="削除" HorizontalAlignment="Left" Height="32" Margin="377,491,0,0" VerticalAlignment="Top" Width="96"/>
+		<Button x:Name="btnItemUp" Content="▲" HorizontalAlignment="Left" Height="32" Margin="377,64,0,0" VerticalAlignment="Top" Width="64" Click="btnItemUp_Click"/>
+		<Button x:Name="btnItemDown" Content="▼" HorizontalAlignment="Left" Height="32" Margin="377,112,0,0" VerticalAlignment="Top" Width="64" Click="btnItemDown_Click"/>
+		<Button x:Name="btnRefer" Content="参照" HorizontalAlignment="Left" Height="32" Margin="377,433,0,0" VerticalAlignment="Top" Width="96" Click="btnRefer_Click"/>
+		<Button x:Name="btnDelete" Content="削除" HorizontalAlignment="Left" Height="32" Margin="377,491,0,0" VerticalAlignment="Top" Width="96" Click="btnDelete_Click"/>
 		<TextBox x:Name="txbStageName" HorizontalAlignment="Left" Height="32" Margin="32,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="なまえ" VerticalAlignment="Center" Width="320" VerticalContentAlignment="Center"/>
-		<Button x:Name="btnNewStage" Content="新規" HorizontalAlignment="Left" Height="32" Margin="377,0,0,0" VerticalAlignment="Center" Width="96" Grid.Row="1" Click="btnNewStage_Click" IsEnabled="False"/>
+		<Button x:Name="btnNewStage" Content="新規" HorizontalAlignment="Left" Height="32" Margin="377,0,0,0" VerticalAlignment="Center" Width="96" Grid.Row="1" Click="btnNewStage_Click"/>
 
 	</Grid>
 </Window>

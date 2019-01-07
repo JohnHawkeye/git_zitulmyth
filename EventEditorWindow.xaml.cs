@@ -127,7 +127,7 @@ namespace Zitulmyth
 			{
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
 
-				FileStream fs = new FileStream("Assets/json/event/event_" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName, FileMode.Create);
+				FileStream fs = new FileStream("Assets/json/event/" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName, FileMode.Create);
 				try
 				{
 					json.WriteObject(fs, propertyEventData);
@@ -149,14 +149,14 @@ namespace Zitulmyth
 
 			OptionControlSetting();
 			
-			string fileName = "Assets/json/event/event_" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName;
+			string fileName = "Assets/json/event/" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName;
 
 			if (File.Exists(fileName))
 			{
 
 				DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(List<EventDataProperty>));
 
-				FileStream fs = new FileStream("Assets/json/event/event_" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName, FileMode.Open);
+				FileStream fs = new FileStream("Assets/json/event/" + StageOrder.lstStageOrder[StageManager.stageNum].eventFileName, FileMode.Open);
 
 				try
 				{

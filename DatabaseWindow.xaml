@@ -1,0 +1,47 @@
+﻿<Window x:Class="Zitulmyth.DatabaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zitulmyth"
+        mc:Ignorable="d"
+        Title="データベース管理" Height="654" Width="800" Background="Black" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="117*"/>
+			<RowDefinition Height="8*"/>
+		</Grid.RowDefinitions>
+		<TabControl x:Name="tabDatabase" Height="549" Margin="22,16,22,0" Width="750" HorizontalAlignment="Center" VerticalAlignment="Top" SelectedIndex="0">
+			<TabItem Header="プレイヤー">
+				<Grid Background="#FFE5E5E5"/>
+			</TabItem>
+			<TabItem Header="ブロック">
+				<Grid Background="#FFE5E5E5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="185*"/>
+						<ColumnDefinition Width="559*"/>
+					</Grid.ColumnDefinitions>
+					<ListBox x:Name="lsbBlock" Height="337" Margin="10,10,13,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="162" SelectionChanged="lsbBlock_SelectionChanged"/>
+					<TextBox x:Name="txbBlockName" Grid.Column="1" HorizontalAlignment="Left" Height="26" Margin="104,10,0,0" TextWrapping="Wrap" Text="なまえ" VerticalAlignment="Top" Width="109" VerticalContentAlignment="Center" TextChanged="txbBlockName_TextChanged" KeyDown="txbBlockName_KeyDown"/>
+					<Label x:Name="lblBlockName" Content="名前：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="72"/>
+					<Image x:Name="imgBlockCB" Grid.Column="1" HorizontalAlignment="Left" Height="64" Margin="104,69,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgBlockCB_MouseLeftButtonDown"/>
+					<Label x:Name="lblBlockImage" Content="グラフィック：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="72"/>
+					<Label x:Name="lblBlockPassage" Content="通行不可：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="72"/>
+					<CheckBox x:Name="ckbPassage" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="104,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.45,0.667" Height="15" Width="20" Click="ckbPassage_Click"/>
+					<Button x:Name="btnBlockMaxList" Content="最大数の変更" HorizontalAlignment="Center" Margin="0,365,0,0" VerticalAlignment="Top" Width="160" Height="22" Click="btnBlockMaxList_Click"/>
+				</Grid>
+			</TabItem>
+			<TabItem Header="エネミー">
+				<Grid Background="#FFE5E5E5"/>
+			</TabItem>
+			<TabItem Header="オブジェクト">
+				<Grid Background="#FFE5E5E5"/>
+			</TabItem>
+			<TabItem Header="アイテム">
+				<Grid Background="#FFE5E5E5"/>
+			</TabItem>
+		</TabControl>
+		<Button x:Name="btnUpdate" Content="適用" HorizontalAlignment="Left" Height="24" Margin="710,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="64" Click="btnUpdate_Click"/>
+
+	</Grid>
+</Window>
