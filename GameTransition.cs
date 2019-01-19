@@ -86,6 +86,7 @@ namespace Zitulmyth
 
 					if (!endSplashLogo)
 					{
+						splashLogoPhase = 4;
 						switch (splashLogoPhase)
 						{
 							case 0:
@@ -298,12 +299,12 @@ namespace Zitulmyth
 							Vector blpos = StageEvent.listEvent[eventCount].balloonPos;
 							string blstring = StageEvent.listEvent[eventCount].balloonMsg;
 
-							if(StageEvent.listEvent[eventCount].targetImgType == TargetImageType.IMG_Player)
+							if(StageEvent.listEvent[eventCount].targetImgType == TargetType.Player)
 							{
 								eventTargetImage = ImageData.imgPlayer;
 							}
 
-							if (StageEvent.listEvent[eventCount].targetImgType == TargetImageType.IMG_Object)
+							if (StageEvent.listEvent[eventCount].targetImgType == TargetType.Object)
 							{
 								eventTargetImage = SelectObjectImage();
 							}
@@ -337,7 +338,7 @@ namespace Zitulmyth
 
 
 
-							if(StageEvent.listEvent[eventCount].targetImgType == TargetImageType.IMG_Object)
+							if(StageEvent.listEvent[eventCount].targetImgType == TargetType.Object)
 							{
 								eventTargetImage = SelectObjectImage();
 							}
@@ -381,19 +382,19 @@ namespace Zitulmyth
 
 							switch (StageEvent.listEvent[eventCount].targetImgType)
 							{
-								case TargetImageType.IMG_Player:
+								case TargetType.Player:
 									ImageData.imgPlayer.Source = 
 										ImageData.ImageSourceSelector(StageEvent.listEvent[eventCount].categoryName,
 																		StageEvent.listEvent[eventCount].patternName);
 									break;
-								case TargetImageType.IMG_Enemy:
+								case TargetType.Enemy:
 
 									//
 									SpawnEnemy.lstEnemyData[0].imgEnemy.Source =
 										ImageData.ImageSourceSelector(StageEvent.listEvent[eventCount].categoryName,
 																		StageEvent.listEvent[eventCount].patternName);
 									break;
-								case TargetImageType.IMG_Object:
+								case TargetType.Object:
 
 									SelectObjectImage().Source =
 
@@ -401,7 +402,7 @@ namespace Zitulmyth
 																		StageEvent.listEvent[eventCount].patternName);
 
 									break;
-								case TargetImageType.IMG_Item:
+								case TargetType.Item:
 									break;
 							}
 							
@@ -609,42 +610,19 @@ namespace Zitulmyth
 			{
 				case EventCommandEnum.CharaImageChange:
 
-					for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
-					{
-						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
-						{
-							temp = ObjectChecker.lstObject[i].imgObject;
-							break;
-						}
-					}
+					temp = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
 
 					break;
 
 				case EventCommandEnum.Move:
 
-					for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
-					{
-						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
-						{
-							temp = ObjectChecker.lstObject[i].imgObject;
-							
-							break;
-						}
-					}
+					temp = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
 
 					break;
 
 				case EventCommandEnum.Balloon:
 
-					for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
-					{
-						if (ObjectChecker.lstObject[i].objName == StageEvent.listEvent[eventCount].objectName)
-						{
-							temp = ObjectChecker.lstObject[i].imgObject;
-
-							break;
-						}
-					}
+					temp = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
 
 					break;
 

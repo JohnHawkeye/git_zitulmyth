@@ -17,7 +17,7 @@ namespace Zitulmyth
 
 		public static void InitBlockData()
 		{
-			StageData.indicateStage = new BlockType[24, 32];
+			StageData.indicateStage = new int[24, 32];
 			StageData.imgBlock = new Image[24, 32];
 		}
 
@@ -31,74 +31,20 @@ namespace Zitulmyth
 			{
 				for (int j = 0; j < 32; j++)
 				{
-					switch (StageData.indicateStage[i, j])
+					int spriteindex = StageData.indicateStage[i, j];
+
+					string spritename = StageData.lstDbBlock[spriteindex].sprite;
+
+					_image = new Image
 					{
-						case BlockType.GreenGround:
-
-							_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "GreenGround"),
-													Width = 32, Height = 32,};
-							
-							break;
-
-						case BlockType.WoodPlatform:
-
-							_image = new Image{Source = ImageData.ImageSourceSelector(CategoryName.Block, "WoodPlat"),
-													Width = 32,Height = 32,};
-							
-							break;
-
-						case BlockType.LadderTop:
-
-							_image = new Image{Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderTop") ,
-													Width = 32,Height = 32, };
-							
-							break;
-
-						case BlockType.LadderMid:
-
-							_image = new Image{Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderMid"),
-													Width = 32,Height = 32,};
-						
-							break;
-
-						case BlockType.LadderBottom:
-
-							_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderBtm"),
-													Width = 32, Height = 32, };
-					
-							break;
-
-						case BlockType.InvisibleBlock:
-
-							if(GameTransition.gameTransition != GameTransitionType.EditMode)
-							{
-								_image = new Image { Source = ImageData.cbEmpty, Width = 32, Height = 32, };
-							}
-							else{
-								_image = new Image { Source = ImageData.cbInvisibleBlock, Width = 32, Height = 32, };
-							}
-							
-					
-							break;
-
-						case BlockType.InvisiblePlat:
-
-							if (GameTransition.gameTransition != GameTransitionType.EditMode)
-							{
-								_image = new Image { Source = ImageData.cbEmpty, Width = 32, Height = 32, };
-							}
-							else
-							{
-								_image = new Image { Source = ImageData.cbInvisiblePlat, Width = 32, Height = 32, };
-							}
-								
-					
-							break;
-					}
+						Source = ImageData.ImageSourceSelector(CategoryName.Block, spritename),
+						Width = 32,
+						Height = 32,
+					};
 
 					StageData.imgBlock[i, j] = _image;
 
-					if (StageData.indicateStage[i,j] != BlockType.None)
+					if (StageData.indicateStage[i,j] != 0)
 					{
 						canvas.Children.Add(StageData.imgBlock[i, j]);
 						Canvas.SetTop(StageData.imgBlock[i, j], i * 32);
@@ -117,7 +63,7 @@ namespace Zitulmyth
 				for (int j = 0; j < 32; j++)
 				{
 					
-					if (StageData.indicateStage[i, j] != BlockType.None)
+					if (StageData.indicateStage[i, j] != 0)
 					{
 						canvas.Children.Remove(StageData.imgBlock[i, j]);
 

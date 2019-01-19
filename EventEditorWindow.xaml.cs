@@ -48,9 +48,9 @@ namespace Zitulmyth
 		[DataMember]
 		public Vector setPosition { get; set; }
 		[DataMember]
-		public TargetImageType targetImgType { get; set; }
+		public TargetType targetImgType { get; set; }
 		[DataMember]
-		public ObjectName objectName { get; set; }
+		public int targetId { get; set; }
 		[DataMember]
 		public CategoryName categoryName { get; set; }
 		[DataMember]
@@ -79,7 +79,6 @@ namespace Zitulmyth
 		private ObservableCollection<EventDataProperty> obe = new ObservableCollection<EventDataProperty>();
 		private List<EventDataProperty> propertyEventData = new List<EventDataProperty>();
 		private string[] strEventCommand;
-		private string[] strObjectName;
 		private string[] strCategoryName;
 		private List<string> lstPatternName = new List<string>();
 		private int loadingCount = 0;
@@ -93,6 +92,7 @@ namespace Zitulmyth
 		private TextBox txbOptDistanceX = new TextBox();
 		private TextBox txbOptDistanceY = new TextBox();
 		private TextBox txbOptSpeed = new TextBox();
+		private TextBox txbOptTargetId = new TextBox();
 
 		private CheckBox ckbOptKeyLock = new CheckBox();
 		private CheckBox ckbOptEnterClose = new CheckBox();
@@ -101,15 +101,14 @@ namespace Zitulmyth
 		private CheckBox ckbOptUiVisibility = new CheckBox();
 		private CheckBox ckbOptEventOnly = new CheckBox();
 
+		private Label ctlDataIndex = new Label();
+		private ComboBox ctlEventType = new ComboBox();
 		private ComboBox cmbOptBgmName = new ComboBox();
 		private ComboBox cmbOptSeName = new ComboBox();
 		private ComboBox cmbOptTargetImage = new ComboBox();
-		private ComboBox cmbOptObjectName = new ComboBox();
 		private ComboBox cmbOptColor = new ComboBox();
 		private ComboBox cmbOptCategoryName = new ComboBox();
 		private ComboBox cmbOptPatternName = new ComboBox();
-
-
 
 		public EventEditorWindow()
 		{
@@ -144,8 +143,9 @@ namespace Zitulmyth
 		{
 
 			strEventCommand = Enum.GetNames(typeof(EventCommandEnum));
-			strObjectName = Enum.GetNames(typeof(ObjectName));
 			strCategoryName = Enum.GetNames(typeof(CategoryName));
+			ctlEventType = cmbEventType;
+			ctlDataIndex = lblDataIndex;
 
 			OptionControlSetting();
 			
@@ -223,7 +223,7 @@ namespace Zitulmyth
 					txbOptMessage.Text = propertyEventData[row].balloonMsg;
 					ckbOptEnterClose.IsChecked = propertyEventData[row].balloonEnterClose;
 					cmbOptTargetImage.SelectedItem = propertyEventData[row].targetImgType.ToString();
-					cmbOptObjectName.SelectedItem = propertyEventData[row].objectName.ToString();
+					txbOptTargetId.Text = propertyEventData[row].targetId.ToString();
 					break;
 
 				case "BgmPlay":
@@ -236,7 +236,7 @@ namespace Zitulmyth
 
 				case "Move":
 					cmbOptTargetImage.SelectedItem = propertyEventData[row].targetImgType.ToString();
-					cmbOptObjectName.SelectedItem = propertyEventData[row].objectName.ToString();
+					txbOptTargetId.Text = propertyEventData[row].targetId.ToString();
 					txbOptDistanceX.Text = propertyEventData[row].moveDistance.X.ToString();
 					txbOptDistanceY.Text = propertyEventData[row].moveDistance.Y.ToString();
 					txbOptSpeed.Text = propertyEventData[row].moveSpeed.ToString();
@@ -259,9 +259,8 @@ namespace Zitulmyth
 
 				case "CharaImageChange":
 					cmbOptTargetImage.SelectedItem = propertyEventData[row].targetImgType.ToString();
-					cmbOptObjectName.SelectedItem = propertyEventData[row].objectName.ToString();
+					txbOptTargetId.Text = propertyEventData[row].targetId.ToString();
 
-				
 					cmbOptCategoryName.SelectedItem = propertyEventData[row].categoryName.ToString();
 					if(propertyEventData[row].patternName == null)
 					{
@@ -301,7 +300,10 @@ namespace Zitulmyth
 
 		private void cmbEventType_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			OptionControlRemove();
+			grdOption.Children.Clear();
+
+			grdOption.Children.Add(ctlEventType);
+			grdOption.Children.Add(ctlDataIndex);
 
 			switch (cmbEventType.SelectedItem)
 			{
@@ -338,9 +340,9 @@ namespace Zitulmyth
 					cmbOptTargetImage.Margin = new Thickness(10+20+112, 6, 0, 0);
 					Grid.SetRow(cmbOptTargetImage, 2);
 
-					grdOption.Children.Add(cmbOptObjectName);
-					cmbOptObjectName.Margin = new Thickness(10+40+112+128, 6, 0, 0);
-					Grid.SetRow(cmbOptObjectName, 2);
+					grdOption.Children.Add(txbOptTargetId);
+					txbOptTargetId.Margin = new Thickness(10+40+112+128, 6, 0, 0);
+					Grid.SetRow(txbOptTargetId, 2);
 
 					break;
 
@@ -362,9 +364,9 @@ namespace Zitulmyth
 					cmbOptTargetImage.Margin = new Thickness(184, 6, 0, 0);
 					Grid.SetRow(cmbOptTargetImage, 0);
 
-					grdOption.Children.Add(cmbOptObjectName);
-					cmbOptObjectName.Margin = new Thickness(184+128+20, 6, 0, 0);
-					Grid.SetRow(cmbOptObjectName, 0);
+					grdOption.Children.Add(txbOptTargetId);
+					txbOptTargetId.Margin = new Thickness(184+128+20, 6, 0, 0);
+					Grid.SetRow(txbOptTargetId, 0);
 
 					grdOption.Children.Add(txbOptDistanceX);
 					txbOptDistanceX.Margin = new Thickness(184, 6, 0, 0);
@@ -407,16 +409,14 @@ namespace Zitulmyth
 					cmbOptTargetImage.Margin = new Thickness(184, 6, 0, 0);
 					Grid.SetRow(cmbOptTargetImage, 0);
 
-					grdOption.Children.Add(cmbOptObjectName);
-					cmbOptObjectName.Margin = new Thickness(184+128+20, 6, 0, 0);
-					Grid.SetRow(cmbOptObjectName, 0);
+					grdOption.Children.Add(txbOptTargetId);
+					txbOptTargetId.Margin = new Thickness(184+128+20, 6, 0, 0);
+					Grid.SetRow(txbOptTargetId, 0);
 
 					grdOption.Children.Add(cmbOptCategoryName);
 					cmbOptCategoryName.Margin = new Thickness(184, 6, 0, 0);
 					cmbOptCategoryName.SelectionChanged += new SelectionChangedEventHandler(CategoryChosedPatternReading);
 					Grid.SetRow(cmbOptCategoryName, 1);
-
-
 
 					grdOption.Children.Add(cmbOptPatternName);
 					cmbOptPatternName.Margin = new Thickness(184 + 20 + 128, 6, 0, 0);
@@ -475,36 +475,6 @@ namespace Zitulmyth
 			btnAdd.IsEnabled = true;
 		}
 
-		public void OptionControlRemove()
-		{
-
-			grdOption.Children.Remove(txbOptValue);
-			grdOption.Children.Remove(txbOptBalloonX);
-			grdOption.Children.Remove(txbOptBalloonY);
-			grdOption.Children.Remove(txbOptMessage);
-			grdOption.Children.Remove(txbOptStartX);
-			grdOption.Children.Remove(txbOptStartY);
-			grdOption.Children.Remove(txbOptDistanceX);
-			grdOption.Children.Remove(txbOptDistanceY);
-			grdOption.Children.Remove(txbOptSpeed);
-
-			grdOption.Children.Remove(ckbOptKeyLock);
-			grdOption.Children.Remove(ckbOptEnterClose);
-			grdOption.Children.Remove(ckbOptDirection);
-			grdOption.Children.Remove(ckbOptFadeType);
-			grdOption.Children.Remove(ckbOptUiVisibility);
-			grdOption.Children.Remove(ckbOptEventOnly);
-
-			grdOption.Children.Remove(cmbOptBgmName);
-			grdOption.Children.Remove(cmbOptSeName);
-			grdOption.Children.Remove(cmbOptTargetImage);
-			grdOption.Children.Remove(cmbOptObjectName);
-			grdOption.Children.Remove(cmbOptColor);
-			grdOption.Children.Remove(cmbOptCategoryName);
-			grdOption.Children.Remove(cmbOptPatternName);
-
-		}
-
 		public void OptionControlSetting()
 		{
 
@@ -517,7 +487,7 @@ namespace Zitulmyth
 				Text = "1000",
 				Width = 56, Height = 26,
 				FontSize = 16,
-				ToolTip = "Value"
+				ToolTip = "値"
 		
 			};
 			
@@ -531,7 +501,7 @@ namespace Zitulmyth
 				Width = 56,
 				Height = 26,
 				FontSize = 16,
-				ToolTip = "BalloonPositionX"
+				ToolTip = "ふきだしの位置X"
 			};
 
 			txbOptBalloonY = new TextBox
@@ -544,7 +514,7 @@ namespace Zitulmyth
 				Width = 56,
 				Height = 26,
 				FontSize = 16,
-				ToolTip = "BalloonPositionY"
+				ToolTip = "ふきだしの位置Y"
 			};
 
 			txbOptMessage = new TextBox
@@ -558,7 +528,7 @@ namespace Zitulmyth
 				Width = 512,
 				Height = 26,
 				FontSize = 16,
-				ToolTip = "BalloonMessage"
+				ToolTip = "メッセージ"
 			};
 
 			txbOptStartX = new TextBox
@@ -626,7 +596,20 @@ namespace Zitulmyth
 				ToolTip = "Speed"
 			};
 
-		//checkbox
+			txbOptTargetId = new TextBox
+			{
+
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Top,
+				HorizontalContentAlignment = HorizontalAlignment.Right,
+				Text = "0",
+				Width = 56,
+				Height = 26,
+				FontSize = 16,
+				ToolTip = "TargetId"
+			};
+
+			//checkbox
 
 			ckbOptKeyLock = new CheckBox
 			{
@@ -771,22 +754,6 @@ namespace Zitulmyth
 
 			};
 
-			cmbOptObjectName = new ComboBox
-			{
-
-				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Top,
-				HorizontalContentAlignment = HorizontalAlignment.Left,
-				VerticalContentAlignment = VerticalAlignment.Top,
-
-				Width = 128,
-				Height = 26,
-				FontSize = 16,
-				ToolTip = "TargetObjectName",
-				ItemsSource = strObjectName,
-
-			};
-
 			cmbOptColor = new ComboBox
 			{
 
@@ -877,23 +844,41 @@ namespace Zitulmyth
 
 				case "Wait":
 
-					propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
+					if (SystemOperator.IsNumeric(txbOptValue.Text))
+					{
+						propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
+
 					break;
 
 				case "Balloon":
 
-					propertyEventData[row].balloonPos = 
-						new Vector (int.Parse(txbOptBalloonX.Text), int.Parse(txbOptBalloonY.Text));
+					if (SystemOperator.IsNumeric(txbOptBalloonX.Text)&&
+						SystemOperator.IsNumeric(txbOptBalloonY.Text)&&
+						SystemOperator.IsNumeric(txbOptTargetId.Text))
+					{
+						propertyEventData[row].balloonPos =
+						new Vector(int.Parse(txbOptBalloonX.Text), int.Parse(txbOptBalloonY.Text));
 
-					propertyEventData[row].balloonMsg = txbOptMessage.Text;
-					propertyEventData[row].balloonEnterClose = (bool)ckbOptEnterClose.IsChecked;
+						propertyEventData[row].balloonMsg = txbOptMessage.Text;
+						propertyEventData[row].balloonEnterClose = (bool)ckbOptEnterClose.IsChecked;
 
-					propertyEventData[row].targetImgType = 
-						(TargetImageType)Enum.Parse(typeof(TargetImageType), cmbOptTargetImage.SelectedItem.ToString());
+						propertyEventData[row].targetImgType =
+							(TargetType)Enum.Parse(typeof(TargetType), cmbOptTargetImage.SelectedItem.ToString());
 
-					propertyEventData[row].objectName =
-						(ObjectName)Enum.Parse(typeof(ObjectName), cmbOptObjectName.SelectedItem.ToString());
-					
+						propertyEventData[row].targetId = int.Parse(txbOptTargetId.Text);
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
+
+
+
 					break;
 
 				case "BgmPlay":
@@ -912,17 +897,24 @@ namespace Zitulmyth
 
 				case "Move":
 
-					propertyEventData[row].targetImgType =
-						(TargetImageType)Enum.Parse(typeof(TargetImageType), cmbOptTargetImage.SelectedItem.ToString());
+					if(SystemOperator.IsNumeric(txbOptTargetId.Text)&&
+					   SystemOperator.IsNumeric(txbOptSpeed.Text))
+					{
+						propertyEventData[row].targetImgType =
+						(TargetType)Enum.Parse(typeof(TargetType), cmbOptTargetImage.SelectedItem.ToString());
 
-					propertyEventData[row].objectName =
-						(ObjectName)Enum.Parse(typeof(ObjectName), cmbOptObjectName.SelectedItem.ToString());
+						propertyEventData[row].targetId = int.Parse(txbOptTargetId.Text);
 
-					propertyEventData[row].moveDistance =
-						new Vector(int.Parse(txbOptDistanceX.Text), int.Parse(txbOptDistanceY.Text));
+						propertyEventData[row].moveDistance =
+							new Vector(int.Parse(txbOptDistanceX.Text), int.Parse(txbOptDistanceY.Text));
 
-					propertyEventData[row].moveSpeed = int.Parse(txbOptSpeed.Text);
-					propertyEventData[row].direction = (bool)ckbOptDirection.IsChecked;
+						propertyEventData[row].moveSpeed = int.Parse(txbOptSpeed.Text);
+						propertyEventData[row].direction = (bool)ckbOptDirection.IsChecked;
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
 
 					break;
 
@@ -940,55 +932,92 @@ namespace Zitulmyth
 
 				case "CharaFadeIn":
 
-					propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
+					if (SystemOperator.IsNumeric(txbOptValue.Text))
+					{
+						propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
 
-					propertyEventData[row].targetImgType =
-						(TargetImageType)Enum.Parse(typeof(TargetImageType), cmbOptTargetImage.SelectedItem.ToString());
-					
+						propertyEventData[row].targetImgType =
+							(TargetType)Enum.Parse(typeof(TargetType), cmbOptTargetImage.SelectedItem.ToString());
+
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
+
 					break;
 
 				case "CharaImageChange":
 
-					propertyEventData[row].targetImgType =
-						(TargetImageType)Enum.Parse(typeof(TargetImageType), cmbOptTargetImage.SelectedItem.ToString());
+					if (SystemOperator.IsNumeric(txbOptTargetId.Text))
+					{
+						propertyEventData[row].targetImgType =
+						(TargetType)Enum.Parse(typeof(TargetType), cmbOptTargetImage.SelectedItem.ToString());
 
-					propertyEventData[row].objectName =
-						(ObjectName)Enum.Parse(typeof(ObjectName), cmbOptObjectName.SelectedItem.ToString());
+						propertyEventData[row].targetId = int.Parse(txbOptTargetId.Text);
 
-					propertyEventData[row].categoryName =
-						(CategoryName)Enum.Parse(typeof(CategoryName), cmbOptCategoryName.SelectedItem.ToString());
+						propertyEventData[row].categoryName =
+							(CategoryName)Enum.Parse(typeof(CategoryName), cmbOptCategoryName.SelectedItem.ToString());
 
-					propertyEventData[row].patternName =cmbOptPatternName.SelectedItem.ToString();
+						propertyEventData[row].patternName = cmbOptPatternName.SelectedItem.ToString();
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
 
 					break;
 
 				case "ScreenFadeIn":
 
-					propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
+					if (SystemOperator.IsNumeric(txbOptValue.Text))
+					{
+						propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
 
-					propertyEventData[row].fadeType = (bool)ckbOptFadeType.IsChecked;
+						propertyEventData[row].fadeType = (bool)ckbOptFadeType.IsChecked;
 
-					propertyEventData[row].color =
-						(ColorEnum)Enum.Parse(typeof(ColorEnum), cmbOptColor.SelectedItem.ToString());
-					
+						propertyEventData[row].color =
+							(ColorEnum)Enum.Parse(typeof(ColorEnum), cmbOptColor.SelectedItem.ToString());
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
+
 					break;
 
 				case "ScreenFadeOut":
 
-					propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
+					if (SystemOperator.IsNumeric(txbOptValue.Text))
+					{
+						propertyEventData[row].eventValue = int.Parse(txbOptValue.Text);
 
-					propertyEventData[row].fadeType = (bool)ckbOptFadeType.IsChecked;
+						propertyEventData[row].fadeType = (bool)ckbOptFadeType.IsChecked;
 
-					propertyEventData[row].color =
-						(ColorEnum)Enum.Parse(typeof(ColorEnum), cmbOptColor.SelectedItem.ToString());
+						propertyEventData[row].color =
+							(ColorEnum)Enum.Parse(typeof(ColorEnum), cmbOptColor.SelectedItem.ToString());
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
 
 					break;
 
 				case "GenerateEnemy":
 
-					propertyEventData[row].setPosition =
-						new Vector(int.Parse(txbOptStartX.Text), int.Parse(txbOptStartY.Text));
-					
+					if (SystemOperator.IsNumeric(txbOptStartX.Text)&&
+						SystemOperator.IsNumeric(txbOptStartY.Text))
+					{
+						propertyEventData[row].setPosition =
+							new Vector(int.Parse(txbOptStartX.Text), int.Parse(txbOptStartY.Text));
+
+					}
+					else
+					{
+						MessageBox.Show("値が正しくありません。半角数字を入力してください。", "入力", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
+
 					break;
 
 				case "EventEnd":

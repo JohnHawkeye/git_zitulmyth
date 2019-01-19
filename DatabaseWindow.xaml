@@ -5,15 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="データベース管理" Height="654" Width="800" Background="Black" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="データベース管理" Height="654" Width="800" Background="Black" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" Closed="Window_Closed">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="117*"/>
-			<RowDefinition Height="8*"/>
+			<RowDefinition Height="23*"/>
+			<RowDefinition Height="2*"/>
 		</Grid.RowDefinitions>
 		<TabControl x:Name="tabDatabase" Height="549" Margin="22,16,22,0" Width="750" HorizontalAlignment="Center" VerticalAlignment="Top" SelectedIndex="0">
 			<TabItem Header="プレイヤー">
-				<Grid Background="#FFE5E5E5"/>
+				<Grid Background="#FFE5E5E5">
+					<Image x:Name="imgPlayerIdleL" HorizontalAlignment="Left" Height="64" Margin="46,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerIdleL_MouseLeftButtonDown" Panel.ZIndex="2" Tag="1"/>
+					<Label x:Name="lblPlayerSpriteName" Content="待機" HorizontalAlignment="Left" Margin="46,133,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerIdleR" HorizontalAlignment="Left" Height="64" Margin="115,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerIdleR_MouseLeftButtonDown" Panel.ZIndex="2" Tag="2"/>
+					<Image x:Name="imgPlayerMoveL" HorizontalAlignment="Left" Height="64" Margin="212,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" Panel.ZIndex="2" MouseLeftButtonDown="imgPlayerMoveL_MouseLeftButtonDown" Tag="3"/>
+					<Label x:Name="lblPlayerSpriteName_Copy" Content="移動" HorizontalAlignment="Left" Margin="212,133,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerMoveR" HorizontalAlignment="Left" Height="64" Margin="281,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" Panel.ZIndex="2" Tag="4" MouseLeftButtonDown="imgPlayerMoveR_MouseLeftButtonDown"/>
+					<Image x:Name="imgPlayerAttackL" HorizontalAlignment="Left" Height="64" Margin="380,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerAttackL_MouseLeftButtonDown" Panel.ZIndex="2" Tag="5"/>
+					<Label x:Name="lblPlayerSpriteName_Copy1" Content="攻撃" HorizontalAlignment="Left" Margin="380,133,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerAttackR" HorizontalAlignment="Left" Height="64" Margin="449,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerAttackR_MouseLeftButtonDown" Panel.ZIndex="2" Tag="6"/>
+					<Image x:Name="imgPlayerJumpL" HorizontalAlignment="Left" Height="64" Margin="558,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerJumpL_MouseLeftButtonDown" Panel.ZIndex="2" Tag="7"/>
+					<Label x:Name="lblPlayerSpriteName_Copy2" Content="ジャンプ" HorizontalAlignment="Left" Margin="558,133,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerJumpR" HorizontalAlignment="Left" Height="64" Margin="627,64,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerJumpR_MouseLeftButtonDown" Panel.ZIndex="2" Tag="8"/>
+					<Image x:Name="imgPlayerDamageL" HorizontalAlignment="Left" Height="64" Margin="46,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerDamageL_MouseLeftButtonDown" Panel.ZIndex="2" Tag="9"/>
+					<Label x:Name="lblPlayerSpriteName_Copy3" Content="ダメージ" HorizontalAlignment="Left" Margin="46,259,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerDamageR" HorizontalAlignment="Left" Height="64" Margin="115,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerDamageR_MouseLeftButtonDown" Panel.ZIndex="2" Tag="10"/>
+					<Image x:Name="imgPlayerLadder" HorizontalAlignment="Left" Height="64" Margin="212,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerLadder_MouseLeftButtonDown" Panel.ZIndex="2" Tag="11"/>
+					<Label x:Name="lblPlayerSpriteName_Copy4" Content="昇り降り" HorizontalAlignment="Left" Margin="212,259,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerSquatL" HorizontalAlignment="Left" Height="64" Margin="380,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerSquatL_MouseLeftButtonDown" Panel.ZIndex="2" Tag="13"/>
+					<Label x:Name="lblPlayerSpriteName_Copy5" Content="しゃがみ" HorizontalAlignment="Left" Margin="380,259,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerSquatR" HorizontalAlignment="Left" Height="64" Margin="449,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerSquatR_MouseLeftButtonDown" Panel.ZIndex="2" Tag="14"/>
+					<Image x:Name="imgPlayerDeathL" HorizontalAlignment="Left" Height="64" Margin="558,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerDeathL_MouseLeftButtonDown" Panel.ZIndex="2" Tag="15"/>
+					<Label x:Name="lblPlayerSpriteName_Copy6" Content="死亡" HorizontalAlignment="Left" Margin="558,259,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+					<Image x:Name="imgPlayerDeathR" HorizontalAlignment="Left" Height="64" Margin="627,190,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgPlayerDeathR_MouseLeftButtonDown" Panel.ZIndex="2" Tag="16"/>
+					<Rectangle Fill="#FFE5E5E5" HorizontalAlignment="Left" Height="312" Margin="10,11,0,0" Stroke="White" VerticalAlignment="Top" Width="724" Panel.ZIndex="1" StrokeThickness="2"/>
+					<Label x:Name="lblPlayerSpriteName_Copy7" Content="グラフィック" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="133" HorizontalContentAlignment="Center" Panel.ZIndex="2"/>
+				</Grid>
 			</TabItem>
 			<TabItem Header="ブロック">
 				<Grid Background="#FFE5E5E5">
@@ -22,11 +48,11 @@
 						<ColumnDefinition Width="559*"/>
 					</Grid.ColumnDefinitions>
 					<ListBox x:Name="lsbBlock" Height="337" Margin="10,10,13,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="162" SelectionChanged="lsbBlock_SelectionChanged"/>
-					<TextBox x:Name="txbBlockName" Grid.Column="1" HorizontalAlignment="Left" Height="26" Margin="104,10,0,0" TextWrapping="Wrap" Text="なまえ" VerticalAlignment="Top" Width="109" VerticalContentAlignment="Center" TextChanged="txbBlockName_TextChanged" KeyDown="txbBlockName_KeyDown"/>
-					<Label x:Name="lblBlockName" Content="名前：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="72"/>
-					<Image x:Name="imgBlockCB" Grid.Column="1" HorizontalAlignment="Left" Height="64" Margin="104,69,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgBlockCB_MouseLeftButtonDown"/>
-					<Label x:Name="lblBlockImage" Content="グラフィック：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="72"/>
-					<Label x:Name="lblBlockPassage" Content="通行不可：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="72"/>
+					<TextBox x:Name="txbBlockName" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="104,14,0,0" TextWrapping="Wrap" Text="なまえ" VerticalAlignment="Top" Width="109" VerticalContentAlignment="Center" KeyDown="txbBlockName_KeyDown"/>
+					<Label x:Name="lblBlockName" Content="名前：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Background="White" Height="32" Width="539" Panel.ZIndex="-1" Padding="5,7,5,0"/>
+					<Image x:Name="imgBlockCB" Grid.Column="1" HorizontalAlignment="Left" Height="64" Margin="104,76,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgBlockCB_MouseLeftButtonDown"/>
+					<Label x:Name="lblBlockImage" Content="グラフィック：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Background="White" Height="80" Width="168" Panel.ZIndex="-1"/>
+					<Label x:Name="lblBlockPassage" Content="通行不可：" Grid.Column="1" HorizontalAlignment="Left" Margin="10,169,0,0" VerticalAlignment="Top" Background="White" Height="26" Width="125"/>
 					<CheckBox x:Name="ckbPassage" Content="" Grid.Column="1" HorizontalAlignment="Left" Margin="104,174,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.45,0.667" Height="15" Width="20" Click="ckbPassage_Click"/>
 					<Button x:Name="btnBlockMaxList" Content="最大数の変更" HorizontalAlignment="Center" Margin="0,365,0,0" VerticalAlignment="Top" Width="160" Height="22" Click="btnBlockMaxList_Click"/>
 				</Grid>
@@ -35,13 +61,58 @@
 				<Grid Background="#FFE5E5E5"/>
 			</TabItem>
 			<TabItem Header="オブジェクト">
-				<Grid Background="#FFE5E5E5"/>
+				<Grid Background="#FFE5E5E5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="89*"/>
+						<ColumnDefinition Width="283*"/>
+					</Grid.ColumnDefinitions>
+					<ListBox x:Name="lsbObject" Height="337" Margin="6,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="162" SelectionChanged="lsbObject_SelectionChanged"/>
+					<Button x:Name="btnObjectMaxList" Content="最大数の変更" HorizontalAlignment="Center" Margin="9,360,9,0" VerticalAlignment="Top" Width="160" Height="22" Click="btnObjectMaxList_Click"/>
+					<TextBox x:Name="txbObjectName" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="111,14,0,0" TextWrapping="Wrap" Text="なまえ" VerticalAlignment="Top" Width="109" VerticalContentAlignment="Center" KeyDown="txbObjectName_KeyDown"/>
+					<Label x:Name="lblObjectName" Content="名前：" Grid.Column="1" HorizontalAlignment="Left" Margin="17,10,0,0" VerticalAlignment="Top" Background="White" Height="32" Width="539" Panel.ZIndex="-1" Padding="5,7,5,0"/>
+					<Image x:Name="imgObjectA" Grid.Column="1" HorizontalAlignment="Left" Height="64" Margin="111,60,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgObjectA_MouseLeftButtonDown"/>
+					<Label x:Name="lblObjectImage" Content="グラフィック：" Grid.Column="1" HorizontalAlignment="Left" Margin="17,52,0,0" VerticalAlignment="Top" Background="White" Height="80" Width="258" Panel.ZIndex="-1"/>
+					<Image x:Name="imgObjectB" Grid.Column="1" HorizontalAlignment="Left" Height="64" Margin="200,60,0,0" VerticalAlignment="Top" Width="64" Source="Assets/icon/noimg.png" MouseLeftButtonDown="imgObjectB_MouseLeftButtonDown"/>
+					<RadioButton x:Name="rdbObjDisplay" Content="表示のみ" Grid.Column="1" HorizontalAlignment="Left" Margin="110,148,0,0" VerticalAlignment="Top" GroupName="attribute" IsChecked="True" Click="rdbObjDisplay_Click"/>
+					<RadioButton x:Name="rdbObjPhysical" Content="物理性質" Grid.Column="1" HorizontalAlignment="Left" Margin="210,148,0,0" VerticalAlignment="Top" GroupName="attribute" Click="rdbObjPhysical_Click"/>
+					<RadioButton x:Name="rdbObjCollider" Content="コライダ―" Grid.Column="1" HorizontalAlignment="Left" Margin="320,148,0,0" VerticalAlignment="Top" GroupName="attribute" Click="rdbObjCollider_Click"/>
+					<RadioButton x:Name="rdbObjLadder" Content="ラダー" Grid.Column="1" HorizontalAlignment="Left" Margin="110,168,0,0" VerticalAlignment="Top" GroupName="attribute" Click="rdbObjLadder_Click"/>
+					<RadioButton x:Name="rdbObjPlat" Content="プラットフォーム" Grid.Column="1" HorizontalAlignment="Left" Margin="210,168,0,0" VerticalAlignment="Top" GroupName="attribute" Click="rdbObjPlat_Click"/>
+					<RadioButton x:Name="rdbObjGoal" Content="ゴール" Grid.Column="1" HorizontalAlignment="Left" Margin="320,168,0,0" VerticalAlignment="Top" GroupName="attribute" Click="rdbObjGoal_Click"/>
+					<Label x:Name="lblObjectImage_Copy" Content="属性：" Grid.Column="1" HorizontalAlignment="Left" Margin="17,142,0,0" VerticalAlignment="Top" Background="White" Height="50" Width="539" Panel.ZIndex="-1"/>
+					<Label x:Name="lblObjectOption" Content="オプション：" Grid.Column="1" HorizontalAlignment="Left" Margin="17,202,0,0" VerticalAlignment="Top" Background="White" Height="145" Width="539" Panel.ZIndex="-1"/>
+					<CheckBox x:Name="ckbObjDestructable" Content="破壊可能：" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="32,236,0,0" Background="White" Click="ckbObjDestructable_Click"/>
+					<TextBox x:Name="txbObjAutoX" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="151,287,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Right" Panel.ZIndex="2" KeyDown="txbObjAutoX_KeyDown"/>
+					<CheckBox x:Name="ckbObjTimer" Content="タイマー：" Grid.Column="1" HorizontalAlignment="Left" Margin="200,236,0,0" VerticalAlignment="Top" Click="ckbObjTimer_Click"/>
+					<CheckBox x:Name="ckbObjDamage" Content="ダメージの有無：" Grid.Column="1" HorizontalAlignment="Left" Margin="356,236,0,0" VerticalAlignment="Top" Click="ckbObjDamage_Click"/>
+					<TextBox x:Name="txbObjDamage" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="462,234,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="64" KeyDown="txbObjDamage_KeyDown"/>
+					<CheckBox x:Name="ckbObjAutoMove" Content="自動移動：" Grid.Column="1" HorizontalAlignment="Left" Margin="32,290,0,0" VerticalAlignment="Top" Click="ckbObjAutoMove_Click"/>
+					<TextBox x:Name="txbObjAutoY" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="225,287,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Right" Panel.ZIndex="2" KeyDown="txbObjAutoY_KeyDown"/>
+					<Label x:Name="label" Content="X" Grid.Column="1" HorizontalAlignment="Left" Margin="132,284,0,0" VerticalAlignment="Top" Background="#FFE0E0E0" Width="64"/>
+					<Label x:Name="lblObjectInfluence" Content="影響ステータス：" Grid.Column="1" HorizontalAlignment="Left" Margin="17,358,0,0" VerticalAlignment="Top" Background="White" Height="78" Width="539" Panel.ZIndex="-1"/>
+					<TextBox x:Name="txbObjDurability" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="117,234,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="64" KeyDown="txbObjDurability_KeyDown"/>
+					<TextBox x:Name="txbTime" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="271,234,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="64" KeyDown="txbTime_KeyDown"/>
+					<Label x:Name="label_Copy" Content="Y" Grid.Column="1" HorizontalAlignment="Left" Margin="206,284,0,0" VerticalAlignment="Top" Background="#FFE0E0E0" Width="64"/>
+					<Label x:Name="label_Copy1" Content="速度" Grid.Column="1" HorizontalAlignment="Left" Margin="280,284,0,0" VerticalAlignment="Top" Background="#FFE0E0E0" Width="78"/>
+					<TextBox x:Name="txbObjAutoSpeed" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="314,287,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Right" Panel.ZIndex="2" KeyDown="txbObjAutoSpeed_KeyDown"/>
+					<TextBox x:Name="txbObjInfluenceSpeed" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="93,396,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Right" Panel.ZIndex="2" KeyDown="txbObjInfluenceSpeed_KeyDown"/>
+					<Label x:Name="label_Copy2" Content="移動速度" Grid.Column="1" HorizontalAlignment="Left" Margin="32,393,0,0" VerticalAlignment="Top" Background="#FFE0E0E0" Width="106"/>
+					<CheckBox x:Name="ckbObjWater" Content="水中" Grid.Column="1" HorizontalAlignment="Left" Margin="32,263,0,0" VerticalAlignment="Top" Click="ckbObjWater_Click"/>
+					<TextBox x:Name="txbObjInfluenceJump" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="210,396,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Right" Panel.ZIndex="2" KeyDown="txbObjInfluenceJump_KeyDown"/>
+					<Label x:Name="label_Copy3" Content="ジャンプ力" Grid.Column="1" HorizontalAlignment="Left" Margin="149,393,0,0" VerticalAlignment="Top" Background="#FFE0E0E0" Width="106"/>
+					<CheckBox x:Name="ckbObjSlide" Content="すべり" Grid.Column="1" HorizontalAlignment="Left" Margin="200,263,0,0" VerticalAlignment="Top" Click="ckbObjSlide_Click"/>
+					<CheckBox x:Name="ckbObjTriggerType" Content="OFF：接触、ON：入力）" Grid.Column="1" HorizontalAlignment="Left" Margin="155,322,0,0" VerticalAlignment="Top" Panel.ZIndex="1" Click="ckbObjTriggerType_Click"/>
+					<CheckBox x:Name="ckbObjTriggerAction" Content="トリガーアクション：（" Grid.Column="1" HorizontalAlignment="Left" Margin="32,322,0,0" VerticalAlignment="Top" Panel.ZIndex="1" Click="ckbObjTriggerAction_Click"/>
+					<CheckBox x:Name="ckbObjOperable" Content="操作可能" Grid.Column="1" HorizontalAlignment="Left" Margin="356,263,0,0" VerticalAlignment="Top" Click="ckbObjOperable_Click"/>
+					<TextBox x:Name="txbObjInfluenceFall" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="326,396,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Right" Panel.ZIndex="2" KeyDown="txbObjInfluenceFall_KeyDown"/>
+					<Label x:Name="label_Copy4" Content="落下速度" Grid.Column="1" HorizontalAlignment="Left" Margin="265,393,0,0" VerticalAlignment="Top" Background="#FFE0E0E0" Width="106"/>
+				</Grid>
 			</TabItem>
 			<TabItem Header="アイテム">
 				<Grid Background="#FFE5E5E5"/>
 			</TabItem>
 		</TabControl>
-		<Button x:Name="btnUpdate" Content="適用" HorizontalAlignment="Left" Height="24" Margin="710,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="64" Click="btnUpdate_Click"/>
+		<Button x:Name="btnUpdate" Content="適用" HorizontalAlignment="Left" Height="24" Margin="710,0,0,3" Grid.Row="1" VerticalAlignment="Center" Width="64" Click="btnUpdate_Click"/>
 
 	</Grid>
 </Window>

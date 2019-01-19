@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Zitulmyth.Checking;
 using Zitulmyth.Data;
+using Zitulmyth.Enums;
 using static Zitulmyth.StageEditorWindow;
 
 namespace Zitulmyth
@@ -55,7 +56,7 @@ namespace Zitulmyth
 
 		public static void BoundObject(ref Vector pos ,bool charaDir,ref Vector total, Vector target , ref Vector bps,
 										ref double coefficient, ref bool boundDir,int weight,int speed,int jumppower,
-										int width,int height,ref bool isKnockBack)
+										Vector size,ref bool isKnockBack)
 		{
 
 			double addY = 0;
@@ -78,7 +79,7 @@ namespace Zitulmyth
 
 					if (!charaDir)
 					{
-						if (!BlockCheck.BlockCheckLeft(pos.X - bps.X, pos.Y, speed) &&
+						if (!BlockCheck.BlockCheckLeft(pos.X - bps.X, pos.Y,(int)size.Y, speed) &&
 							pos.X - bps.X > 0)
 						{
 							pos.X -= bps.X;
@@ -87,14 +88,14 @@ namespace Zitulmyth
 					}
 					else
 					{
-						if (!BlockCheck.BlockCheckRight(pos.X + bps.X, pos.Y, speed) &&
-							pos.X + bps.X < 1024 - width * 32)
+						if (!BlockCheck.BlockCheckRight(pos.X + bps.X, pos.Y, (int)size.X, (int)size.Y, speed) &&
+							pos.X + bps.X < 1024 - (int)size.X)
 						{
 							pos.X += bps.X;
 						}
 					}
 
-					if (!BlockCheck.BlockCheckTop(pos.X, pos.Y - bps.Y,jumppower) &&
+					if (!BlockCheck.BlockCheckTop(pos.X, pos.Y - bps.Y, (int)size.X,jumppower) &&
 						pos.Y - bps.Y > 0)
 					{
 						pos.Y -= bps.Y;
@@ -125,7 +126,7 @@ namespace Zitulmyth
 
 					if (!charaDir)
 					{
-						if (!BlockCheck.BlockCheckLeft(pos.X - bps.X, pos.Y, speed) &&
+						if (!BlockCheck.BlockCheckLeft(pos.X - bps.X, pos.Y, (int)size.Y, speed) &&
 							pos.X - bps.X > 0)
 						{
 							pos.X -= bps.X;
@@ -134,15 +135,15 @@ namespace Zitulmyth
 					}
 					else
 					{
-						if (!BlockCheck.BlockCheckRight(pos.X + bps.X, pos.Y, speed) &&
-							pos.X + bps.X < 1024 - width * 32)
+						if (!BlockCheck.BlockCheckRight(pos.X + bps.X, pos.Y, (int)size.X, (int)size.Y ,speed) &&
+							pos.X + bps.X < 1024 - (int)size.X)
 						{
 							pos.X += bps.X;
 						}
 					}
 
-					if (!BlockCheck.BlockCheckBottom(pos.X, pos.Y + bps.Y + height * 32,weight) &&
-						pos.Y + bps.Y < 768 - height * 32)
+					if (!BlockCheck.BlockCheckBottom(pos.X, pos.Y + bps.Y , (int)size.X, (int)size.Y,weight) &&
+						pos.Y + bps.Y < 768 - (int)size.Y)
 					{
 						pos.Y += bps.Y;
 					}
@@ -193,12 +194,11 @@ namespace Zitulmyth
 				StageEditorOperator.lstObjectDataConvert.Add(new EditorObjectDataListConvert {
 					objectName = stageEditorData.objectName[i],
 					objectPosition = stageEditorData.objectPosition[i],
-					objectWidth = stageEditorData.objectWidth[i],
-					objectHeight = stageEditorData.objectHeight[i],
+					objectSize = stageEditorData.objectSize[i],
 					objectZindex = stageEditorData.objectZindex[i],
-					objectTriggerAction = stageEditorData.objectTriggerAction[i],
-					objectTriggerTarget = stageEditorData.objectTriggerTarget[i],
-					objectTriggerType = stageEditorData.objectTriggerType[i],
+					objectToggleSwitch = stageEditorData.objectToggleSwitch[i],
+					objectTargetType = stageEditorData.objectTargetType[i],
+					objectTargetId = stageEditorData.objectTalkID[i],
 					objectTalkID = stageEditorData.objectTalkID[i],
 				});
 			}
@@ -214,26 +214,24 @@ namespace Zitulmyth
 		
 			int arynum = StageEditorOperator.lstObjectDataConvert.Count;
 
-			stageEditorData.objectName = new ObjectName[arynum];
+			stageEditorData.objectName = new string[arynum];
 			stageEditorData.objectPosition = new Vector[arynum];
-			stageEditorData.objectWidth = new int[arynum];
-			stageEditorData.objectHeight = new int[arynum];
+			stageEditorData.objectSize = new Vector[arynum];
 			stageEditorData.objectZindex = new int[arynum];
-			stageEditorData.objectTriggerAction = new bool[arynum];
-			stageEditorData.objectTriggerTarget = new ObjectName[arynum];
-			stageEditorData.objectTriggerType = new bool[arynum];
+			stageEditorData.objectToggleSwitch = new bool[arynum];
+			stageEditorData.objectTargetType = new TargetType[arynum];
+			stageEditorData.objectTargetId = new int[arynum];
 			stageEditorData.objectTalkID = new int[arynum];
 
 			for (int i = 0; i < stageEditorData.objectName.Length; i++)
 			{
 				stageEditorData.objectName[i] = StageEditorOperator.lstObjectDataConvert[i].objectName;
 				stageEditorData.objectPosition[i] = StageEditorOperator.lstObjectDataConvert[i].objectPosition;
-				stageEditorData.objectWidth[i] = StageEditorOperator.lstObjectDataConvert[i].objectWidth;
-				stageEditorData.objectHeight[i] = StageEditorOperator.lstObjectDataConvert[i].objectHeight;
+				stageEditorData.objectSize[i] = StageEditorOperator.lstObjectDataConvert[i].objectSize;
 				stageEditorData.objectZindex[i] = StageEditorOperator.lstObjectDataConvert[i].objectZindex;
-				stageEditorData.objectTriggerAction[i] = StageEditorOperator.lstObjectDataConvert[i].objectTriggerAction;
-				stageEditorData.objectTriggerTarget[i] = StageEditorOperator.lstObjectDataConvert[i].objectTriggerTarget;
-				stageEditorData.objectTriggerType[i] = StageEditorOperator.lstObjectDataConvert[i].objectTriggerType;
+				stageEditorData.objectToggleSwitch[i] = StageEditorOperator.lstObjectDataConvert[i].objectToggleSwitch;
+				stageEditorData.objectTargetType[i] = StageEditorOperator.lstObjectDataConvert[i].objectTargetType;
+				stageEditorData.objectTargetId[i] = StageEditorOperator.lstObjectDataConvert[i].objectTargetId;
 				stageEditorData.objectTalkID[i] = StageEditorOperator.lstObjectDataConvert[i].objectTalkID;
 			}
 
@@ -313,6 +311,18 @@ namespace Zitulmyth
 				stageEditorData.itemPosition[i] = StageEditorOperator.lstItemDataConvert[i].itemPosition;
 			}
 
+		}
+
+		public static bool IsNumeric(string stTarget)
+		{
+			double dNullable;
+
+			return double.TryParse(
+				stTarget,
+				System.Globalization.NumberStyles.Any,
+				null,
+				out dNullable
+			);
 		}
 	}
 }

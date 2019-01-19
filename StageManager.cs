@@ -68,12 +68,11 @@ namespace Zitulmyth
 
 			for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 			{
-
 				var _imgObject = new Image
 				{
-					Source = ObjectChecker.lstObject[i].cbSource,
-					Width = ObjectChecker.lstObject[i].width * 32,
-					Height = ObjectChecker.lstObject[i].height * 32,
+					Source = ImageData.ImageSourceSelector(CategoryName.Object,ObjectChecker.lstObject[i].objName),
+					Width = ObjectChecker.lstObject[i].size.X,
+					Height = ObjectChecker.lstObject[i].size.Y,
 					Stretch = Stretch.Fill,
 				};
 

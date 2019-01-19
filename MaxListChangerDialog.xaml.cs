@@ -108,13 +108,27 @@ namespace Zitulmyth
 								}
 								else
 								{
-									dbo.Add(new DatabaseObject { name = "", sprite = "" });
+									dbo.Add(new DatabaseObject {
+										name = "",
+										spriteA = "", spriteB = "",
+										size = new Vector(32,32),
+										attribute = ObjectAttribute.DisplayOnly,
+										destructable = false, durability = 0,
+										switchingTimer = false, targetTime = 0,
+										damaging = false, damagevalue = 0,
+										underwater = false, slide = false, operable = false,
+										automove = false, autoMoveRangeX = 0, autoMoveRangeY = 0, autoMoveSpeed = 0,
+										triggerAction = false, triggerType = false,
+										influenceSpeed = 0, influenceJump = 0, influenceFall = 0 });
 								}
 
 							}
 
 							MainWindow.databaseWindow.lstViewDbObject.Clear();
 							MainWindow.databaseWindow.lstViewDbObject = dbo;
+
+							MainWindow.databaseWindow.ListBoxObjectUpdate();
+
 							break;
 
 						case 4://item

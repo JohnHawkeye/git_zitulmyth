@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using Zitulmyth.Data;
 
 namespace Zitulmyth
 {
@@ -46,7 +47,7 @@ namespace Zitulmyth
 		public int croppingIndex = 0;
 		public bool isNewPattern = false;
 		private int namingNum = 0;
-		private string namingStr = "新規パターン";
+		private string namingStr = "新規パターン(0)";
 
 		public List<Image> previewImage = new List<Image>();
 		public BitmapImage bmiPreviewCloseButton;
@@ -552,10 +553,11 @@ namespace Zitulmyth
 
 				for (int i = 0; i < ChildSelector().Count; i++)
 				{
-					if (namingStr == ChildSelector()[i].patternName)
+					if ("新規パターン(" + namingNum + ")" == ChildSelector()[i].patternName)
 					{
-						namingStr = "新規パターン(" + namingNum + ")";
 						namingNum++;
+						namingStr = "新規パターン(" + namingNum + ")";
+						
 						break;
 					}
 
@@ -609,6 +611,51 @@ namespace Zitulmyth
 		private void btnClose_Click(object sender, RoutedEventArgs e)
 		{
 			this.Close();
+		}
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			ImageData.SpriteReading();
+		}
+
+		private void btnDuplicate_Click(object sender, RoutedEventArgs e)
+		{
+
+			if (trvCategory.Items.IndexOf((TreeViewItem)trvCategory.SelectedItem) > -1)
+			{
+				TreeViewItem item = (TreeViewItem)trvCategory.SelectedItem;
+				parentName = item.Header.ToString();
+
+
+				for (int i = 0; i < ChildSelector().Count; i++)
+				{
+					if (namingStr == ChildSelector()[i].patternName)
+					{
+						namingNum++;
+						namingStr = "複製パターン(" + namingNum + ")";
+						
+						break;
+					}
+
+				}
+
+				int lstnum = ChildSelector().Count;
+				ImagePattern tempPattern = new ImagePattern();
+
+				if(lstnum >= 1)
+				{
+					tempPattern = ChildSelector()[lstnum-1];
+				}
+
+				ChildSelector().Add(new ImagePattern { patternName = namingStr, fileName = tempPattern.fileName,cropRange= new List<Int32Rect>( tempPattern.cropRange) });
+
+				TreeViewItem newItem = new TreeViewItem();
+				newItem.Header = ChildSelector()[ChildSelector().Count - 1].patternName;
+				ParentSelector().Items.Add(newItem);
+
+				PatternDataWrite();
+
+			}
 		}
 	}
 }

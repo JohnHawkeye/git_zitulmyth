@@ -33,32 +33,28 @@ namespace Zitulmyth
 
 		[DataMember]
 		public string scenemyName;
-
 		[DataMember]
 		public List<StageClearCondition> lstEditClearCondition = new List<StageClearCondition>();
-
 		[DataMember]
 		public bool editRespqwnEnemy;
 
 		[DataMember]
-		public BlockType[] editIndicateStage = new BlockType[768];
+		public int[] editIndicateStage = new int[768];
 
 		[DataMember]
-		public ObjectName[] objectName;
+		public string[] objectName;
 		[DataMember]
 		public Vector[] objectPosition;
 		[DataMember]
-		public int[] objectWidth;
-		[DataMember]
-		public int[] objectHeight;
+		public Vector[] objectSize;
 		[DataMember]
 		public int[] objectZindex;
 		[DataMember]
-		public bool[] objectTriggerAction;
+		public bool[] objectToggleSwitch;
 		[DataMember]
-		public ObjectName[] objectTriggerTarget;
+		public TargetType[] objectTargetType;
 		[DataMember]
-		public bool[] objectTriggerType;
+		public int[] objectTargetId;
 		[DataMember]
 		public int[] objectTalkID;
 
@@ -96,26 +92,15 @@ namespace Zitulmyth
 		private List<string> lstSceneryName;
 
 		private string[] strClearConditionName;
-		private string[] strObjectName;
-
+		private string[] strTargetType;
+		
 		public StageEditorWindow()
 		{
 			InitializeComponent();
 
 		}
 
-		private void StageEditorWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			if (!MainWindow.closeMainWindow)
-			{
-				e.Cancel = true;
-				this.Visibility = Visibility.Hidden;
-			}
-			else
-			{
-				e.Cancel = false;
-			}
-		}
+		
 
 		private void tbcEditSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
@@ -158,18 +143,17 @@ namespace Zitulmyth
 			{
 				for (int j = 0; j < 32; j++)
 				{
-					sed.editIndicateStage[i * 32 + j] = BlockType.None;
+					sed.editIndicateStage[i * 32 + j] = 0;
 				}
 			}
 
-			sed.objectName = new ObjectName[] { };
+			sed.objectName = new string[] { };
 			sed.objectPosition = new Vector[] { };
-			sed.objectWidth = new int[] { };
-			sed.objectHeight = new int[] { };
+			sed.objectSize = new Vector[] { };
 			sed.objectZindex = new int[] { };
-			sed.objectTriggerAction = new bool[] { };
-			sed.objectTriggerTarget = new ObjectName[] { };
-			sed.objectTriggerType = new bool[] { };
+			sed.objectToggleSwitch = new bool[] { };
+			sed.objectTargetType = new TargetType[] { };
+			sed.objectTargetId = new int[] { };
 			sed.objectTalkID = new int[] { };
 
 			sed.enemyName = new EnemyName[] { };
@@ -242,8 +226,8 @@ namespace Zitulmyth
 			ctlListViewItem = lsvItemList;
 
 			strClearConditionName = Enum.GetNames(typeof(StageClearConditionName));
-			strObjectName = Enum.GetNames(typeof(ObjectName));
-
+			strTargetType = Enum.GetNames(typeof(TargetType));
+			
 			lstSceneryName = ImageData.PatternNameListCreating(CategoryName.Scenery);
 			cmbSceneryName.ItemsSource = lstSceneryName;
 
@@ -295,26 +279,24 @@ namespace Zitulmyth
 				}
 			}
 
-			stageEditorData.objectName = new ObjectName[ObjectChecker.lstObject.Count];
+			stageEditorData.objectName = new string[ObjectChecker.lstObject.Count];
 			stageEditorData.objectPosition = new Vector[ObjectChecker.lstObject.Count];
-			stageEditorData.objectWidth = new int[ObjectChecker.lstObject.Count];
-			stageEditorData.objectHeight = new int[ObjectChecker.lstObject.Count];
+			stageEditorData.objectSize = new Vector[ObjectChecker.lstObject.Count];
 			stageEditorData.objectZindex = new int[ObjectChecker.lstObject.Count];
-			stageEditorData.objectTriggerAction = new bool[ObjectChecker.lstObject.Count];
-			stageEditorData.objectTriggerTarget = new ObjectName[ObjectChecker.lstObject.Count];
-			stageEditorData.objectTriggerType = new bool[ObjectChecker.lstObject.Count];
+			stageEditorData.objectToggleSwitch = new bool[ObjectChecker.lstObject.Count];
+			stageEditorData.objectTargetType = new TargetType[ObjectChecker.lstObject.Count];
+			stageEditorData.objectTargetId = new int[ObjectChecker.lstObject.Count];
 			stageEditorData.objectTalkID = new int[ObjectChecker.lstObject.Count];
 
 			for (int i = 0; i < ObjectChecker.lstObject.Count; i++)
 			{
 				stageEditorData.objectName[i] = ObjectChecker.lstObject[i].objName;
 				stageEditorData.objectPosition[i] = ObjectChecker.lstObject[i].position;
-				stageEditorData.objectWidth[i] = ObjectChecker.lstObject[i].width;
-				stageEditorData.objectHeight[i] = ObjectChecker.lstObject[i].height;
+				stageEditorData.objectSize[i] = ObjectChecker.lstObject[i].size;
 				stageEditorData.objectZindex[i] = ObjectChecker.lstObject[i].zindex;
-				stageEditorData.objectTriggerAction[i] = ObjectChecker.lstObject[i].triggerAction;
-				stageEditorData.objectTriggerTarget[i] = ObjectChecker.lstObject[i].triggerTarget;
-				stageEditorData.objectTriggerType[i] = ObjectChecker.lstObject[i].triggerType;
+				stageEditorData.objectToggleSwitch[i] = ObjectChecker.lstObject[i].toggleSwitch;
+				stageEditorData.objectTargetType[i] = ObjectChecker.lstObject[i].targetType;
+				stageEditorData.objectTargetId[i] = ObjectChecker.lstObject[i].targetId;
 				stageEditorData.objectTalkID[i] = ObjectChecker.lstObject[i].talkID;
 			}
 
@@ -392,16 +374,15 @@ namespace Zitulmyth
 		{
 			for(int i= 0; i < lstEditorBlockPalette.Count; i++)
 			{
-				if(lstEditorBlockPalette[i].type == BlockType.None)
-				{;
-
+				if(i == 0)
+				{
 					Canvas.SetLeft(imgPaletteCursor[0], Canvas.GetLeft(lstEditorBlockPalette[i].image));
 					Canvas.SetTop(imgPaletteCursor[0], Canvas.GetTop(lstEditorBlockPalette[i].image));
 					break;
 				}
 			}
 
-			blockPaletteSelected = BlockType.None;
+			blockPaletteSelected = 0;
 
 		}
 
@@ -498,6 +479,8 @@ namespace Zitulmyth
 
 			if (row >= 0)
 			{
+				grbObjectOption.IsEnabled = true;
+
 				if(stageEditorData.objectZindex[row] == 5)
 				{
 					rdbZindexBack.IsChecked = true;
@@ -507,13 +490,15 @@ namespace Zitulmyth
 					rdbZindexFront.IsChecked = true;	//11
 				}
 
-				cmbObjectTargetName.ItemsSource = strObjectName;
-				cmbObjectTargetName.SelectedItem = stageEditorData.objectTriggerTarget[row].ToString();
+				cmbObjectTargetType.ItemsSource = strTargetType;
+				cmbObjectTargetType.SelectedItem = stageEditorData.objectTargetType[row].ToString();
 
-				ckbAction.IsChecked = (bool)stageEditorData.objectTriggerAction[row];
-				ckbTriggerType.IsChecked = (bool)stageEditorData.objectTriggerType[row];
 				txbObjectTalkID.Text = stageEditorData.objectTalkID[row].ToString();
-				
+
+			}
+			else
+			{
+				grbObjectOption.IsEnabled = false;
 			}
 		}
 
@@ -537,11 +522,9 @@ namespace Zitulmyth
 					stageEditorData.objectZindex[row] = 11;
 				}
 
-				stageEditorData.objectTriggerTarget[row] =
-					(ObjectName)Enum.Parse(typeof(ObjectName), cmbObjectTargetName.SelectedItem.ToString());
+				stageEditorData.objectTargetType[row] =
+					(TargetType)Enum.Parse(typeof(TargetType), cmbObjectTargetType.SelectedItem.ToString());
 
-				stageEditorData.objectTriggerAction[row] = (bool)ckbAction.IsChecked;
-				stageEditorData.objectTriggerType[row] = (bool)ckbTriggerType.IsChecked;
 				stageEditorData.objectTalkID[row] = int.Parse(txbObjectTalkID.Text);
 
 				ListViewObjectDataUpdate();
@@ -572,6 +555,15 @@ namespace Zitulmyth
 		{
 			stageOrderWindow = new StageOrderWindow();
 			stageOrderWindow.ShowDialog();
+		}
+
+		private void StageEditorWindow1_Closed(object sender, EventArgs e)
+		{
+			EditorImagesRemove();
+			MainWindow.isOpenStageEditorWindow = false;
+			MainWindow.ctlDatabaseButton.IsEnabled = true;
+			MainWindow.ctlImageButton.IsEnabled = true;
+			MainWindow.ctlMaterialButton.IsEnabled = true;
 		}
 	}
 }

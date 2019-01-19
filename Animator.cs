@@ -59,8 +59,6 @@ namespace Zitulmyth
 		private static List<CroppedBitmap> cbDataCoin = new List<CroppedBitmap>();
 		private static List<CroppedBitmap> cbDataBoarMeat = new List<CroppedBitmap>();
 
-		private static List<CroppedBitmap> cbDataFireCamp = new List<CroppedBitmap>();
-
 		public static void CBDataSettings()
 		{
 
@@ -93,7 +91,6 @@ namespace Zitulmyth
 			cbDataCoin = AnimationSourceSelector(CategoryName.Item, "Coin");
 			cbDataBoarMeat = AnimationSourceSelector(CategoryName.Item, "BoarMeat");
 
-			cbDataFireCamp = AnimationSourceSelector(CategoryName.Object, "FireCamp");
 		}
 
 		public static void AnimationEnemy()
@@ -303,16 +300,7 @@ namespace Zitulmyth
 				List<CroppedBitmap> animationCells = new List<CroppedBitmap>();
 				bool noAnim = false;
 
-				switch (ObjectChecker.lstObject[i].objName)
-				{
-					case ObjectName.Obj_CampFire:
-						animationCells = cbDataFireCamp;
-						break;
-
-					default:
-						noAnim = true;
-						break;
-				}
+				animationCells = AnimationSourceSelector(CategoryName.Object, ObjectChecker.lstObject[i].objName);
 
 				if (!noAnim)
 				{

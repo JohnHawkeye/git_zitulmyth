@@ -35,12 +35,11 @@ namespace Zitulmyth
 		public int id { get; set; }
 		public string objectName { get; set; }
 		public Vector objectPosition { get; set; }
-		public int objectWidth { get; set; }
-		public int objectHeight { get; set; }
+		public Vector objectSize { get; set; }
 		public int objectZindex { get; set; }
-		public bool objectTriggerAction { get; set; }
-		public string objectTriggerTarget { get; set; }
-		public bool objectTriggerType { get; set; }
+		public bool objectToggleSwitch { get; set; }
+		public TargetType objectTargetType { get; set; }
+		public int objectTargetId { get; set; }
 		public int objectTalkID { get; set; }
 	}
 	public class EditorListViewEnemyData
@@ -61,14 +60,13 @@ namespace Zitulmyth
 	//convert only
 	public class EditorObjectDataListConvert
 	{
-		public ObjectName objectName;
+		public string objectName;
 		public Vector objectPosition;
-		public int objectWidth;
-		public int objectHeight;
+		public Vector objectSize;
 		public int objectZindex;
-		public bool objectTriggerAction;
-		public ObjectName objectTriggerTarget;
-		public bool objectTriggerType;
+		public bool objectToggleSwitch;
+		public TargetType objectTargetType;
+		public int objectTargetId;
 		public int objectTalkID;
 	}
 
@@ -89,7 +87,6 @@ namespace Zitulmyth
 	//palette
 	public class EditorBlockPalette
 	{
-		public BlockType type;
 		public Rectangle rectangle;
 		public Image image;
 		public Label label;
@@ -97,7 +94,6 @@ namespace Zitulmyth
 
 	public class EditorObjectPalette
 	{
-		public ObjectName type;
 		public Rectangle rectangle;
 		public Image image;
 		public Label label;
@@ -145,8 +141,8 @@ namespace Zitulmyth
 
 		public static Vector memoryPlayerStartPos;
 
-		public static BlockType blockPaletteSelected = BlockType.None;
-		public static ObjectName objectPaletteSelected = ObjectName.Empty_Collider;
+		public static int blockPaletteSelected = 0;
+		public static int objectPaletteSelected = 0;
 		public static EnemyName enemyPaletteSelected = EnemyName.Zigitu01;
 		public static ItemName itemPaletteSelected = ItemName.Apple;
 
@@ -180,6 +176,17 @@ namespace Zitulmyth
 			Canvas.SetZIndex(imgPaletteCursor[3], ImageZindex.debugview);
 
 		}
+
+		public static void EditorImagesRemove()
+		{
+			MainWindow.mainCanvas.Children.Remove(imgEditorPlayer);
+			MainWindow.mainCanvas.Children.Remove(imgEditorPointerCursor);
+
+			ctlCanvasBlockPalette.Children.Clear();
+			ctlCanvasEnemyPalette.Children.Clear();
+			ctlCanvasObjectPalette.Children.Clear();
+			ctlCanvasItemPalette.Children.Clear();
+		}
 		
 		public static void EditorPlayerStartPosDecision()
 		{
@@ -207,64 +214,34 @@ namespace Zitulmyth
 
 		public static void EditorBlockPaletteSetting()
 		{
-			var blockEnum = Enum.GetValues(typeof(BlockType)).Cast<BlockType>().ToList();
 			int size = 32;
-			Vector setpos = new Vector(20, 20);
+			int arrangedLength = 0;
+			int col = 0;
+			int marginLeft = 20,marginTop = 20;
 
-			for(int i = 0; i < blockEnum.Count; i++)
+			Vector setpos = new Vector(0, 0);
+
+			for(int i = 0; i < StageData.lstDbBlock.Count; i++)
 			{
-				lstEditorBlockPalette.Add(new EditorBlockPalette {
-					type = blockEnum[i], image = new Image(), rectangle = new Rectangle(),label = new Label()});
+				lstEditorBlockPalette.Add(new EditorBlockPalette { image = new Image(), rectangle = new Rectangle(), label = new Label() });
+				lstEditorBlockPalette[i].image.Tag = i;
 
-				lstEditorBlockPalette[i].image.Name = lstEditorBlockPalette[i].type.ToString();
-
-				switch (blockEnum[i])
-				{
-					case BlockType.GreenGround:
-						lstEditorBlockPalette[i].image.Source =
-							ImageData.ImageSourceSelector(CategoryName.Block, "GreenGround");
-						lstEditorBlockPalette[i].label.Content = "草の地面";
-						break;
-					case BlockType.InvisibleBlock:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbInvisibleBlock;
-						lstEditorBlockPalette[i].label.Content = "透明ブロック";
-						break;
-					case BlockType.InvisiblePlat:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbInvisiblePlat;
-						lstEditorBlockPalette[i].label.Content = "透明プラット";
-						break;
-					case BlockType.LadderBottom:
-						lstEditorBlockPalette[i].image.Source =
-							ImageData.ImageSourceSelector(CategoryName.Block, "LadderBtm");
-						lstEditorBlockPalette[i].label.Content = "はしご下";
-						break;
-					case BlockType.LadderMid:
-						lstEditorBlockPalette[i].image.Source =
-							ImageData.ImageSourceSelector(CategoryName.Block, "LadderMid");
-						lstEditorBlockPalette[i].label.Content = "はしご中";
-						break;
-					case BlockType.LadderTop:
-						lstEditorBlockPalette[i].image.Source =
-							ImageData.ImageSourceSelector(CategoryName.Block, "LadderTop");
-						lstEditorBlockPalette[i].label.Content = "はしご上";
-						break;
-					case BlockType.None:
-						lstEditorBlockPalette[i].image.Source = ImageData.cbEmpty;
-						lstEditorBlockPalette[i].label.Content = "なし";
-						break;
-					case BlockType.WoodPlatform:
-						lstEditorBlockPalette[i].image.Source = 
-							ImageData.ImageSourceSelector(CategoryName.Block, "WoodPlat");
-						lstEditorBlockPalette[i].label.Content = "木のプラット";
-						break;
-				}
+				lstEditorBlockPalette[i].image.Source =	ImageData.ImageSourceSelector(CategoryName.Block, StageData.lstDbBlock[i].sprite);
+				lstEditorBlockPalette[i].label.Content = StageData.lstDbBlock[i].name;
 
 				lstEditorBlockPalette[i].image.Width = size;
 				lstEditorBlockPalette[i].image.Height = size;
 
+				if(arrangedLength + col * marginLeft >= 400)
+				{
+					arrangedLength = 0;
+					marginTop += 64;
+					col = 0;
+				}
+
 				ctlCanvasBlockPalette.Children.Add(lstEditorBlockPalette[i].image);
-				Canvas.SetLeft(lstEditorBlockPalette[i].image, setpos.X+64*i);
-				Canvas.SetTop(lstEditorBlockPalette[i].image, setpos.Y);
+				Canvas.SetLeft(lstEditorBlockPalette[i].image, marginLeft + setpos.X + col * size + arrangedLength);
+				Canvas.SetTop(lstEditorBlockPalette[i].image, marginTop + setpos.Y);
 
 				lstEditorBlockPalette[i].rectangle.Width = size;
 				lstEditorBlockPalette[i].rectangle.Height = size;
@@ -272,21 +249,25 @@ namespace Zitulmyth
 
 				lstEditorBlockPalette[i].rectangle.Stroke = Brushes.Black;
 				ctlCanvasBlockPalette.Children.Add(lstEditorBlockPalette[i].rectangle);
-				Canvas.SetLeft(lstEditorBlockPalette[i].rectangle, setpos.X + 64 * i);
-				Canvas.SetTop(lstEditorBlockPalette[i].rectangle, setpos.Y);
+				Canvas.SetLeft(lstEditorBlockPalette[i].rectangle, marginLeft + setpos.X + col * size + arrangedLength);
+				Canvas.SetTop(lstEditorBlockPalette[i].rectangle, marginTop + setpos.Y);
 
 				lstEditorBlockPalette[i].label.HorizontalAlignment = HorizontalAlignment.Left;
 				ctlCanvasBlockPalette.Children.Add(lstEditorBlockPalette[i].label);
-				Canvas.SetLeft(lstEditorBlockPalette[i].label, setpos.X + 64 * i);
-				Canvas.SetTop(lstEditorBlockPalette[i].label, setpos.Y+size);
+				Canvas.SetLeft(lstEditorBlockPalette[i].label, marginLeft + setpos.X+ col * size + arrangedLength);
+				Canvas.SetTop(lstEditorBlockPalette[i].label, marginTop + setpos.Y+size);
 
 				lstEditorBlockPalette[i].image.MouseLeftButtonDown += new MouseButtonEventHandler(BlockPaletteClick);
 				
-				if(blockEnum[i] == BlockType.None)
+				if(i == 0)
 				{
 					Canvas.SetLeft(imgPaletteCursor[0],Canvas.GetLeft(lstEditorBlockPalette[i].image));
 					Canvas.SetTop(imgPaletteCursor[0], Canvas.GetTop(lstEditorBlockPalette[i].image));
 				}
+
+				arrangedLength += size;
+				col++;
+
 			}
 
 		}
@@ -294,90 +275,40 @@ namespace Zitulmyth
 
 		public static void EditorObjectPaletteSetting()
 		{
-			var objEnum = Enum.GetValues(typeof(ObjectName)).Cast<ObjectName>().ToList();
 
-			Vector setpos = new Vector(20, 20);
+			Vector setpos = new Vector(0, 0);
 			Vector size = new Vector(32,32);
-			int colcount = 0;
-			int rowcount = 0;
+			int arrangedLength = 0;
+			int col = 0 ,row = 0;
+			int marginLeft = 20, marginTop = 20;
 
-			for (int i = 0; i < objEnum.Count; i++)
+			for (int i = 0; i < StageData.lstDbObject.Count; i++)
 			{
-				lstEditorObjectPalette.Add(new EditorObjectPalette
-				{
-					type = objEnum[i],
+				lstEditorObjectPalette.Add(new EditorObjectPalette{
 					image = new Image(),
 					rectangle = new Rectangle(),
 					label = new Label()
 				});
 
-				lstEditorObjectPalette[i].image.Name = lstEditorObjectPalette[i].type.ToString();
+				lstEditorObjectPalette[i].image.Tag = i;
 
-				switch (objEnum[i])
-				{
-					case ObjectName.Empty_Collider:
-						lstEditorObjectPalette[i].image.Source = ImageData.cbDebug[0];
-						lstEditorObjectPalette[i].image.Stretch = Stretch.Fill;
-						lstEditorObjectPalette[i].label.Content = "トリガーエリア";
-						break;
-					case ObjectName.Npc_Ilsona:
-						lstEditorObjectPalette[i].image.Source = 
-							ImageData.ImageSourceSelector(CategoryName.Npc, "IrusonaIdleR");
-						lstEditorObjectPalette[i].label.Content = "イルソナ";
-
-						size = new Vector(64, 64);
-						break;
-					case ObjectName.Npc_Opsa:
-						lstEditorObjectPalette[i].image.Source = 
-							ImageData.ImageSourceSelector(CategoryName.Npc, "OpsaIdleR");
-						lstEditorObjectPalette[i].label.Content = "オプサ";
-						size = new Vector(32, 64);
-						break;
-					case ObjectName.Npc_Yeeda:
-						lstEditorObjectPalette[i].image.Source = 
-							ImageData.ImageSourceSelector(CategoryName.Npc, "YeedaIdleR");
-						lstEditorObjectPalette[i].label.Content = "イェーダ";
-						size = new Vector(32, 64);
-						break;
-					case ObjectName.Obj_CampFire:
-						lstEditorObjectPalette[i].image.Source = 
-							ImageData.ImageSourceSelector(CategoryName.Object, "FireCamp");
-						lstEditorObjectPalette[i].label.Content = "たきび";
-						size = new Vector(96, 64);
-						break;
-					case ObjectName.Obj_Chair:
-						lstEditorObjectPalette[i].image.Source =
-							ImageData.ImageSourceSelector(CategoryName.Object, "chair");
-						lstEditorObjectPalette[i].label.Content = "いす";
-						size = new Vector(32, 64);
-						break;
-					case ObjectName.Obj_Huton:
-						lstEditorObjectPalette[i].image.Source =
-							ImageData.ImageSourceSelector(CategoryName.Object, "huton");
-						lstEditorObjectPalette[i].label.Content = "ふとん";
-						size = new Vector(64, 32);
-						break;
-					case ObjectName.Obj_Table:
-						lstEditorObjectPalette[i].image.Source = 
-							ImageData.ImageSourceSelector(CategoryName.Object, "table");
-						lstEditorObjectPalette[i].label.Content = "テーブル";
-						size = new Vector(64, 32);
-						break;
-				}
-
-				if (setpos.X + size.X * colcount+64 >= ctlCanvasObjectPalette.Width)
-				{
-					colcount = 0;
-					rowcount++;
-
-				}
-
+				lstEditorObjectPalette[i].image.Source = ImageData.ImageSourceSelector(CategoryName.Object, StageData.lstDbObject[i].spriteA);
+				lstEditorObjectPalette[i].label.Content = StageData.lstDbObject[i].name;
+				size = StageData.lstDbObject[i].size;
 				lstEditorObjectPalette[i].image.Width = size.X;
 				lstEditorObjectPalette[i].image.Height = size.Y;
 
+				if (arrangedLength + col * marginLeft >= 400)
+				{
+					arrangedLength = 0;
+					marginTop += 64;
+					col = 0;
+					row++;
+				}
+
 				ctlCanvasObjectPalette.Children.Add(lstEditorObjectPalette[i].image);
-				Canvas.SetLeft(lstEditorObjectPalette[i].image, setpos.X + colcount * size.X);
-				Canvas.SetTop(lstEditorObjectPalette[i].image, setpos.Y + rowcount * size.Y);
+				Canvas.SetLeft(lstEditorObjectPalette[i].image, marginLeft + setpos.X + col * 32 + arrangedLength);
+				Canvas.SetTop(lstEditorObjectPalette[i].image, marginTop + setpos.Y + row * 32);
 
 				lstEditorObjectPalette[i].rectangle.Width = size.X;
 				lstEditorObjectPalette[i].rectangle.Height = size.Y;
@@ -385,17 +316,19 @@ namespace Zitulmyth
 
 				lstEditorObjectPalette[i].rectangle.Stroke = Brushes.Black;
 				ctlCanvasObjectPalette.Children.Add(lstEditorObjectPalette[i].rectangle);
-				Canvas.SetLeft(lstEditorObjectPalette[i].rectangle, setpos.X + colcount * size.X);
-				Canvas.SetTop(lstEditorObjectPalette[i].rectangle, setpos.Y + rowcount * size.Y);
+				Canvas.SetLeft(lstEditorObjectPalette[i].rectangle, marginLeft + setpos.X + col * 32 + arrangedLength);
+				Canvas.SetTop(lstEditorObjectPalette[i].rectangle, marginTop + setpos.Y + row * 32);
 
 				lstEditorObjectPalette[i].label.HorizontalAlignment = HorizontalAlignment.Left;
 				ctlCanvasObjectPalette.Children.Add(lstEditorObjectPalette[i].label);
-				Canvas.SetLeft(lstEditorObjectPalette[i].label, setpos.X + colcount * size.X);
-				Canvas.SetTop(lstEditorObjectPalette[i].label, setpos.Y+size.Y + rowcount * size.Y);
+				Canvas.SetLeft(lstEditorObjectPalette[i].label, marginLeft + setpos.X + col * 32 + arrangedLength);
+				Canvas.SetTop(lstEditorObjectPalette[i].label, marginTop + setpos.Y + row * 32 + size.Y);
 
 				lstEditorObjectPalette[i].image.MouseLeftButtonDown += new MouseButtonEventHandler(ObjectPaletteClick);
 
-				colcount++;
+				arrangedLength += (int)size.X;
+				col++;
+
 			}
 
 		}
@@ -569,7 +502,7 @@ namespace Zitulmyth
 		
 			Vector pos = VisualTreeHelper.GetOffset((Image)sender);
 
-			blockPaletteSelected = (BlockType)Enum.Parse(typeof(BlockType),((Image)sender).Name);
+			blockPaletteSelected = (int)((Image)sender).Tag;
 	
 			Canvas.SetLeft(imgPaletteCursor[0],pos.X); Canvas.SetTop(imgPaletteCursor[0], pos.Y);
 
@@ -585,13 +518,14 @@ namespace Zitulmyth
 
 			Vector pos = VisualTreeHelper.GetOffset((Image)sender);
 
-			objectPaletteSelected = (ObjectName)Enum.Parse(typeof(ObjectName), ((Image)sender).Name);
+			objectPaletteSelected = (int)((Image)sender).Tag;
 
 			Canvas.SetLeft(imgPaletteCursor[1], pos.X); Canvas.SetTop(imgPaletteCursor[1], pos.Y);
 
 			imgEditorPointerCursor.Source = (sender as Image).Source;
 			imgEditorPointerCursor.Width = (sender as Image).Width;
 			imgEditorPointerCursor.Height = (sender as Image).Height;
+			imgEditorPointerCursor.Stretch = Stretch.Fill;
 
 			paletteMode = PaletteMode.Object;
 		}
@@ -638,50 +572,23 @@ namespace Zitulmyth
 			Image _image = new Image();
 			
 
-			if(stageEditorData.editIndicateStage[index] == BlockType.None)
+			if(stageEditorData.editIndicateStage[index] == 0)
 			{
 				stageEditorData.editIndicateStage[index] = blockPaletteSelected;
 
-				switch (stageEditorData.editIndicateStage[index])
+				string spritename = StageData.lstDbBlock[blockPaletteSelected].sprite;
+
+				_image = new Image
 				{
-					case BlockType.GreenGround:
-						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "GreenGround"),
-												Width = 32, Height = 32, };
-						break;
-
-					case BlockType.WoodPlatform:
-						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "WoodPlat"),
-												Width = 32, Height = 32, };
-						break;
-
-					case BlockType.LadderTop:
-						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderTop"),
-												Width = 32, Height = 32, };
-						break;
-
-					case BlockType.LadderMid:
-						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderMid"),
-												Width = 32, Height = 32, };
-						break;
-
-					case BlockType.LadderBottom:
-						_image = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Block, "LadderBtm"),
-												Width = 32, Height = 32, };
-						break;
-
-					case BlockType.InvisibleBlock:
-						_image = new Image { Source = ImageData.cbInvisibleBlock, Width = 32, Height = 32, };
-						break;
-
-					case BlockType.InvisiblePlat:
-						_image = new Image { Source = ImageData.cbInvisiblePlat, Width = 32, Height = 32, };
-						break;
-				}
+					Source = ImageData.ImageSourceSelector(CategoryName.Block, spritename),
+					Width = 32,
+					Height = 32,
+				};
 
 				StageData.imgBlock[blockY, blockX] = _image;
 				StageData.indicateStage[blockY, blockX] = blockPaletteSelected;
 
-				if (stageEditorData.editIndicateStage[index] != BlockType.None)
+				if (stageEditorData.editIndicateStage[index] != 0)
 				{
 					
 					MainWindow.mainCanvas.Children.Add(StageData.imgBlock[blockY, blockX]);
@@ -690,7 +597,6 @@ namespace Zitulmyth
 					Canvas.SetZIndex(StageData.imgBlock[blockY, blockX], ImageZindex.block);
 				}
 			}
-		
 			
 		}
 
@@ -702,9 +608,9 @@ namespace Zitulmyth
 			int blockY = (int)blockpos.Y - 1;
 		
 
-			if (stageEditorData.editIndicateStage[index] != BlockType.None)
+			if (stageEditorData.editIndicateStage[index] != 0)
 			{
-				stageEditorData.editIndicateStage[index] = BlockType.None;
+				stageEditorData.editIndicateStage[index] = 0;
 				MainWindow.mainCanvas.Children.Remove(StageData.imgBlock[blockY, blockX]);
 				StageData.imgBlock[blockY, blockX] = null;
 			}
@@ -737,25 +643,30 @@ namespace Zitulmyth
 
 				int arraylength =  stageEditorData.objectName.Length - 1;
 
-				stageEditorData.objectName[arraylength] = objectPaletteSelected;
+				stageEditorData.objectName[arraylength] = StageData.lstDbObject[objectPaletteSelected].name;
 				stageEditorData.objectPosition[arraylength] = new Vector(blockX*32, blockY*32);
-				stageEditorData.objectWidth[arraylength] = (int)imgEditorPointerCursor.Width/32;
-				stageEditorData.objectHeight[arraylength] = (int)imgEditorPointerCursor.Height/32;
+
+				stageEditorData.objectSize[arraylength] = StageData.lstDbObject[objectPaletteSelected].size;
 				stageEditorData.objectZindex[arraylength] = ImageZindex.object_back;
 
-				ObjectChecker.lstObject.Add(ObjectChecker.SetObjectData(
-						stageEditorData.objectName[arraylength], stageEditorData.objectPosition[arraylength],
-						stageEditorData.objectWidth[arraylength] , stageEditorData.objectHeight[arraylength],
-						stageEditorData.objectZindex[arraylength],
-						false, stageEditorData.objectName[arraylength],false,0));
+				ObjectChecker.lstObject.Add(new ObjectData {
+					objName = stageEditorData.objectName[arraylength],
+					position = stageEditorData.objectPosition[arraylength],
+					size = stageEditorData.objectSize[arraylength],
+					zindex = stageEditorData.objectZindex[arraylength],
+					toggleSwitch = false,
+					targetType = TargetType.Player,
+					targetId = 0,
+					talkID = 0,
+				});
 
 				int lstobjeIndex = ObjectChecker.lstObject.Count - 1;
 
 				var _imgObject = new Image
 				{
-					Source = ObjectChecker.lstObject[lstobjeIndex].cbSource,
-					Width = ObjectChecker.lstObject[lstobjeIndex].width * 32,
-					Height = ObjectChecker.lstObject[lstobjeIndex].height * 32,
+					Source = ImageData.ImageSourceSelector(CategoryName.Object,StageData.lstDbObject[objectPaletteSelected].spriteA),
+					Width = ObjectChecker.lstObject[lstobjeIndex].size.X,
+					Height = ObjectChecker.lstObject[lstobjeIndex].size.Y,
 					Stretch = Stretch.Fill,
 				};
 
@@ -802,12 +713,11 @@ namespace Zitulmyth
 					id = i,
 					objectName = stageEditorData.objectName[i].ToString(),
 					objectPosition = stageEditorData.objectPosition[i],
-					objectWidth = stageEditorData.objectWidth[i],
-					objectHeight = stageEditorData.objectHeight[i],
+					objectSize = stageEditorData.objectSize[i],
 					objectZindex = stageEditorData.objectZindex[i],
-					objectTriggerAction = stageEditorData.objectTriggerAction[i],
-					objectTriggerTarget = stageEditorData.objectTriggerTarget[i].ToString(),
-					objectTriggerType = stageEditorData.objectTriggerType[i],
+					objectToggleSwitch = stageEditorData.objectToggleSwitch[i],
+					objectTargetType = stageEditorData.objectTargetType[i],
+					objectTargetId = stageEditorData.objectTargetId[i],
 					objectTalkID = stageEditorData.objectTalkID[i],
 
 				});

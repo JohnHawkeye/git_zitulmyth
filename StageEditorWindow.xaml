@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zitulmyth"
         mc:Ignorable="d"
-        Title="ステージエディタ" Height="780" Width="666" Closing="StageEditorWindow_Closing" Background="Black" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="ToolWindow" Left="1200" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="StageEditorWindow_Loaded">
+        Title="ステージエディタ" Height="780" Width="666" Background="Black" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="ToolWindow" Left="1200" HorizontalAlignment="Left" VerticalAlignment="Top" Loaded="StageEditorWindow_Loaded" Closed="StageEditorWindow1_Closed">
 	<Grid x:Name="grdMain" Margin="0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="49*"/>
@@ -82,7 +82,9 @@
 						<RowDefinition Height="319*"/>
 						<RowDefinition Height="266*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavBlockPalette" Height="240" Margin="0,32,0,0" Width="512" HorizontalAlignment="Center" VerticalAlignment="Top" Background="White" MouseRightButtonDown="cavBlockPalette_MouseRightButtonDown"/>
+					<ScrollViewer HorizontalAlignment="Left" Height="300" Margin="10,10,0,0" VerticalAlignment="Top" Width="606">
+						<Canvas x:Name="cavBlockPalette" Height="600" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Background="White" MouseRightButtonDown="cavBlockPalette_MouseRightButtonDown"/>
+					</ScrollViewer>
 				</Grid>
 			</TabItem>
 			<TabItem Header="オブジェクト">
@@ -91,24 +93,22 @@
 						<RowDefinition Height="281*"/>
 						<RowDefinition Height="304*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavObjectPalette" Height="240" Margin="57,32,57,0" Width="512" HorizontalAlignment="Center" VerticalAlignment="Top" Background="White"/>
 					<ListView x:Name="lsvObjectList" HorizontalAlignment="Left" Height="128" Margin="57,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="512" SelectionChanged="lsvObjectList_SelectionChanged">
 						<ListView.View>
 							<GridView>
 								<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=id}"/>
 								<GridViewColumn Header="名前" DisplayMemberBinding="{Binding Path=objectName}"/>
 								<GridViewColumn Header="位置" DisplayMemberBinding="{Binding Path=objectPosition}"/>
-								<GridViewColumn Header="幅" DisplayMemberBinding="{Binding Path=objectWidth}"/>
-								<GridViewColumn Header="高さ" DisplayMemberBinding="{Binding Path=objectHeight}"/>
+								<GridViewColumn Header="サイズ" DisplayMemberBinding="{Binding Path=objectSize}"/>
 								<GridViewColumn Header="順序" DisplayMemberBinding="{Binding Path=objectZindex}"/>
-								<GridViewColumn Header="アクション" DisplayMemberBinding="{Binding Path=objectTriggerAction}"/>
-								<GridViewColumn Header="ターゲット" DisplayMemberBinding="{Binding Path=objectTriggerTarget}"/>
-								<GridViewColumn Header="タイプ" DisplayMemberBinding="{Binding Path=objectTriggerType}"/>
+								<GridViewColumn Header="トグル" DisplayMemberBinding="{Binding Path=objectToggleSwitch}"/>
+								<GridViewColumn Header="ターゲット先" DisplayMemberBinding="{Binding Path=objectTargetType}"/>
+								<GridViewColumn Header="ターゲットID" DisplayMemberBinding="{Binding Path=objectTargetId}"/>
 								<GridViewColumn Header="会話ID" DisplayMemberBinding="{Binding Path=objectTalkID}"/>
 							</GridView>
 						</ListView.View>
 					</ListView>
-					<GroupBox x:Name="groupBox1" Header="オプション設定" HorizontalAlignment="Left" Height="140" Margin="57,143,0,0" Grid.Row="1" VerticalAlignment="Top" Width="512">
+					<GroupBox x:Name="grbObjectOption" Header="オプション設定" HorizontalAlignment="Left" Height="140" Margin="57,143,0,0" Grid.Row="1" VerticalAlignment="Top" Width="512" IsEnabled="False">
 						<Grid HorizontalAlignment="Left" Height="112" Margin="0,0,-2,0" VerticalAlignment="Center" Width="502">
 							<Grid.RowDefinitions>
 								<RowDefinition/>
@@ -119,14 +119,16 @@
 							<Label x:Name="label4" Content="表示順序" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="7,0,0,0" Background="White" HorizontalContentAlignment="Center"/>
 							<RadioButton x:Name="rdbZindexFront" Content="前面" HorizontalAlignment="Left" Margin="88,12,0,0" VerticalAlignment="Top" IsChecked="True"/>
 							<RadioButton x:Name="rdbZindexBack" Content="背面" HorizontalAlignment="Left" Margin="148,12,0,0" VerticalAlignment="Top" IsChecked="True"/>
-							<CheckBox x:Name="ckbAction" Content="アクションの有無" HorizontalAlignment="Left" Margin="227,0,0,0" Grid.Row="1" VerticalAlignment="Center"/>
-							<CheckBox x:Name="ckbTriggerType" Content="トリガー" HorizontalAlignment="Left" Margin="355,11,0,11" Grid.Row="1" VerticalAlignment="Center" ToolTip="オフ：触れる　オン：キー入力"/>
-							<ComboBox x:Name="cmbObjectTargetName" HorizontalAlignment="Left" Margin="88,10,0,6" Grid.Row="1" VerticalAlignment="Center" Width="121"/>
+							<ComboBox x:Name="cmbObjectTargetType" HorizontalAlignment="Left" Margin="88,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="121"/>
 							<Label x:Name="label4_Copy" Content="ターゲット" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="7,7,0,5" Background="White" Grid.Row="1" HorizontalContentAlignment="Center"/>
 							<Label x:Name="label4_Copy1" Content="会話ID" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="7,9,0,2" Background="White" Grid.Row="2" HorizontalContentAlignment="Center"/>
 							<TextBox x:Name="txbObjectTalkID" HorizontalAlignment="Left" Height="23" Margin="88,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="54" HorizontalContentAlignment="Right" PreviewTextInput="txbObjectTalkID_PreviewTextInput"/>
+							<TextBox x:Name="txbTargetID" HorizontalAlignment="Left" Height="22" Margin="214,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="64" ToolTip="ターゲットのID"/>
 						</Grid>
 					</GroupBox>
+					<ScrollViewer HorizontalAlignment="Left" Height="261" Margin="10,10,0,0" VerticalAlignment="Top" Width="606">
+						<Canvas x:Name="cavObjectPalette" Height="600" Margin="0" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Background="White"/>
+					</ScrollViewer>
 				</Grid>
 			</TabItem>
 			<TabItem Header="エネミー">

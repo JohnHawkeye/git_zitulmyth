@@ -42,14 +42,13 @@ namespace Zitulmyth
 							ref lstEnemyData[i].totalDistance,lstEnemyData[i].targetDistance,ref lstEnemyData[i].bps,
 							ref lstEnemyData[i].coefficient,ref lstEnemyData[i].boundDirection,
 							lstEnemyData[i].weight, lstEnemyData[i].speed, lstEnemyData[i].jumpPower,
-							lstEnemyData[i].widthblock, lstEnemyData[i].heightblock, ref lstEnemyData[i].isKnockBack);
+							lstEnemyData[i].pixSize, ref lstEnemyData[i].isKnockBack);
 					}
 				}
 
 				if (!lstEnemyData[i].isKnockBack) {
 					EnemyFalling(i, lstEnemyData[i].direction, lstEnemyData[i].position,
-									lstEnemyData[i].widthblock, lstEnemyData[i].heightblock,
-									lstEnemyData[i].speed, lstEnemyData[i].targetDistance);
+									lstEnemyData[i].pixSize,lstEnemyData[i].speed, lstEnemyData[i].targetDistance);
 				}
 				
 
@@ -166,8 +165,7 @@ namespace Zitulmyth
 			{
 				case EnemyName.Boar:
 					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
-										lstEnemyData[index].widthblock, lstEnemyData[index].heightblock,
-										lstEnemyData[index].speed, true);
+										lstEnemyData[index].pixSize,lstEnemyData[index].speed, true);
 
 					break;
 
@@ -184,8 +182,7 @@ namespace Zitulmyth
 			{
 				case EnemyName.Boar:
 					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
-										lstEnemyData[index].widthblock, lstEnemyData[index].heightblock,
-										lstEnemyData[index].speed * lstEnemyData[index].acceleration,false);
+										lstEnemyData[index].pixSize,lstEnemyData[index].speed * lstEnemyData[index].acceleration,false);
 					
 
 					break;
@@ -196,7 +193,7 @@ namespace Zitulmyth
 		}
 
 
-		private static void EnemyHorizontalMove(int index, bool direction,Vector pos,int blockW,int blockH,
+		private static void EnemyHorizontalMove(int index, bool direction,Vector pos,Vector size,
 			int speed,bool wait)
 		{
 
@@ -210,7 +207,7 @@ namespace Zitulmyth
 
 				if (!direction)
 				{
-					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y + blockH * 32, speed)&&
+					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y, (int)size.Y, speed)&&
 						pos.X>0)
 					{
 						if (pos.X - SystemOperator.BlockPerSecond() * speed > 0)
@@ -229,8 +226,8 @@ namespace Zitulmyth
 				else
 				{
 
-					if (!BlockCheck.BlockCheckRight(pos.X + blockW * 32, pos.Y + blockH * 32, speed)&&
-						pos.X + blockW * 32 < 1024 - lstEnemyData[index].widthblock * 32)
+					if (!BlockCheck.BlockCheckRight(pos.X, pos.Y,(int)size.X,(int)size.Y, speed)&&
+						pos.X + size.X < 1024 - lstEnemyData[index].widthblock * 32)
 					{
 
 						if (pos.X + SystemOperator.BlockPerSecond() * speed < 992)
@@ -285,10 +282,10 @@ namespace Zitulmyth
 			}
 		}
 
-		public void EnemyJumping(int index, bool direction, Vector pos, int blockW, int jumpPower, Vector target)
+		public void EnemyJumping(int index, bool direction, Vector pos, int width, int jumpPower, Vector target)
 		{
 
-			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y,jumpPower))
+			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y,width,jumpPower))
 			{
 				if (pos.Y - SystemOperator.BlockPerSecond() * jumpPower > 0)
 				{
@@ -315,13 +312,12 @@ namespace Zitulmyth
 
 		}
 
-		private static void EnemyFalling(int index, bool direction, Vector pos, int blockW,int blockH, int speed, Vector target)
+		private static void EnemyFalling(int index, bool direction, Vector pos, Vector size, int speed, Vector target)
 		{
 
-			if (!lstEnemyData[index].isLadder && !BlockCheck.BlockCheckTopLadder(pos.X, pos.Y+blockH * 32, lstEnemyData[index].weight))
+			if (!lstEnemyData[index].isLadder)
 			{
-				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y + blockH *32, lstEnemyData[index].weight)) &&
-					!BlockCheck.BlockCheckOnPlat(pos.X, pos.Y + blockH * 32, lstEnemyData[index].weight))
+				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y,(int)size.X,(int)size.Y, lstEnemyData[index].weight)))
 				{
 					
 					lstEnemyData[index].position.Y += SystemOperator.BlockPerSecond()*lstEnemyData[index].weight;

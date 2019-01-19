@@ -36,6 +36,9 @@ namespace Zitulmyth
 		//Controls
 
 		public static bool closeMainWindow = false;
+		public static Button ctlImageButton;
+		public static Button ctlMaterialButton;
+		public static Button ctlDatabaseButton;
 
 		public static Canvas mainCanvas;
 		public static Label lblMode;
@@ -45,9 +48,10 @@ namespace Zitulmyth
 		public static bool titleStrSwitch = true;
 
 		//window settings
+		public static bool isOpenStageEditorWindow = false;
 		public static bool isOpenEventEditorWindow = false;
 		
-		public static StageEditorWindow stageEditor = new StageEditorWindow();
+		public static StageEditorWindow stageEditor;
 		public static EventEditorWindow eventEditor;
 		public static MaterialBrowser materialBrowser;
 		public static ImageManagerWindow imageManager;
@@ -96,11 +100,12 @@ namespace Zitulmyth
 			this.GetNowTime();
 			lastTime = nowTime;
 
-			ImageData.SpriteReading();
+			ImageData.SpriteReading();				//cropped image data
 
 			StageManager.stageNum = 0;
-			StageOrder.OrderListInit();
-			StageDataSetting.SetData();
+			StageOrder.OrderListInit();				//stage order
+			StageDataSetting.DataBaseReading();		//database
+			StageDataSetting.SetData();				//stage data
 
 			ImageData.SystemImagesReading();
 			Sound.SoundEffectLoad(Canvas);
@@ -114,6 +119,9 @@ namespace Zitulmyth
 			mainCanvas = this.FindName("Canvas") as Canvas;
 			lblMode = FindName("lblGameMode") as Label;
 
+			ctlDatabaseButton = btnViewDatabaseWindow;
+			ctlMaterialButton = btnViewMaterialBrowser;
+			ctlImageButton = btnViewImageManager;
 
 			CollisionCheck.ColliderCheckMaskGenerater(Canvas);
 			MainWeapon.InitMainWeapon(Canvas);
@@ -210,7 +218,7 @@ namespace Zitulmyth
 					elapsedTime = nowTime - lastTime;
 
 //debug
-					DebugLabelA.Content = SystemOperator.moveCommonAmountX + " ,"+ SystemOperator.moveCommonAmountY;
+					DebugLabelA.Content = BlockCheck.debug;
 										
 
 					if (elapsedTime < 0)
@@ -436,12 +444,9 @@ namespace Zitulmyth
 //control event
 		private void GameWindow_Closed(object sender, EventArgs e)
 		{
-			closeMainWindow = true;
-			stageEditor.Close();
-
-			if (isOpenEventEditorWindow)
+			if (isOpenStageEditorWindow)
 			{
-				eventEditor.Close();
+				stageEditor.Close();
 			}
 			
 		}
@@ -620,8 +625,19 @@ namespace Zitulmyth
 
 		private void btnViewStageEditorWindow_Click(object sender, RoutedEventArgs e)
 		{
-			stageEditor.Show();
-			stageEditor.Focus();
+			if (!isOpenStageEditorWindow)
+			{
+				stageEditor = new StageEditorWindow();
+				stageEditor.Show();
+				stageEditor.Focus();
+				isOpenStageEditorWindow = true;
+
+				btnViewDatabaseWindow.IsEnabled = false;
+				btnViewMaterialBrowser.IsEnabled = false;
+				btnViewImageManager.IsEnabled = false;
+				
+			}
+			
 		}
 
 		private void btnViewMaterialBrowser_Click(object sender, RoutedEventArgs e)

@@ -15,45 +15,43 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Zitulmyth.Checking;
 using Zitulmyth.Data;
-
+using Zitulmyth.Enums;
 
 
 namespace Zitulmyth
 {
 
-	public enum ObjectName
+	public enum ObjectAttribute
 	{
-		Player,
-		Empty_Collider,
-		Npc_Opsa,
-		Npc_Yeeda,
-		Npc_Ilsona,
-		Obj_Chair,
-		Obj_Table,
-		Obj_Huton,
-		Obj_CampFire,
+		DisplayOnly = 0,
+		Physicality = 1,
+		EmptyCollider = 2,
+		Ladder = 3,
+		Platform = 4,
+		Goalgate = 5,
 	}
 
 	public class ObjectData
 	{
-		public ObjectName objName;
+		public string objName;
 		public Image imgObject;
-		public CroppedBitmap cbSource;
 		public Vector position;
-		public int width;		//blocknum
-		public int height;
+		public Vector size;
 		public int zindex;
-		public int expirationTime;
-		public int totalTime;
+		public bool toggleSwitch;
+		public int totalSwitchTime;
+		public int totalExpirationTime;
+		public int nowDurability;
+		public Vector totalDistance;
 		public int keyFlame;
 		public int totalAnimTime;
-		public ObjectName triggerTarget;
-		public bool triggerAction;
-		public bool triggerType;	//false:touch true:input
+		public TargetType targetType;
+		public int targetId;
 		public int talkID;
+		
 	}
 
-	 public class ObjectChecker
+	public class ObjectChecker
 	{
 		public static List<ObjectData> lstObject = new List<ObjectData>();
 		public static int activeObject; //store index
@@ -62,67 +60,19 @@ namespace Zitulmyth
 
 		public static Vector triggerTargetPosition;
 
-
-		public static ObjectData SetObjectData(ObjectName name, Vector pos,int wb,int hb,int zid,
-			bool action , ObjectName target,bool type,int talkid)
+		public static int DatabaseObjectNameSearch(int target)
 		{
-			var obj = new ObjectData();
-			CroppedBitmap cb = new CroppedBitmap();
+			int index;
 
-			switch (name)
+			for(int i = 0; i < StageData.lstDbObject.Count; i++)
 			{
-				case ObjectName.Empty_Collider:
-					cb = ImageData.cbDebug[0];
-					break;
-
-				case ObjectName.Npc_Ilsona:
-					cb = ImageData.ImageSourceSelector(CategoryName.Npc,"IrusonaIdleR");
-					break;
-
-				case ObjectName.Npc_Opsa:
-					cb = ImageData.ImageSourceSelector(CategoryName.Npc, "OpsaIdleR");
-					break;
-
-				case ObjectName.Npc_Yeeda:
-					cb = ImageData.ImageSourceSelector(CategoryName.Npc, "YeedaIdleR");
-					break;
-
-				case ObjectName.Obj_CampFire:
-					cb = ImageData.ImageSourceSelector(CategoryName.Object, "FireCamp");
-					break;
-
-				case ObjectName.Obj_Chair:
-					cb = ImageData.ImageSourceSelector(CategoryName.Object, "chair");
-					break;
-
-				case ObjectName.Obj_Huton:
-					cb = ImageData.ImageSourceSelector(CategoryName.Object, "huton");
-					break;
-
-				case ObjectName.Obj_Table:
-					cb = ImageData.ImageSourceSelector(CategoryName.Object, "table");
-					break;
-
-				case ObjectName.Player:
-					cb = ImageData.ImageSourceSelector(CategoryName.Player, "moveR");
-					break;
+				if(lstObject[target].objName == StageData.lstDbObject[i].name)
+				{
+					return index = i;
+				}
 			}
 
-			obj = new ObjectData
-			{
-				objName = name,
-				position = pos,
-				zindex = zid,
-				triggerAction = action,
-				triggerTarget = target,
-				triggerType = type,
-				cbSource = cb,
-				width = wb,
-				height = hb,
-				talkID = talkid,
-			};
-
-			return obj;
+			return index = -1;
 		}
 
 		public static void CollisionPtoActionCollider()
@@ -136,9 +86,16 @@ namespace Zitulmyth
 					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
 
 					Vector p2 = new Vector(Canvas.GetLeft(lstObject[i].imgObject), Canvas.GetTop(lstObject[i].imgObject));
-					Vector size2 = new Vector(lstObject[i].width * 32, lstObject[i].height * 32);
+					Vector size2 = new Vector(lstObject[i].size.X, lstObject[i].size.Y);
 
-					if (CollisionCheck.Collision(p1, p2, size1, size2) && lstObject[i].triggerAction)
+					bool triggeraction = false;
+
+					if (DatabaseObjectNameSearch(i) >= 0)
+					{
+						triggeraction = StageData.lstDbObject[DatabaseObjectNameSearch(i)].triggerAction;
+					}
+
+					if (CollisionCheck.Collision(p1, p2, size1, size2) && triggeraction)
 					{
 
 						GetTriggerTargetPosition(i);
@@ -177,7 +134,7 @@ namespace Zitulmyth
 
 			Vector p2 = new Vector(Canvas.GetLeft(lstObject[activeObject].imgObject), 
 									Canvas.GetTop(lstObject[activeObject].imgObject));
-			Vector size2 = new Vector(lstObject[activeObject].width * 32, lstObject[activeObject].height * 32);
+			Vector size2 = new Vector(lstObject[activeObject].size.X, lstObject[activeObject].size.Y);
 
 			if (CollisionCheck.Collision(p1, p2, size1, size2))
 			{
@@ -193,23 +150,14 @@ namespace Zitulmyth
 		public static void GetTriggerTargetPosition(int index)
 		{
 
-			if (lstObject[index].triggerTarget == ObjectName.Player)
+			if (lstObject[index].targetType == TargetType.Player)
 			{
 				Vector playerPos = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
 				triggerTargetPosition = playerPos;
 			}
 			else
 			{
-				for (int i = 0; i < lstObject.Count; i++)
-				{
-					if (lstObject[index].triggerTarget == lstObject[i].objName)
-					{
-
-						triggerTargetPosition = lstObject[i].position;
-
-						break;
-					}
-				}
+				triggerTargetPosition = lstObject[lstObject[index].targetId].position;
 			}
 				
 		
@@ -234,8 +182,15 @@ namespace Zitulmyth
 
 		public static void OnTriggerTouchEvent()
 		{
-							   
-			if (!TalkCommander.isTalk && !ObjectChecker.lstObject[ObjectChecker.activeObject].triggerType)
+
+			bool triggertype = false;
+
+			if (ObjectChecker.DatabaseObjectNameSearch(ObjectChecker.activeObject) >= 0)
+			{
+				triggertype = StageData.lstDbObject[ObjectChecker.DatabaseObjectNameSearch(ObjectChecker.activeObject)].triggerType;
+			}
+
+			if (!TalkCommander.isTalk && !triggertype)
 			{
 				if(ObjectChecker.activeObject != ObjectChecker.oldActiveObject)
 				{

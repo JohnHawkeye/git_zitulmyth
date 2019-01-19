@@ -93,7 +93,7 @@ namespace Zitulmyth
 
 			if (KeyController.keyLeft)
 			{
-				if (!BlockCheck.BlockCheckLeft(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed))
+				if (!BlockCheck.BlockCheckLeft(playerPos.X, playerPos.Y ,(int)playerSize.Y, moveSpeed))
 				{
 					if (playerPos.X - SystemOperator.BlockPerSecond() * moveSpeed > 0)
 					{
@@ -107,7 +107,7 @@ namespace Zitulmyth
 
 			if (KeyController.keyRight)
 			{
-				if (!BlockCheck.BlockCheckRight(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed))
+				if (!BlockCheck.BlockCheckRight(playerPos.X, playerPos.Y,(int)playerSize.X, (int)playerSize.Y, moveSpeed))
 				{
 
 					if (playerPos.X + SystemOperator.BlockPerSecond() * moveSpeed < 992)
@@ -132,7 +132,7 @@ namespace Zitulmyth
 
 			
 			if (KeyController.keyUp && !TalkCommander.isTalk)
-			{
+			{/*
 				if (BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y+playerHeight*32, moveSpeed))
 				{
 					if (playerPos.Y - SystemOperator.BlockPerSecond() * moveSpeed > 0)
@@ -141,11 +141,11 @@ namespace Zitulmyth
 						SystemOperator.moveCommonAmountY = moveSpeed;
 					}
 				}
-
+				*/
 			}
 
 			if (KeyController.keyDown && !TalkCommander.isTalk)
-			{
+			{/*
 				//ladder
 				if ((BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed)  ||
 					BlockCheck.BlockCheckTopLadder(playerPos.X, playerPos.Y + playerHeight*32, weight))&&
@@ -166,7 +166,7 @@ namespace Zitulmyth
 						SystemOperator.moveCommonAmountY = moveSpeed;
 					}
 				}
-
+				*/
 				if (!isLadder)
 				{
 					isSquat = true;
@@ -179,7 +179,7 @@ namespace Zitulmyth
 				isSquat = false;
 			}
 
-
+			/*
 			//laddercheck
 			if(!BlockCheck.BlockCheckLadder(playerPos.X, playerPos.Y + playerHeight * 32, moveSpeed))
 			{
@@ -191,12 +191,12 @@ namespace Zitulmyth
 				isLadder = true;
 				fallingStartPoint = playerPos.Y;
 			}
-
+			*/
 
 			//jump
 			if (KeyController.keySpace && jumpCount == 0)
 			{
-				if (!BlockCheck.BlockCheckTop(playerPos.X, playerPos.Y, jumpPower))
+				if (!BlockCheck.BlockCheckTop(playerPos.X, playerPos.Y, (int)playerSize.X, jumpPower))
 				{
 					if (playerPos.Y - jumpPower > 0)
 					{
@@ -260,37 +260,63 @@ namespace Zitulmyth
 			{
 				SystemOperator.BoundObject(ref playerPos, boundDirectionX, ref knockBackTotalDis, knockBackTargetDis,
 					ref knockBackBps, ref coefficient, ref boundDirectionY,
-					weight, moveSpeed, jumpPower, playerWidth, playerHeight, ref isKnockBack);
+					weight, moveSpeed, jumpPower, playerSize, ref isKnockBack);
 			}
 
 			//image change
 			if (GameTransition.gameTransition == GameTransitionType.StageDuring)
 			{
-
-				if (!playerDirection)
+				if(KeyController.keyLeft || KeyController.keyRight)
 				{
-					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player,"moveL");
+					if (!playerDirection)
+					{
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteMoveL);
+					}
+					else
+					{
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteMoveR);
+					}
 				}
 				else
 				{
-					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "moveR");
+					if (!playerDirection)
+					{
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteIdleL);
+					}
+					else
+					{
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteIdleR);
+					}
 				}
+				
 
 				if (isSquat)
 				{
 					if (!playerDirection)
 					{
-						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "squatL");
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteSquatL);
 					}
 					else
 					{
-						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "squatR");
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteSquatR);
+					}
+				}
+
+				if (jumping)
+				{
+					if (!playerDirection)
+					{
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteJumpL);
+					}
+					else
+					{
+						ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteJumpR);
 					}
 				}
 
 				if (isLadder && (KeyController.keyUp || KeyController.keyDown))
 				{
-					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "ladder");
+					ImageData.imgPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteLadder);
 				}
 			}
 
@@ -303,10 +329,9 @@ namespace Zitulmyth
 			playerPos.X = Canvas.GetLeft(ImageData.imgPlayer);
 			playerPos.Y = Canvas.GetTop(ImageData.imgPlayer);
 			
-			if (!isLadder && !BlockCheck.BlockCheckTopLadder(playerPos.X,playerPos.Y + playerHeight * 32 ,weight))
+			if (!isLadder)
 			{
-				if ((!BlockCheck.BlockCheckBottom(playerPos.X, playerPos.Y + playerHeight * 32, weight))&&
-					!BlockCheck.BlockCheckOnPlat(playerPos.X, playerPos.Y + playerHeight * 32, weight))
+				if (!BlockCheck.BlockCheckBottom(playerPos.X, playerPos.Y,(int)playerSize.X, (int)playerSize.Y, weight))
 				{
 					if(!isKnockBack)
 					playerPos.Y += SystemOperator.BlockPerSecond() * weight;
