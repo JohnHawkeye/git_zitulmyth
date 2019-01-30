@@ -44,10 +44,10 @@ namespace Zitulmyth
 		/// </summary>
 		/// <returns></returns>
 
-		public static double BlockPerSecond()
+		public static double PixelPerSecond(int value)
 		{
 			double temp;
-			temp = Math.Round(32 * (double)MainWindow.elapsedTime / 500, 2, MidpointRounding.AwayFromZero);
+			temp = Math.Round((double)value / 25 , 1, MidpointRounding.AwayFromZero);
 
 			return temp;
 
@@ -64,7 +64,7 @@ namespace Zitulmyth
 
 			
 
-			bps.X = target.X / 32 * BlockPerSecond() * 2;
+			bps.X = target.X / 32 * PixelPerSecond(64);
 			bps.Y = target.Y * bps.X / target.X;
 
 			addY = coefficient * weight / (target.X / 2)*0.102;

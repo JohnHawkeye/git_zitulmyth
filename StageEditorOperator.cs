@@ -152,7 +152,7 @@ namespace Zitulmyth
 		public static void EditorImageDataSetting()
 		{
 			imgEditorPlayer.Width = 32; imgEditorPlayer.Height = 64;
-			imgEditorPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, "moveR");
+			imgEditorPlayer.Source = ImageData.ImageSourceSelector(CategoryName.Player, StageData.lstDbPlayer.spriteMoveR);
 			MainWindow.mainCanvas.Children.Add(imgEditorPlayer);
 
 			imgEditorPointerCursor.Width = imgEditorPointerCursor.Height = 32;

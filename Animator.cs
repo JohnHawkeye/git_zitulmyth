@@ -300,7 +300,15 @@ namespace Zitulmyth
 				List<CroppedBitmap> animationCells = new List<CroppedBitmap>();
 				bool noAnim = false;
 
-				animationCells = AnimationSourceSelector(CategoryName.Object, ObjectChecker.lstObject[i].objName);
+				if (!ObjectChecker.lstObject[i].toggleSwitch)
+				{
+					animationCells = AnimationSourceSelector(CategoryName.Object, ObjectChecker.lstObject[i].spriteNameA);
+				}
+				else
+				{
+					animationCells = AnimationSourceSelector(CategoryName.Object, ObjectChecker.lstObject[i].spriteNameB);
+				}
+				
 
 				if (!noAnim)
 				{

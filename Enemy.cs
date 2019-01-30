@@ -210,9 +210,9 @@ namespace Zitulmyth
 					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y, (int)size.Y, speed)&&
 						pos.X>0)
 					{
-						if (pos.X - SystemOperator.BlockPerSecond() * speed > 0)
+						if (pos.X - SystemOperator.PixelPerSecond(speed) > 0)
 						{
-							pos.X -= SystemOperator.BlockPerSecond() * speed;
+							pos.X -= SystemOperator.PixelPerSecond(speed);
 						}
 						else
 						{
@@ -230,9 +230,9 @@ namespace Zitulmyth
 						pos.X + size.X < 1024 - lstEnemyData[index].widthblock * 32)
 					{
 
-						if (pos.X + SystemOperator.BlockPerSecond() * speed < 992)
+						if (pos.X + SystemOperator.PixelPerSecond(speed) < 992)
 						{
-							pos.X += SystemOperator.BlockPerSecond() * speed;
+							pos.X += SystemOperator.PixelPerSecond(speed);
 						}
 						else
 						{
@@ -245,7 +245,7 @@ namespace Zitulmyth
 				}
 
 				lstEnemyData[index].position.X = pos.X;
-				lstEnemyData[index].totalDistance.X += SystemOperator.BlockPerSecond() * speed;
+				lstEnemyData[index].totalDistance.X += SystemOperator.PixelPerSecond(speed);
 			}
 			else
 			{
@@ -287,7 +287,7 @@ namespace Zitulmyth
 
 			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y,width,jumpPower))
 			{
-				if (pos.Y - SystemOperator.BlockPerSecond() * jumpPower > 0)
+				if (pos.Y - SystemOperator.PixelPerSecond(jumpPower) > 0)
 				{
 					lstEnemyData[index].jumpCount++;
 
@@ -300,8 +300,8 @@ namespace Zitulmyth
 			{
 				if (lstEnemyData[index].jumpTotalLength < lstEnemyData[index].jumpMaxHeight)
 				{
-					lstEnemyData[index].position.Y -= SystemOperator.BlockPerSecond() * jumpPower;
-					lstEnemyData[index].jumpTotalLength += SystemOperator.BlockPerSecond() * jumpPower;
+					lstEnemyData[index].position.Y -= SystemOperator.PixelPerSecond(jumpPower);
+					lstEnemyData[index].jumpTotalLength += SystemOperator.PixelPerSecond(jumpPower);
 				}
 				else
 				{
@@ -320,7 +320,7 @@ namespace Zitulmyth
 				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y,(int)size.X,(int)size.Y, lstEnemyData[index].weight)))
 				{
 					
-					lstEnemyData[index].position.Y += SystemOperator.BlockPerSecond()*lstEnemyData[index].weight;
+					lstEnemyData[index].position.Y += SystemOperator.PixelPerSecond(lstEnemyData[index].weight);
 					
 					if (!lstEnemyData[index].isFalling)
 					{
@@ -498,7 +498,7 @@ namespace Zitulmyth
 					enemy = new EnemyData
 					{
 						name = EnemyName.Zigitu01,
-						speed = 4, life = 1, ofepower = 1, defpower = 0, weight = 6, direction = dir,
+						speed = 4, life = 1, ofepower = 1, defpower = 0, weight = 160, direction = dir,
 						state = EnemyState.Spawn,
 						pixSize = new Vector(32, 64), position = setpos,
 						triggerAreaPos = new Vector(32, 64),triggerAreaSize = new Vector(0,0),triggerAreaOffset = new Vector(0, 0),
@@ -515,7 +515,7 @@ namespace Zitulmyth
 					enemy = new EnemyData
 					{
 						name = EnemyName.Boar,
-						speed = 2, life = 5, ofepower = 1, defpower = 0, weight = 6, direction = dir,
+						speed = 128, life = 5, ofepower = 1, defpower = 0, weight = 160, direction = dir,
 						state = EnemyState.Spawn,
 						pixSize = new Vector(64, 32), position = setpos,
 						triggerAreaPos = new Vector(64, 32), triggerAreaSize = new Vector(5, 1), triggerAreaOffset = new Vector(0, 0),

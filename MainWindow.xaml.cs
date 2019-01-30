@@ -105,7 +105,7 @@ namespace Zitulmyth
 			StageManager.stageNum = 0;
 			StageOrder.OrderListInit();				//stage order
 			StageDataSetting.DataBaseReading();		//database
-			StageDataSetting.SetData();				//stage data
+			
 
 			ImageData.SystemImagesReading();
 			Sound.SoundEffectLoad(Canvas);
@@ -160,7 +160,6 @@ namespace Zitulmyth
 			Canvas.SetLeft(canScreenFade, 0);
 			Canvas.SetTop(canScreenFade, 0);
 			Canvas.SetZIndex(canScreenFade, ImageZindex.fade);
-
 
 			StageInit.InitPlayer(Canvas);
 			StageInit.InitPlayerStatus(CaLife, CaMana);
@@ -217,9 +216,9 @@ namespace Zitulmyth
 					this.GetNowTime();
 					elapsedTime = nowTime - lastTime;
 
-//debug
-					DebugLabelA.Content = BlockCheck.debug;
-										
+					//debug
+					lblDebugA.Content = PlayerStatus.playerPos.X +"," + PlayerStatus.playerPos.Y;
+					lblDebugB.Content = SystemOperator.PixelPerSecond(PlayerStatus.weight);
 
 					if (elapsedTime < 0)
 					{
@@ -318,6 +317,9 @@ namespace Zitulmyth
 						SystemOperator.moveCommonAmountX = 0;
 						SystemOperator.moveCommonAmountY = 0;
 
+						ObjectChecker.CollisionPtoActionCollider();
+						PlayerBehavior.CollisionPtoE();
+
 						PlayerBehavior.MovePlayer(Canvas);
 						PlayerBehavior.FallingPlayer();
 
@@ -334,8 +336,7 @@ namespace Zitulmyth
 							MainWeapon.MainWeaponCollision(Canvas);
 						}
 						
-						ObjectChecker.CollisionPtoActionCollider();
-						PlayerBehavior.CollisionPtoE();
+						
 						SubWeapon.CollisionSubWeapon(Canvas);
 
 						PlayerStatus.PlayerStatusUpdate();

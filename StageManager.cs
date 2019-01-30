@@ -18,6 +18,7 @@ namespace Zitulmyth
 		ReachTheTartgetPoint,
 		TalkFlag,
 		TimeElapsed,
+		ClearFlag,
 	}
 
 	public class StageOrderList
@@ -52,6 +53,9 @@ namespace Zitulmyth
 		public static int numKillEnemy = 0;
 		public static bool respawnEnemy;
 
+		public static bool clearFlag;
+
+
 		public static void StageObjectsSetting(Canvas canvas)
 		{
 	
@@ -70,11 +74,20 @@ namespace Zitulmyth
 			{
 				var _imgObject = new Image
 				{
-					Source = ImageData.ImageSourceSelector(CategoryName.Object,ObjectChecker.lstObject[i].objName),
 					Width = ObjectChecker.lstObject[i].size.X,
 					Height = ObjectChecker.lstObject[i].size.Y,
 					Stretch = Stretch.Fill,
 				};
+
+				if (!ObjectChecker.lstObject[i].toggleSwitch)
+				{
+					_imgObject.Source = ImageData.ImageSourceSelector(CategoryName.Object, ObjectChecker.lstObject[i].spriteNameA);
+				}
+				else
+				{
+					_imgObject.Source = ImageData.ImageSourceSelector(CategoryName.Object, ObjectChecker.lstObject[i].spriteNameB);
+				}
+			
 
 				ObjectChecker.lstObject[i].imgObject = _imgObject;
 				canvas.Children.Add(ObjectChecker.lstObject[i].imgObject);
@@ -137,6 +150,15 @@ namespace Zitulmyth
 
 					case StageClearConditionName.TimeElapsed:
 						if (numKillEnemy >= lstClearCondition[i].targetNumKill)
+						{
+							satisfyCount++;
+						}
+
+						break;
+
+					case StageClearConditionName.ClearFlag:
+
+						if (clearFlag)
 						{
 							satisfyCount++;
 						}

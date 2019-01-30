@@ -77,6 +77,8 @@ namespace Zitulmyth
 		public static int charaMoveIndex = 0;
 		public static bool charaMoveStart;
 
+		public static bool stageTestPlay = false;
+
 		public static void GameTransitionController(Canvas canvas, Canvas caLife,Canvas caMana)
 		{
 			switch (gameTransition)
@@ -248,27 +250,50 @@ namespace Zitulmyth
 
 				case GameTransitionType.StageNext:
 
-					StageManager.stageNum++;
-					if(StageManager.stageNum >= StageOrder.lstStageOrder.Count)
+					if (!stageTestPlay)
+					{
+
+						StageManager.stageNum++;
+						if (StageManager.stageNum >= StageOrder.lstStageOrder.Count)
+						{
+							MainWindow.timerFrameUpdate.Stop();
+
+							MessageBox.Show("すべてのステージが終わりました。ゲームを終了します。", "ゲームの終了", MessageBoxButton.OK, MessageBoxImage.Information);
+
+							Application.Current.Shutdown();
+						}
+
+						StageInit.StageBlockRemove(canvas);
+						StageInit.StageObjectsRemove(canvas);
+						StageInit.StageEnemyRemove(canvas);
+						growthEnemy = false;
+						StageInit.StageItemRemove(canvas);
+
+						StageManager.lstClearCondition.Clear();
+						StageManager.clearFlag = false;
+
+						MainWindow.lblMode.Content = "ゲームモード：ステージ準備";
+						gameTransition = GameTransitionType.StageInit;
+					}
+					else
 					{
 						MainWindow.timerFrameUpdate.Stop();
+						gameTransition = GameTransitionType.EditMode;
+						stageTestPlay = false;
+						StageManager.clearFlag = false;
 
-						MessageBox.Show("すべてのステージが終わりました。ゲームを終了します。", "ゲームの終了", MessageBoxButton.OK, MessageBoxImage.Information);
+						MainWindow.stageEditor.StageLoad();
 
-						Application.Current.Shutdown();
+						MainWindow.stageEditor.StageEditorDataSetting();
+						StageEditorOperator.EditorPlayerPaletteSetting();
+
+						MainWindow.stageEditor.tbcEditSelect.IsEnabled = true;
+						MainWindow.stageEditor.btnStageNumDecrease.IsEnabled = true;
+						MainWindow.stageEditor.btnStageNumIncrease.IsEnabled = true;
+						MainWindow.stageEditor.btnStageOrder.IsEnabled = true;
+						MainWindow.stageEditor.btnStageTestPlay.IsEnabled = true;
+						MainWindow.stageEditor.btnEventWindowOpen.IsEnabled = true;
 					}
-
-
-					StageInit.StageBlockRemove(canvas);
-					StageInit.StageObjectsRemove(canvas);
-					StageInit.StageEnemyRemove(canvas);
-					growthEnemy = false;
-					StageInit.StageItemRemove(canvas);
-
-					StageManager.lstClearCondition.Clear();
-
-					MainWindow.lblMode.Content = "ゲームモード：ステージ準備";
-					gameTransition = GameTransitionType.StageInit;
 
 					break;
 

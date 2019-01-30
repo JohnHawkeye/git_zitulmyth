@@ -121,9 +121,15 @@
 							<RadioButton x:Name="rdbZindexBack" Content="背面" HorizontalAlignment="Left" Margin="148,12,0,0" VerticalAlignment="Top" IsChecked="True"/>
 							<ComboBox x:Name="cmbObjectTargetType" HorizontalAlignment="Left" Margin="88,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="121"/>
 							<Label x:Name="label4_Copy" Content="ターゲット" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="7,7,0,5" Background="White" Grid.Row="1" HorizontalContentAlignment="Center"/>
-							<Label x:Name="label4_Copy1" Content="会話ID" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="7,9,0,2" Background="White" Grid.Row="2" HorizontalContentAlignment="Center"/>
-							<TextBox x:Name="txbObjectTalkID" HorizontalAlignment="Left" Height="23" Margin="88,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="54" HorizontalContentAlignment="Right" PreviewTextInput="txbObjectTalkID_PreviewTextInput"/>
-							<TextBox x:Name="txbTargetID" HorizontalAlignment="Left" Height="22" Margin="214,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="64" ToolTip="ターゲットのID"/>
+							<Label x:Name="label4_Copy1" Content="会話ID" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="148,0,0,0" Background="White" Grid.Row="2" HorizontalContentAlignment="Center"/>
+							<TextBox x:Name="txbObjectTalkID" HorizontalAlignment="Left" Height="22" Margin="214,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="50" HorizontalContentAlignment="Right" PreviewTextInput="txbObjectTalkID_PreviewTextInput" VerticalContentAlignment="Center"/>
+							<TextBox x:Name="txbObjTargetID" HorizontalAlignment="Left" Height="22" Margin="214,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="64" ToolTip="ターゲットのID" VerticalContentAlignment="Center"/>
+							<Label x:Name="lblSize" Content="表示順序" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="240,6,0,5" Background="White" HorizontalContentAlignment="Center"/>
+							<TextBox x:Name="txbObjSizeX" HorizontalAlignment="Left" Height="22" Margin="307,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="50" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+							<TextBox x:Name="txbObjSizeY" HorizontalAlignment="Left" Height="22" Margin="371,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Center" Width="50" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+							<Label x:Name="label1" Content="," HorizontalAlignment="Left" Margin="357,6,0,0" VerticalAlignment="Top"/>
+							<Label x:Name="lblToggle" Content="トグル" HorizontalAlignment="Left" Height="26" VerticalAlignment="Center" Width="62" Margin="7,5,0,6" Background="White" Grid.Row="2" HorizontalContentAlignment="Center"/>
+							<CheckBox x:Name="ckbObjToggleSwitch" Content="" HorizontalAlignment="Left" Margin="88,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
 						</Grid>
 					</GroupBox>
 					<ScrollViewer HorizontalAlignment="Left" Height="261" Margin="10,10,0,0" VerticalAlignment="Top" Width="606">
@@ -175,7 +181,8 @@
 		<Button x:Name="btnStageNumIncrease" Content="▶" HorizontalAlignment="Left" Margin="188,0,0,0" VerticalAlignment="Center" Width="24" Height="20" Click="btnStageNumIncrease_Click"/>
 		<Button x:Name="btnJsonWrite" Content="上書き保存" HorizontalAlignment="Left" VerticalAlignment="Center" Height="34" Width="114" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="1" FontSize="14" Margin="532,0,0,10" Click="btnJsonWrite_Click" Grid.Row="2"/>
 		<Button x:Name="btnEventWindowOpen" Content="イベント編集" HorizontalAlignment="Left" Margin="560,0,0,0" VerticalAlignment="Center" Width="75" Click="btnEventWindowOpen_Click" Height="24"/>
-		<Button x:Name="btnStageOrder" Content="リスト編集" HorizontalAlignment="Left" Height="24" Margin="240,0,0,0" VerticalAlignment="Center" Width="85" Click="btnStageOrder_Click"/>
+		<Button x:Name="btnStageOrder" Content="リスト編集" HorizontalAlignment="Left" Height="24" Margin="240,0,0,0" VerticalAlignment="Center" Width="74" Click="btnStageOrder_Click"/>
 		<TextBlock x:Name="txkStageName" HorizontalAlignment="Left" Height="20" Margin="50,0,0,0" TextWrapping="Wrap" Text="ステージ名" VerticalAlignment="Center" Width="128" Foreground="Black" Background="White" Padding="2,2,0,0"/>
+		<Button x:Name="btnStageTestPlay" Content="テストプレイ" HorizontalAlignment="Left" Margin="340,0,0,0" VerticalAlignment="Center" Width="80" Height="24" Click="btnStageTestPlay_Click"/>
 	</Grid>
 </Window>

@@ -34,21 +34,49 @@ namespace Zitulmyth
 	public class ObjectData
 	{
 		public string objName;
+		public ObjectAttribute objectAttribute;
+		public string spriteNameA;
+		public string spriteNameB;
 		public Image imgObject;
 		public Vector position;
 		public Vector size;
 		public int zindex;
+
+		public bool destructable;
+		public int durability;
+		public bool damaging;
+		public int damageValue;
+
 		public bool toggleSwitch;
+		public int targetSwitchTime;
 		public int totalSwitchTime;
+		public int targetExpirationTime;
 		public int totalExpirationTime;
-		public int nowDurability;
+
+		public bool operable;
+		public bool automove;
 		public Vector totalDistance;
+		public Vector targetDistance;
+
 		public int keyFlame;
 		public int totalAnimTime;
 		public TargetType targetType;
 		public int targetId;
+		public bool triggerAction;
+		public bool triggerType;
 		public int talkID;
+
+		/*
 		
+		public int autoMoveRangeX { get; set; }
+		public int autoMoveRangeY { get; set; }
+		public int autoMoveSpeed { get; set; }
+		public int influenceSpeed{ get; set; }
+		public int influenceJump { get; set; }
+		public int influenceFall { get; set; }
+		 * 
+		 */
+
 	}
 
 	public class ObjectChecker
@@ -57,16 +85,23 @@ namespace Zitulmyth
 		public static int activeObject; //store index
 		public static int oldActiveObject;
 		public static bool isTrigger;
+		public static int touchLadderCount;
+		public static int onPlatCount;
 
 		public static Vector triggerTargetPosition;
+
+		public static bool obstacleUp;
+		public static bool obstacleDown;
+		public static bool obstacleLeft;
+		public static bool obstacleRight;
 
 		public static int DatabaseObjectNameSearch(int target)
 		{
 			int index;
 
-			for(int i = 0; i < StageData.lstDbObject.Count; i++)
+			for (int i = 0; i < StageData.lstDbObject.Count; i++)
 			{
-				if(lstObject[target].objName == StageData.lstDbObject[i].name)
+				if (lstObject[target].objName == StageData.lstDbObject[i].name)
 				{
 					return index = i;
 				}
@@ -75,56 +110,194 @@ namespace Zitulmyth
 			return index = -1;
 		}
 
-		public static void CollisionPtoActionCollider()
+		public static void PlayerOverlappedWithObject()
 		{
-			if (!isTrigger)
+
+			for (int i = 0; i < lstObject.Count; i++)
 			{
-				for (int i = 0; i < lstObject.Count; i++)
+
+				Vector p1 = PlayerStatus.playerPos;
+				Vector size1 = PlayerStatus.playerSize;
+
+				Vector p2 = lstObject[i].position;
+				Vector size2 = lstObject[i].size;
+
+				if (CollisionCheck.Collision(p1, p2, size1, size2))
 				{
-
-					Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
-					Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
-
-					Vector p2 = new Vector(Canvas.GetLeft(lstObject[i].imgObject), Canvas.GetTop(lstObject[i].imgObject));
-					Vector size2 = new Vector(lstObject[i].size.X, lstObject[i].size.Y);
-
-					bool triggeraction = false;
-
-					if (DatabaseObjectNameSearch(i) >= 0)
+					if (lstObject[i].objectAttribute == ObjectAttribute.Ladder)
 					{
-						triggeraction = StageData.lstDbObject[DatabaseObjectNameSearch(i)].triggerAction;
-					}
-
-					if (CollisionCheck.Collision(p1, p2, size1, size2) && triggeraction)
-					{
-
-						GetTriggerTargetPosition(i);
-
-						activeObject = i;
-
-						isTrigger = true;
-
-						Canvas.SetLeft(ImageData.imgPopCanTalk, triggerTargetPosition.X - 16);
-						Canvas.SetTop(ImageData.imgPopCanTalk, triggerTargetPosition.Y - 32);
-						ImageData.imgPopCanTalk.Visibility = Visibility.Visible;
-
-						break;
+						PlayerStatus.isLadder = true;
 					}
 					else
 					{
-						ImageData.imgPopCanTalk.Visibility = Visibility.Hidden;
+						PlayerStatus.isLadder = false;
 					}
+				}
 
-				}
 			}
-			else
+		}
+
+		public static void CollisionPtoActionCollider()
+		{
+
+			touchLadderCount = 0;
+			onPlatCount = 0;
+
+			for (int i = 0; i < lstObject.Count; i++)
 			{
-				if (!TriggerExitCheck())
+
+				Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
+				Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
+
+				Vector p2 = new Vector(Canvas.GetLeft(lstObject[i].imgObject), Canvas.GetTop(lstObject[i].imgObject));
+				Vector size2 = new Vector(lstObject[i].size.X, lstObject[i].size.Y);
+
+				switch (lstObject[i].objectAttribute)
 				{
-					oldActiveObject = 0;
-					isTrigger = false;
+					case ObjectAttribute.EmptyCollider:
+
+						if (!isTrigger)
+						{
+
+							if (CollisionCheck.Collision(p1, p2, size1, size2))
+							{
+
+								if (lstObject[i].triggerAction)
+								{
+									GetTriggerTargetPosition(i);
+
+									activeObject = i;
+
+									isTrigger = true;
+
+									Canvas.SetLeft(ImageData.imgPopCanTalk, triggerTargetPosition.X - 16);
+									Canvas.SetTop(ImageData.imgPopCanTalk, triggerTargetPosition.Y - 32);
+									ImageData.imgPopCanTalk.Visibility = Visibility.Visible;
+								}
+							}
+							else
+							{
+								ImageData.imgPopCanTalk.Visibility = Visibility.Hidden;
+							}
+						}
+						else
+						{
+							if (!TriggerExitCheck())
+							{
+								oldActiveObject = 0;
+								isTrigger = false;
+							}
+						}
+
+
+						break;
+
+					case ObjectAttribute.Physicality:
+
+						Vector move1 = new Vector(0,0);
+						Vector move2 = new Vector(0, 0);
+
+						if (!PlayerStatus.playerDirection)
+						{
+							move1.X = -PlayerStatus.moveSpeed;
+						}
+						else
+						{
+							move1.X = PlayerStatus.moveSpeed;
+						}
+
+						if (PlayerStatus.jumping)
+						{
+							move1.Y = -PlayerStatus.jumpPower;
+						}
+						else
+						{
+							move1.Y = PlayerStatus.weight;
+						}
+
+						if (CollisionCheck.CollisionWithObstacle(p1, p2, size1, size2, move1, move2)){
+							if (p1.X + size1.X < p2.X)
+							{
+								obstacleRight = true;
+							}
+
+							if(p1.X > p2.X + size2.X)
+							{
+								obstacleLeft = true;
+							}
+
+							if(p1.Y + size1.Y < p2.Y)
+							{
+								obstacleDown = true;
+							}
+
+							if (p1.Y > p2.Y + size2.Y)
+							{
+								obstacleUp = true;
+							}
+						}
+						else
+						{
+							obstacleUp = false;
+							obstacleDown = false;
+							obstacleLeft = false;
+							obstacleRight = false;
+						}
+						
+						break;
+
+					case ObjectAttribute.Ladder:
+
+						if (CollisionCheck.TouchTheLadder(p1, p2, size1, size2))
+						{
+							PlayerStatus.jumpCount = 0;
+							PlayerStatus.fallingStartPoint = PlayerStatus.playerPos.Y;
+							touchLadderCount++;
+						}
+
+						break;
+
+					case ObjectAttribute.Platform:
+
+						if (CollisionCheck.OnThePlatform(p1, p2, size1, size2))
+						{
+							PlayerStatus.jumpCount = 0;
+							onPlatCount++;
+							
+						}
+
+						break;
+					case ObjectAttribute.Goalgate:
+
+						if (CollisionCheck.TouchGoal(p1, p2, size1, size2))
+						{
+							if(lstObject[i].toggleSwitch)
+								StageManager.clearFlag = true;
+						}
+
+						break;
+				}
+
+				if(touchLadderCount == 0)
+				{
+					PlayerStatus.isLadder = false;
+				}
+				else
+				{
+					PlayerStatus.isLadder = true;
+				}
+
+				if(onPlatCount == 0)
+				{
+					PlayerStatus.isPlat = false;
+				}
+				else
+				{
+					PlayerStatus.isPlat = true;
 				}
 			}
+
+
 		}
 
 		private static bool TriggerExitCheck()
@@ -132,7 +305,7 @@ namespace Zitulmyth
 			Vector p1 = new Vector(Canvas.GetLeft(ImageData.imgPlayer), Canvas.GetTop(ImageData.imgPlayer));
 			Vector size1 = new Vector(PlayerStatus.playerSize.X, PlayerStatus.playerSize.Y);
 
-			Vector p2 = new Vector(Canvas.GetLeft(lstObject[activeObject].imgObject), 
+			Vector p2 = new Vector(Canvas.GetLeft(lstObject[activeObject].imgObject),
 									Canvas.GetTop(lstObject[activeObject].imgObject));
 			Vector size2 = new Vector(lstObject[activeObject].size.X, lstObject[activeObject].size.Y);
 
@@ -144,7 +317,7 @@ namespace Zitulmyth
 			{
 				return false;
 			}
-				
+
 		}
 
 		public static void GetTriggerTargetPosition(int index)
@@ -159,8 +332,8 @@ namespace Zitulmyth
 			{
 				triggerTargetPosition = lstObject[lstObject[index].targetId].position;
 			}
-				
-		
+
+
 		}
 
 
@@ -183,16 +356,9 @@ namespace Zitulmyth
 		public static void OnTriggerTouchEvent()
 		{
 
-			bool triggertype = false;
-
-			if (ObjectChecker.DatabaseObjectNameSearch(ObjectChecker.activeObject) >= 0)
+			if (!TalkCommander.isTalk && !ObjectChecker.lstObject[ObjectChecker.activeObject].triggerType)
 			{
-				triggertype = StageData.lstDbObject[ObjectChecker.DatabaseObjectNameSearch(ObjectChecker.activeObject)].triggerType;
-			}
-
-			if (!TalkCommander.isTalk && !triggertype)
-			{
-				if(ObjectChecker.activeObject != ObjectChecker.oldActiveObject)
+				if (ObjectChecker.activeObject != ObjectChecker.oldActiveObject)
 				{
 					TalkCommander.TalkDataInit();
 					TalkCommander.isTalk = true;

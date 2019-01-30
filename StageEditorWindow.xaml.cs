@@ -490,8 +490,14 @@ namespace Zitulmyth
 					rdbZindexFront.IsChecked = true;	//11
 				}
 
+				txbObjSizeX.Text = stageEditorData.objectSize[row].X.ToString();
+				txbObjSizeY.Text = stageEditorData.objectSize[row].Y.ToString();
+
 				cmbObjectTargetType.ItemsSource = strTargetType;
 				cmbObjectTargetType.SelectedItem = stageEditorData.objectTargetType[row].ToString();
+
+				txbObjTargetID.Text = stageEditorData.objectTargetId[row].ToString();
+				ckbObjToggleSwitch.IsChecked = stageEditorData.objectToggleSwitch[row];
 
 				txbObjectTalkID.Text = stageEditorData.objectTalkID[row].ToString();
 
@@ -513,21 +519,37 @@ namespace Zitulmyth
 
 			if (row >= 0)
 			{
-				if (rdbZindexBack.IsChecked == true)
+				if (SystemOperator.IsNumeric(txbObjSizeX.Text)&&
+					SystemOperator.IsNumeric(txbObjSizeY.Text)&&
+					SystemOperator.IsNumeric(txbObjTargetID.Text)&&
+					SystemOperator.IsNumeric(txbObjectTalkID.Text))
 				{
-					stageEditorData.objectZindex[row] = 5;
+					if (rdbZindexBack.IsChecked == true)
+					{
+						stageEditorData.objectZindex[row] = 5;
+					}
+					else
+					{
+						stageEditorData.objectZindex[row] = 11;
+					}
+
+					stageEditorData.objectSize[row] = new Vector(int.Parse(txbObjSizeX.Text), int.Parse(txbObjSizeY.Text));
+
+					stageEditorData.objectTargetType[row] =
+						(TargetType)Enum.Parse(typeof(TargetType), cmbObjectTargetType.SelectedItem.ToString());
+
+					stageEditorData.objectTargetId[row] = int.Parse(txbObjTargetID.Text);
+					stageEditorData.objectToggleSwitch[row] = (bool)ckbObjToggleSwitch.IsChecked;
+
+					stageEditorData.objectTalkID[row] = int.Parse(txbObjectTalkID.Text);
+
+					ListViewObjectDataUpdate();
 				}
 				else
 				{
-					stageEditorData.objectZindex[row] = 11;
+					MessageBox.Show("値は数字のみ有効です。半角数字を入力してください。", "入力エラー", MessageBoxButton.OK, MessageBoxImage.Information);
 				}
-
-				stageEditorData.objectTargetType[row] =
-					(TargetType)Enum.Parse(typeof(TargetType), cmbObjectTargetType.SelectedItem.ToString());
-
-				stageEditorData.objectTalkID[row] = int.Parse(txbObjectTalkID.Text);
-
-				ListViewObjectDataUpdate();
+				
 
 			}
 		}
@@ -564,6 +586,33 @@ namespace Zitulmyth
 			MainWindow.ctlDatabaseButton.IsEnabled = true;
 			MainWindow.ctlImageButton.IsEnabled = true;
 			MainWindow.ctlMaterialButton.IsEnabled = true;
+		}
+
+		private void btnStageTestPlay_Click(object sender, RoutedEventArgs e)
+		{
+			paletteMode = PaletteMode.None;
+			tbcEditSelect.IsEnabled = false;
+			btnStageNumDecrease.IsEnabled = false;
+			btnStageNumIncrease.IsEnabled = false;
+			btnStageOrder.IsEnabled = false;
+			btnStageTestPlay.IsEnabled = false;
+			btnEventWindowOpen.IsEnabled = false;
+
+			GameTransition.stageTestPlay = true;
+			MainWindow.timerFrameUpdate.Start();
+
+			StageInit.StageBlockRemove(MainWindow.mainCanvas);
+			StageInit.StageObjectsRemove(MainWindow.mainCanvas);
+			StageInit.StageEnemyRemove(MainWindow.mainCanvas);
+			GameTransition.growthEnemy = false;
+			StageInit.StageItemRemove(MainWindow.mainCanvas);
+			MainWindow.mainCanvas.Children.Remove(StageEditorOperator.imgEditorPlayer);
+
+			StageManager.lstClearCondition.Clear();
+
+			MainWindow.lblMode.Content = "ゲームモード：ステージ準備";
+
+			GameTransition.gameTransition = GameTransitionType.StageInit;
 		}
 	}
 }

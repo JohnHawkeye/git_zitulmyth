@@ -1001,5 +1001,42 @@ namespace Zitulmyth
 
 			}
 		}
+
+		private void txbEnemyName_KeyDown(object sender, KeyEventArgs e)
+		{
+
+		}
+
+		private void lsbEnemy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+
+		}
+
+		private void btnEnemyMaxList_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+
+
+		private void btnItemMaxList_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void txbItemName_KeyDown(object sender, KeyEventArgs e)
+		{
+
+		}
+
+		private void lsbItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+
+		}
+
+		private void imgItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+
+		}
 	}
 }

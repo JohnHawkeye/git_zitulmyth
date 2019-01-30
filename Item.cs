@@ -62,7 +62,7 @@ namespace Zitulmyth
 							itemName = ItemName.Coin,
 							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item,"Coin"), Width = 32, Height = 32 },
 							position = targetpos,
-							weight = 6,	width = 1,height = 1,expirationTime = 1000,totalTime = 0,
+							weight = 160,	width = 1,height = 1,expirationTime = 1000,totalTime = 0,
 						};
 
 					break;
@@ -74,7 +74,7 @@ namespace Zitulmyth
 							itemName = ItemName.Apple,
 							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "Apple"), Width = 32, Height = 32 },
 							position = targetpos,
-							weight = 4,width = 1,height = 1,expirationTime = 1000,totalTime = 0
+							weight = 160,width = 1,height = 1,expirationTime = 1000,totalTime = 0
 						};
 
 					break;
@@ -85,7 +85,7 @@ namespace Zitulmyth
 							itemName = ItemName.StarFruit,
 							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "StarFruit"), Width = 32, Height = 32 },
 							position = targetpos,
-							weight = 4,width= 1,height=1,	expirationTime = 1000,	totalTime = 0
+							weight = 160,width= 1,height=1,	expirationTime = 1000,	totalTime = 0
 						};
 					break;
 
@@ -95,7 +95,7 @@ namespace Zitulmyth
 							itemName = ItemName.TreeBranch,
 							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "TreeBranch"), Width = 64, Height = 32 },
 							position = targetpos,
-							weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
+							weight = 160,width= 2,height=1,expirationTime = 1000,totalTime = 0
 						};
 					break;
 
@@ -105,7 +105,7 @@ namespace Zitulmyth
 							itemName = ItemName.BoarMeat,
 							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "BoarMeat"), Width = 32, Height = 32 },
 							position = targetpos,
-							weight = 4,width= 2,height=1,expirationTime = 1000,totalTime = 0
+							weight = 160,width= 2,height=1,expirationTime = 1000,totalTime = 0
 						};
 					break;
 
@@ -133,10 +133,10 @@ namespace Zitulmyth
 				double posX = Canvas.GetLeft(lstItemData[i].imgItem);
 				double posY = Canvas.GetTop(lstItemData[i].imgItem);
 
-				if (!BlockCheck.BlockCheckBottom(posX, posY,lstItemData[i].width ,lstItemData[i].height * 32, lstItemData[i].weight))
+				if (!BlockCheck.BlockCheckBottom(posX, posY,lstItemData[i].width*32 ,lstItemData[i].height * 32, lstItemData[i].weight))
 				{
 					
-					posY += SystemOperator.BlockPerSecond() * lstItemData[i].weight;
+					posY += SystemOperator.PixelPerSecond(lstItemData[i].weight);
 				
 				}
 

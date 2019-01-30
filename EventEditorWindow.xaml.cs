@@ -80,6 +80,7 @@ namespace Zitulmyth
 		private List<EventDataProperty> propertyEventData = new List<EventDataProperty>();
 		private string[] strEventCommand;
 		private string[] strCategoryName;
+		private string[] strTargetImage;
 		private List<string> lstPatternName = new List<string>();
 		private int loadingCount = 0;
 		
@@ -103,6 +104,8 @@ namespace Zitulmyth
 
 		private Label ctlDataIndex = new Label();
 		private ComboBox ctlEventType = new ComboBox();
+		private Button ctlUpdate = new Button();
+
 		private ComboBox cmbOptBgmName = new ComboBox();
 		private ComboBox cmbOptSeName = new ComboBox();
 		private ComboBox cmbOptTargetImage = new ComboBox();
@@ -144,8 +147,11 @@ namespace Zitulmyth
 
 			strEventCommand = Enum.GetNames(typeof(EventCommandEnum));
 			strCategoryName = Enum.GetNames(typeof(CategoryName));
+			strTargetImage = Enum.GetNames(typeof(TargetType));
+			
 			ctlEventType = cmbEventType;
 			ctlDataIndex = lblDataIndex;
+			ctlUpdate = btnUpdate;
 
 			OptionControlSetting();
 			
@@ -304,6 +310,7 @@ namespace Zitulmyth
 
 			grdOption.Children.Add(ctlEventType);
 			grdOption.Children.Add(ctlDataIndex);
+			grdOption.Children.Add(ctlUpdate);
 
 			switch (cmbEventType.SelectedItem)
 			{
@@ -750,7 +757,7 @@ namespace Zitulmyth
 				Height = 26,
 				FontSize = 16,
 				ToolTip = "TargetImage",
-				ItemsSource = new string[] { "IMG_Player", "IMG_Enemy", "IMG_Object", "IMG_Item" },
+				ItemsSource = strTargetImage,
 
 			};
 

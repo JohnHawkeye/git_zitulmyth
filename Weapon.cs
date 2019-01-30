@@ -102,7 +102,7 @@ namespace Zitulmyth
 				if (rtMainWeapon.Angle < 360 + 45)
 				{
 
-					double temp = SystemOperator.BlockPerSecond() * PlayerStatus.meleeSpeed;
+					double temp = SystemOperator.PixelPerSecond(PlayerStatus.meleeSpeed);
 
 
 					rtMainWeapon.Angle += Math.Round(temp, 0);
@@ -131,7 +131,7 @@ namespace Zitulmyth
 				if (rtMainWeapon.Angle >= 180 - 45)
 				{
 
-					double temp = SystemOperator.BlockPerSecond() * PlayerStatus.meleeSpeed;
+					double temp = SystemOperator.PixelPerSecond(PlayerStatus.meleeSpeed);
 
 
 					rtMainWeapon.Angle -= Math.Round(temp, 0);
@@ -223,7 +223,7 @@ namespace Zitulmyth
 	public class SubWeapon
 	{
 		//weapon parameters
-		public static int subWeaponSpeed = 8;
+		public static int subWeaponSpeed = 512;
 		public static int subWeaponRange = 320;
 		public static int subWeaponTotalDistance = 0;
 		public static bool subWeaponDirection;
@@ -274,14 +274,14 @@ namespace Zitulmyth
 				{
 					if (!subWeaponDirection)
 					{
-						posX -= SystemOperator.BlockPerSecond() * subWeaponSpeed;
+						posX -= SystemOperator.PixelPerSecond(subWeaponSpeed);
 					}
 					else
 					{
-						posX += SystemOperator.BlockPerSecond() * subWeaponSpeed;
+						posX += SystemOperator.PixelPerSecond(subWeaponSpeed);
 					}
 
-					subWeaponTotalDistance += (int) SystemOperator.BlockPerSecond() * subWeaponSpeed;
+					subWeaponTotalDistance += (int) SystemOperator.PixelPerSecond(subWeaponSpeed);
 					Canvas.SetLeft(ImageData.imgSubWeapon[0], posX);
 					Canvas.SetZIndex(ImageData.imgSubWeapon[0], ImageZindex.subWeapon);
 				}
