@@ -62,7 +62,7 @@ namespace Zitulmyth
 								}
 								else
 								{
-									dbb.Add(new DatabaseBlock { name="", sprite="", passage=false});
+									dbb.Add(new DatabaseBlock { name="ブロック " + i, sprite="", passage=false});
 								}
 								
 							}
@@ -86,7 +86,14 @@ namespace Zitulmyth
 								}
 								else
 								{
-									dbe.Add(new DatabaseEnemy { name = "", sprite = "" });
+									dbe.Add(new DatabaseEnemy {
+										name = "エネミー " + i,
+										life = 0, offense = 0,
+										speed = 0, weight = 0, jumpMaxHeight = 0,
+										triggerAreaOffset = new Vector(0,0),
+										triggerAreaPos = new Vector(0,0),
+										triggerAreaSize = new Vector(0,0),
+										dropItemID = 0});
 								}
 
 							}
@@ -94,6 +101,7 @@ namespace Zitulmyth
 							MainWindow.databaseWindow.lstViewDbEnemy.Clear();
 							MainWindow.databaseWindow.lstViewDbEnemy = dbe;
 
+							MainWindow.databaseWindow.ListBoxEnemyUpdate();
 							break;
 
 						case 3://object
@@ -109,7 +117,7 @@ namespace Zitulmyth
 								else
 								{
 									dbo.Add(new DatabaseObject {
-										name = "",
+										name = "オブジェクト " + i,
 										spriteA = "", spriteB = "",
 										size = new Vector(32,32),
 										attribute = ObjectAttribute.DisplayOnly,
@@ -119,7 +127,8 @@ namespace Zitulmyth
 										underwater = false, slide = false, operable = false,
 										automove = false, autoMoveRangeX = 0, autoMoveRangeY = 0, autoMoveSpeed = 0,
 										triggerAction = false, triggerType = false,
-										influenceSpeed = 0, influenceJump = 0, influenceFall = 0 });
+										influenceSpeed = 0, influenceJump = 0, influenceFall = 0,
+										dropItemID = 0});
 								}
 
 							}
@@ -143,13 +152,24 @@ namespace Zitulmyth
 								}
 								else
 								{
-									dbi.Add(new DatabaseItem { name = "", sprite = "" });
+									dbi.Add(new DatabaseItem { name = "アイテム " + i,
+										attribute = ItemAttribute.Consumable,
+										weight = 0,
+										maxLife = 0, nowLife = 0, maxMana = 0, nowMana = 0,
+										offense = 0, meleeSpeed = 0, defense = 0,
+										damageInterbal = 0,
+										speed = 0, jumpMaxHeight = 0, jumpCount = 0, addingWeight = 0,
+										score = 0, money = 0, timeLimit = 0, switchId = 0
+
+									});
 								}
 
 							}
 
 							MainWindow.databaseWindow.lstViewDbItem.Clear();
 							MainWindow.databaseWindow.lstViewDbItem = dbi;
+
+							MainWindow.databaseWindow.ListBoxItemUpdate();
 							break;
 
 					}

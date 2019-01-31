@@ -27,6 +27,14 @@ namespace Zitulmyth
 		BoarMeat,
 	}
 
+	public enum ItemAttribute
+	{
+		Consumable = 0,
+		Equipment = 1,
+		Tool = 2,
+		Treasure = 3,
+	}
+
 	public class ItemData
 	{
 

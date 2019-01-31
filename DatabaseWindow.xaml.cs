@@ -47,7 +47,35 @@ namespace Zitulmyth
 	public class DatabaseEnemy
 	{
 		public string name { get; set; }
-		public string sprite { get; set; }
+
+		public string spriteIdleL { get; set; }
+		public string spriteIdleR { get; set; }
+		public string spriteSpawnL { get; set; }
+		public string spriteSpawnR { get; set; }
+		public string spriteMoveL { get; set; }
+		public string spriteMoveR { get; set; }
+		public string spriteAttackL { get; set; }
+		public string spriteAttackR { get; set; }
+		public string spriteDamageL { get; set; }
+		public string spriteDamageR { get; set; }
+		public string spriteDeathL { get; set; }
+		public string spriteDeathR { get; set; }
+
+		public int life { get; set; }
+		public int offense { get; set; }
+		public bool touchingDamage { get; set; }
+		public int speed { get; set; }
+		public int weight { get; set; }
+		public int jumpMaxHeight { get; set; }
+		public Vector triggerAreaOffset { get; set; }
+		public Vector triggerAreaPos { get; set; }
+		public Vector triggerAreaSize { get; set; }
+
+		public bool floating { get; set; }
+		public bool slipThrough { get; set; }
+		public bool useLadder { get; set; }
+		public bool dropItem { get; set; }
+		public int dropItemID { get; set; }
 	}
 
 	public class DatabaseObject
@@ -75,12 +103,45 @@ namespace Zitulmyth
 		public int influenceSpeed{ get; set; }
 		public int influenceJump { get; set; }
 		public int influenceFall { get; set; }
+
+		public bool dropItem { get; set; }
+		public int dropItemID { get; set; }
 	}
 
 	public class DatabaseItem
 	{
 		public string name { get; set; }
 		public string sprite { get; set; }
+		
+		public ItemAttribute attribute { get; set; }
+		public int weight { get; set; }
+
+		public int maxLife { get; set; }
+		public int nowLife { get; set; }
+		public int maxMana { get; set; }
+		public int nowMana { get; set; }
+
+		public int offense { get; set; }
+		public int meleeSpeed { get; set; }
+		public int defense { get; set; }
+
+		public int damageInterbal { get; set; }
+		public bool invincible { get; set; }
+		public bool knockback { get; set; }
+
+		public int speed { get; set; }
+		public int jumpMaxHeight { get; set; }
+		public int jumpCount { get; set; }
+		public int addingWeight { get; set; }
+
+		public int score { get; set; }
+		public int money { get; set; }
+		public int timeLimit { get; set; }
+		public int switchId { get; set; }
+
+		public bool timeStop { get; set; }
+		public bool bomb { get; set; }
+
 	}
 
 	/// <summary>
@@ -115,8 +176,10 @@ namespace Zitulmyth
 		public int selectedIndex = 0;
 
 		public Image ctlRefSpritePlayer;
+		public Image ctlRefSpriteEnemy;
 		public bool choiceSpriteObject;
 
+		public List<string> lstCommboItemNames = new List<string>();
 
 		public DatabaseWindow()
 		{
@@ -210,6 +273,8 @@ namespace Zitulmyth
 
 				btnUpdate.Content = "適用";
 				btnUpdate.IsEnabled = true;
+
+				MessageBox.Show("データを上書きしました。", "データの上書き", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
 
 
@@ -221,7 +286,10 @@ namespace Zitulmyth
 
 			PlayerGraphicsUpdate();
 			ListBoxBlockUpdate();
+			ListBoxEnemyUpdate();
 			ListBoxObjectUpdate();
+			ListBoxItemUpdate();
+			CommboListItemNamesUpdate();
 		}
 
 		private void DatabaseReading()
@@ -324,6 +392,23 @@ namespace Zitulmyth
 			imgPlayerDeathR.Source = ImageData.ImageSourceSelector(CategoryName.Player, lstViewDbPlayer.spriteDeathR);
 
 		}
+		
+		public void CommboListItemNamesUpdate()
+		{
+			lstCommboItemNames.Clear();
+
+			for(int i= 0; i < lstViewDbItem.Count; i++)
+			{
+				lstCommboItemNames.Add(lstViewDbItem[i].name);
+			}
+
+			cmbEnemyItemDrop.ItemsSource = lstCommboItemNames;
+			cmbEnemyItemDrop.Items.Refresh();
+			
+
+			cmbObjectItemDrop.ItemsSource = lstCommboItemNames;
+			cmbObjectItemDrop.Items.Refresh();
+		}
 
 		public void ListBoxBlockUpdate()
 		{
@@ -339,6 +424,20 @@ namespace Zitulmyth
 			lsbBlock.SelectedIndex = 0;
 		}
 
+		public void ListBoxEnemyUpdate()
+		{
+			lstNameEnemy.Clear();
+
+			for (int i = 0; i < lstViewDbEnemy.Count; i++)
+			{
+				lstNameEnemy.Add(i.ToString() + ": " + lstViewDbEnemy[i].name);
+			}
+
+			lsbEnemy.ItemsSource = lstNameEnemy;
+			lsbEnemy.Items.Refresh();
+			lsbEnemy.SelectedIndex = 0;
+		}
+
 		public void ListBoxObjectUpdate()
 		{
 			lstNameObject.Clear();
@@ -351,6 +450,20 @@ namespace Zitulmyth
 			lsbObject.ItemsSource = lstNameObject;
 			lsbObject.Items.Refresh();
 			lsbObject.SelectedIndex = 0;
+		}
+
+		public void ListBoxItemUpdate()
+		{
+			lstNameItem.Clear();
+
+			for (int i = 0; i < lstViewDbItem.Count; i++)
+			{
+				lstNameItem.Add(i.ToString() + ": " + lstViewDbItem[i].name);
+			}
+
+			lsbItem.ItemsSource = lstNameItem;
+			lsbItem.Items.Refresh();
+			lsbItem.SelectedIndex = 0;
 		}
 
 		private void imgPlayerIdleL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -558,6 +671,9 @@ namespace Zitulmyth
 				txbObjInfluenceSpeed.Text = lstViewDbObject[index].influenceSpeed.ToString();
 				txbObjInfluenceJump.Text = lstViewDbObject[index].influenceJump.ToString();
 				txbObjInfluenceFall.Text = lstViewDbObject[index].influenceFall.ToString();
+
+				ckbObjectItemDrop.IsChecked = lstViewDbObject[index].dropItem;
+				cmbObjectItemDrop.SelectedIndex = lstViewDbObject[index].dropItemID;
 
 			}
 		}
@@ -1004,39 +1120,1092 @@ namespace Zitulmyth
 
 		private void txbEnemyName_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				if (e.Key == Key.Return)
+				{
+					int index = lsbEnemy.SelectedIndex;
 
+					lstViewDbEnemy[index].name = txbEnemyName.Text;
+
+					ListBoxEnemyUpdate();
+					lsbEnemy.SelectedIndex = index;
+				}
+
+			}
 		}
 
 		private void lsbEnemy_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				txbEnemyName.Text = lstViewDbEnemy[index].name;
+
+				imgEnemyIdleL.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteIdleL);
+				imgEnemyIdleR.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteIdleR);
+				imgEnemySpawnL.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteSpawnL);
+				imgEnemySpawnR.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteSpawnR);
+				imgEnemyMoveL.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteMoveL);
+				imgEnemyMoveR.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteMoveR);
+				imgEnemyAttackL.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteAttackL);
+				imgEnemyAttackR.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteAttackR);
+				imgEnemyDamageL.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteDamageL);
+				imgEnemyDamageR.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteDamageR);
+				imgEnemyDeathL.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteDeathL);
+				imgEnemyDeathR.Source = ImageData.ImageSourceSelector(CategoryName.Enemy, lstViewDbEnemy[index].spriteDeathR);
+
+				txbEnemyLife.Text = lstViewDbEnemy[index].life.ToString();
+				txbEnemyOfe.Text = lstViewDbEnemy[index].offense.ToString();
+				ckbEnemyDamage.IsChecked = lstViewDbEnemy[index].touchingDamage;
+
+				txbEnemySpeed.Text = lstViewDbEnemy[index].speed.ToString();
+				txbEnemyWeight.Text = lstViewDbEnemy[index].weight.ToString();
+				txbEnemyMaxJump.Text = lstViewDbEnemy[index].jumpMaxHeight.ToString();
+
+				txbEnemyTriggerPosX.Text = lstViewDbEnemy[index].triggerAreaPos.X.ToString();
+				txbEnemyTriggerPosY.Text = lstViewDbEnemy[index].triggerAreaPos.Y.ToString();
+				txbEnemyTriggerOffsetX.Text = lstViewDbEnemy[index].triggerAreaOffset.X.ToString();
+				txbEnemyTriggerOffsetY.Text = lstViewDbEnemy[index].triggerAreaOffset.Y.ToString();
+				txbEnemyTriggerSizeW.Text = lstViewDbEnemy[index].triggerAreaSize.X.ToString();
+				txbEnemyTriggerSizeH.Text = lstViewDbEnemy[index].triggerAreaSize.Y.ToString();
+
+				ckbEnemyFloating.IsChecked = lstViewDbEnemy[index].floating;
+				ckbEnemySlipThrough.IsChecked = lstViewDbEnemy[index].slipThrough;
+				ckbEnemyUseLadder.IsChecked = lstViewDbEnemy[index].useLadder;
+
+				ckbEnemyItemDrop.IsChecked = lstViewDbEnemy[index].dropItem;
+				cmbEnemyItemDrop.ItemsSource = lstCommboItemNames;
+				cmbEnemyItemDrop.SelectedIndex = lstViewDbEnemy[index].dropItemID;
+
+			}
 		}
 
 		private void btnEnemyMaxList_Click(object sender, RoutedEventArgs e)
 		{
+			maxListChangerDialog = new MaxListChangerDialog();
 
+
+			maxListChangerDialog.oldnum = lstViewDbEnemy.Count;
+			maxListChangerDialog.txbNumber.Text = lstViewDbEnemy.Count.ToString();
+			maxListChangerDialog.ShowDialog();
 		}
-
-
 
 		private void btnItemMaxList_Click(object sender, RoutedEventArgs e)
 		{
+			maxListChangerDialog = new MaxListChangerDialog();
 
+
+			maxListChangerDialog.oldnum = lstViewDbItem.Count;
+			maxListChangerDialog.txbNumber.Text = lstViewDbItem.Count.ToString();
+			maxListChangerDialog.ShowDialog();
 		}
 
 		private void txbItemName_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				if (e.Key == Key.Return)
+				{
+					int index = lsbItem.SelectedIndex;
 
-		}
+					lstViewDbItem[index].name = txbItemName.Text;
 
-		private void lsbItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
+					ListBoxItemUpdate();
+					lsbItem.SelectedIndex = index;
+				}
 
+			}
 		}
 
 		private void imgItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			selectedIndex = lsbItem.SelectedIndex;
+			spriteViewerDialog = new SpriteViewerDialog();
+			spriteCategory = CategoryName.Item;
+			spriteViewerDialog.ShowDialog();
+		}
 
+		private void tabDatabase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if(tabDatabase.SelectedIndex != 4)
+			{
+				CommboListItemNamesUpdate();
+			}
+		}
+
+		private void lsbItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+
+				txbItemName.Text = lstViewDbItem[index].name;
+
+				imgItem.Source = ImageData.ImageSourceSelector(CategoryName.Item, lstViewDbItem[index].sprite);
+				
+				txbItemWeight.Text = lstViewDbItem[index].weight.ToString();
+
+				switch (lstViewDbItem[index].attribute)
+				{
+					case ItemAttribute.Consumable:
+						rdbItemConsumable.IsChecked = true;
+						break;
+					case ItemAttribute.Equipment:
+						rdbItemEquipment.IsChecked = true;
+						break;
+					case ItemAttribute.Tool:
+						rdbItemTool.IsChecked = true;
+						break;
+					case ItemAttribute.Treasure:
+						rdbItemTreasure.IsChecked = true;
+						break;
+				}
+
+				txbItemMaxLife.Text = lstViewDbItem[index].maxLife.ToString();
+				txbItemNowLife.Text = lstViewDbItem[index].nowLife.ToString();
+				txbItemMaxMana.Text = lstViewDbItem[index].maxMana.ToString();
+				txbItemNowMana.Text = lstViewDbItem[index].nowMana.ToString();
+				txbItemOffense.Text = lstViewDbItem[index].offense.ToString();
+				txbItemMeleeSpeed.Text = lstViewDbItem[index].meleeSpeed.ToString();
+				txbItemDefense.Text = lstViewDbItem[index].defense.ToString();
+
+				txbItemDamageInvincible.Text = lstViewDbItem[index].damageInterbal.ToString();
+				ckbItemInvincible.IsChecked = lstViewDbItem[index].invincible;
+				ckbItemKnockback.IsChecked = lstViewDbItem[index].knockback;
+
+				txbItemSpeed.Text = lstViewDbItem[index].speed.ToString();
+				txbItemJumpMaxHeight.Text = lstViewDbItem[index].jumpMaxHeight.ToString();
+				txbItemJumpCount.Text = lstViewDbItem[index].jumpCount.ToString();
+				txbItemAddingWeight.Text = lstViewDbItem[index].addingWeight.ToString();
+
+				txbItemScore.Text = lstViewDbItem[index].score.ToString();
+				txbItemMoney.Text = lstViewDbItem[index].money.ToString();
+				txbItemTimeLimit.Text = lstViewDbItem[index].timeLimit.ToString();
+				txbItemSwitchId.Text = lstViewDbItem[index].switchId.ToString();
+
+				ckbItemTimeStop.IsChecked = lstViewDbItem[index].timeStop;
+				ckbItemBomb.IsChecked = lstViewDbItem[index].bomb;
+			}
+		}
+
+		private void txbEnemyLife_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if(lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyLife.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						lstViewDbEnemy[index].life = int.Parse(txbEnemyLife.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}	
+			}
+		}
+
+		private void txbEnemyOfe_KeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyOfe.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						lstViewDbEnemy[index].offense = int.Parse(txbEnemyOfe.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbEnemySpeed_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemySpeed.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						lstViewDbEnemy[index].speed = int.Parse(txbEnemySpeed.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbEnemyWeight_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyWeight.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						lstViewDbEnemy[index].weight = int.Parse(txbEnemyWeight.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbEnemyMaxJump_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyMaxJump.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						lstViewDbEnemy[index].jumpMaxHeight = int.Parse(txbEnemyMaxJump.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbEnemyTriggerPosX_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyTriggerPosX.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						Vector temp = new Vector(lstViewDbEnemy[index].triggerAreaPos.X, lstViewDbEnemy[index].triggerAreaPos.Y);
+
+						temp.X = int.Parse(txbEnemyTriggerPosX.Text);
+
+						lstViewDbEnemy[index].triggerAreaPos = temp;
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+
+		}
+
+		private void txbEnemyTriggerPosY_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyTriggerPosY.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						Vector temp = new Vector(lstViewDbEnemy[index].triggerAreaPos.X, lstViewDbEnemy[index].triggerAreaPos.Y);
+
+						temp.Y = int.Parse(txbEnemyTriggerPosY.Text);
+
+						lstViewDbEnemy[index].triggerAreaPos = temp;
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+
+		}
+
+		private void txbEnemyTriggerOffsetX_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyTriggerOffsetX.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						Vector temp = new Vector(lstViewDbEnemy[index].triggerAreaOffset.X, lstViewDbEnemy[index].triggerAreaOffset.Y);
+
+						temp.X = int.Parse(txbEnemyTriggerOffsetX.Text);
+
+						lstViewDbEnemy[index].triggerAreaOffset = temp;
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+
+		}
+
+		private void txbEnemyTriggerOffsetY_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyTriggerOffsetY.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						Vector temp = new Vector(lstViewDbEnemy[index].triggerAreaOffset.X, lstViewDbEnemy[index].triggerAreaOffset.Y);
+
+						temp.Y = int.Parse(txbEnemyTriggerOffsetY.Text);
+
+						lstViewDbEnemy[index].triggerAreaOffset = temp;
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+
+		}
+
+		private void txbEnemyTriggerSizeW_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyTriggerSizeW.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						Vector temp = new Vector(lstViewDbEnemy[index].triggerAreaSize.X, lstViewDbEnemy[index].triggerAreaSize.Y);
+
+						temp.X = int.Parse(txbEnemyTriggerSizeW.Text);
+
+						lstViewDbEnemy[index].triggerAreaSize = temp;
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+
+		}
+
+		private void txbEnemyTriggerSizeH_KeyDown(object sender, KeyEventArgs e)
+		{
+
+			if (e.Key == Key.Return)
+			{
+				if (lsbEnemy.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbEnemyTriggerSizeH.Text))
+					{
+						int index = lsbEnemy.SelectedIndex;
+
+						Vector temp = new Vector(lstViewDbEnemy[index].triggerAreaSize.X, lstViewDbEnemy[index].triggerAreaSize.Y);
+
+						temp.Y = int.Parse(txbEnemyTriggerSizeH.Text);
+
+						lstViewDbEnemy[index].triggerAreaSize = temp;
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+
+		}
+
+		private void ckbEnemyDamage_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				lstViewDbEnemy[index].touchingDamage = (bool)ckbEnemyDamage.IsChecked;
+
+			}
+		}
+
+		private void ckbEnemyFloating_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				lstViewDbEnemy[index].floating = (bool)ckbEnemyFloating.IsChecked;
+
+			}
+		}
+
+		private void ckbEnemySlipThrough_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				lstViewDbEnemy[index].slipThrough = (bool)ckbEnemySlipThrough.IsChecked;
+
+			}
+		}
+
+		private void ckbEnemyUseLadder_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				lstViewDbEnemy[index].useLadder = (bool)ckbEnemyUseLadder.IsChecked;
+
+			}
+		}
+
+		private void ckbEnemyItemDrop_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				lstViewDbEnemy[index].dropItem = (bool)ckbEnemyItemDrop.IsChecked;
+
+			}
+		}
+
+		private void cmbEnemyItemDrop_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (lsbEnemy.SelectedIndex >= 0)
+			{
+				int index = lsbEnemy.SelectedIndex;
+
+				lstViewDbEnemy[index].dropItemID = cmbEnemyItemDrop.SelectedIndex;
+
+			}
+		}
+
+		private void txbItemWeight_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemWeight.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].weight = int.Parse(txbItemWeight.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemMaxLife_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemMaxLife.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].maxLife = int.Parse(txbItemMaxLife.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemNowLife_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemNowLife.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].nowLife = int.Parse(txbItemNowLife.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemMaxMana_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemMaxMana.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].maxMana = int.Parse(txbItemMaxMana.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemNowMana_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemNowMana.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].nowMana = int.Parse(txbItemNowMana.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemOffense_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemOffense.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].offense = int.Parse(txbItemOffense.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemMeleeSpeed_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemMeleeSpeed.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].meleeSpeed = int.Parse(txbItemMeleeSpeed.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemDefense_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemDefense.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].defense = int.Parse(txbItemDefense.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemDamageInvincible_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemDamageInvincible.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].damageInterbal = int.Parse(txbItemDamageInvincible.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemSpeed_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemSpeed.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].speed = int.Parse(txbItemSpeed.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemJumpMaxHeight_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemJumpMaxHeight.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].jumpMaxHeight = int.Parse(txbItemJumpMaxHeight.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemJumpCount_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemJumpCount.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].jumpCount = int.Parse(txbItemJumpCount.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemAddingWeight_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemAddingWeight.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].addingWeight = int.Parse(txbItemAddingWeight.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemScore_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemScore.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].score = int.Parse(txbItemScore.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemMoney_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemMoney.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].money = int.Parse(txbItemMoney.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemTimeLimit_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemTimeLimit.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].timeLimit = int.Parse(txbItemTimeLimit.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void txbItemSwitchId_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				if (lsbItem.SelectedIndex >= 0)
+				{
+					if (SystemOperator.IsNumeric(txbItemSwitchId.Text))
+					{
+						int index = lsbItem.SelectedIndex;
+
+						lstViewDbItem[index].switchId = int.Parse(txbItemSwitchId.Text);
+
+					}
+					else
+					{
+						MessageBox.Show("数値を入力してください。");
+
+					}
+				}
+			}
+		}
+
+		private void ckbItemInvincible_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				lstViewDbItem[index].invincible = (bool)ckbItemInvincible.IsChecked;
+
+			}
+		}
+
+		private void ckbItemKnockback_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				lstViewDbItem[index].knockback = (bool)ckbItemKnockback.IsChecked;
+
+			}
+		}
+
+		private void ckbItemTimeStop_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				lstViewDbItem[index].timeStop = (bool)ckbItemTimeStop.IsChecked;
+
+			}
+		}
+
+		private void ckbItemBomb_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				lstViewDbItem[index].bomb = (bool)ckbItemBomb.IsChecked;
+
+			}
+		}
+
+		private void imgEnemyClick(Image img)
+		{
+			ctlRefSpriteEnemy = img;
+			
+			selectedIndex = lsbEnemy.SelectedIndex;
+			spriteViewerDialog = new SpriteViewerDialog();
+			spriteCategory = CategoryName.Enemy;
+			spriteViewerDialog.ShowDialog();
+		}
+
+		private void imgEnemyIdleL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyIdleR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemySpawnL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemySpawnR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyMoveL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyMoveR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyAttackL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyAttackR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyDamageL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyDamageR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyDeathL_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void imgEnemyDeathR_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			imgEnemyClick((Image)sender);
+		}
+
+		private void cmbObjectItemDrop_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (lsbObject.SelectedIndex >= 0)
+			{
+				int index = lsbObject.SelectedIndex;
+
+				lstViewDbObject[index].dropItemID = cmbObjectItemDrop.SelectedIndex;
+
+			}
+		}
+
+		private void ckbObjectItemDrop_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbObject.SelectedIndex >= 0)
+			{
+				int index = lsbObject.SelectedIndex;
+
+				lstViewDbObject[index].dropItem = (bool)ckbObjectItemDrop.IsChecked;
+
+			}
+		}
+
+		private void rdbItemConsumable_Click(object sender, RoutedEventArgs e)
+		{
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				if ((bool)rdbItemConsumable.IsChecked)
+				{
+					lstViewDbItem[index].attribute = ItemAttribute.Consumable;
+				}
+
+			}
+		}
+
+		private void rdbItemEquipment_Click(object sender, RoutedEventArgs e)
+		{
+
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				if ((bool)rdbItemEquipment.IsChecked)
+				{
+					lstViewDbItem[index].attribute = ItemAttribute.Equipment;
+				}
+
+			}
+		}
+
+		private void rdbItemTool_Click(object sender, RoutedEventArgs e)
+		{
+
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				if ((bool)rdbItemTool.IsChecked)
+				{
+					lstViewDbItem[index].attribute = ItemAttribute.Tool;
+				}
+
+			}
+		}
+
+		private void rdbItemTreasure_Click(object sender, RoutedEventArgs e)
+		{
+
+			if (lsbItem.SelectedIndex >= 0)
+			{
+				int index = lsbItem.SelectedIndex;
+
+				if ((bool)rdbItemTreasure.IsChecked)
+				{
+					lstViewDbItem[index].attribute = ItemAttribute.Treasure;
+				}
+
+			}
 		}
 	}
 }

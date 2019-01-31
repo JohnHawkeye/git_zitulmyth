@@ -46,7 +46,7 @@ namespace Zitulmyth
 
 				case CategoryName.Block:
 
-					for(int i = 0; i < ImageData.spriteBlock.Count;i++)
+					for (int i = 0; i < ImageData.spriteBlock.Count; i++)
 					{
 						lstSpriteName.Add(ImageData.spriteBlock[i].patternSource.patternName);
 					}
@@ -57,6 +57,15 @@ namespace Zitulmyth
 					break;
 
 				case CategoryName.Enemy:
+
+					for (int i = 0; i < ImageData.spriteEnemy.Count; i++)
+					{
+						lstSpriteName.Add(ImageData.spriteEnemy[i].patternSource.patternName);
+					}
+
+					lsbSprite.ItemsSource = lstSpriteName;
+					lsbSprite.SelectedIndex = 0;
+
 					break;
 
 				case CategoryName.Object:
@@ -70,6 +79,14 @@ namespace Zitulmyth
 					break;
 
 				case CategoryName.Item:
+
+					for (int i = 0; i < ImageData.spriteItem.Count; i++)
+					{
+						lstSpriteName.Add(ImageData.spriteItem[i].patternSource.patternName);
+					}
+
+					lsbSprite.ItemsSource = lstSpriteName;
+					lsbSprite.SelectedIndex = 0;
 					break;
 			}
 
@@ -79,7 +96,7 @@ namespace Zitulmyth
 
 		private void PreviewImage()
 		{
-			if(lsbSprite.SelectedIndex >= 0)
+			if (lsbSprite.SelectedIndex >= 0)
 			{
 				int index = lsbSprite.SelectedIndex;
 
@@ -94,10 +111,13 @@ namespace Zitulmyth
 					case CategoryName.Block:
 
 						imgPreview.Source = ImageData.spriteBlock[index].patternSource.croppedBitmap[0];
-						
+
 						break;
 
 					case CategoryName.Enemy:
+
+						imgPreview.Source = ImageData.spriteEnemy[index].patternSource.croppedBitmap[0];
+
 						break;
 
 					case CategoryName.Object:
@@ -105,6 +125,9 @@ namespace Zitulmyth
 						break;
 
 					case CategoryName.Item:
+
+						imgPreview.Source = ImageData.spriteItem[index].patternSource.croppedBitmap[0];
+
 						break;
 				}
 			}
@@ -138,7 +161,7 @@ namespace Zitulmyth
 
 					case CategoryName.Block:
 
-						MainWindow.databaseWindow.lstViewDbBlock[MainWindow.databaseWindow.selectedIndex].sprite = 
+						MainWindow.databaseWindow.lstViewDbBlock[MainWindow.databaseWindow.selectedIndex].sprite =
 							lsbSprite.SelectedItem.ToString();
 						MainWindow.databaseWindow.imgBlockCB.Source = ImageData.spriteBlock[index].patternSource.croppedBitmap[0];
 
@@ -152,6 +175,11 @@ namespace Zitulmyth
 						break;
 
 					case CategoryName.Enemy:
+
+						EnemySpriteAddressSelector(Convert.ToInt32(MainWindow.databaseWindow.ctlRefSpriteEnemy.Tag));
+						
+						MainWindow.databaseWindow.ctlRefSpriteEnemy.Source = ImageData.spriteEnemy[index].patternSource.croppedBitmap[0];
+
 						break;
 
 					case CategoryName.Object:
@@ -172,11 +200,16 @@ namespace Zitulmyth
 								lsbSprite.SelectedItem.ToString();
 							MainWindow.databaseWindow.imgObjectB.Source = ImageData.spriteObject[index].patternSource.croppedBitmap[0];
 						}
-						
+
 
 						break;
 
 					case CategoryName.Item:
+
+						MainWindow.databaseWindow.lstViewDbItem[MainWindow.databaseWindow.selectedIndex].sprite =
+							lsbSprite.SelectedItem.ToString();
+						MainWindow.databaseWindow.imgItem.Source = ImageData.spriteItem[index].patternSource.croppedBitmap[0];
+
 						break;
 				}
 
@@ -184,6 +217,61 @@ namespace Zitulmyth
 				this.Close();
 			}
 
+		}
+
+		private void EnemySpriteAddressSelector (int index)
+		{
+			switch (index)
+			{
+				case 0:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteIdleL =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 1:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteIdleR =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 2:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteSpawnL =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 3:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteSpawnR =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 4:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteMoveL =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 5:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteMoveR =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 6:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteAttackL =
+						 lsbSprite.SelectedItem.ToString();
+					break;
+				case 7:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteAttackR =
+							lsbSprite.SelectedItem.ToString();
+					break;
+				case 8:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteDamageL =
+						 lsbSprite.SelectedItem.ToString();
+					break;
+				case 9:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteDamageR =
+						 lsbSprite.SelectedItem.ToString();
+					break;
+				case 10:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteDeathL =
+						lsbSprite.SelectedItem.ToString();
+					break;
+				case 11:
+					MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].spriteDeathR =
+						lsbSprite.SelectedItem.ToString();
+					break;
+			}
 		}
 	}
 }
