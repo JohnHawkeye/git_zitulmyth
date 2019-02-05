@@ -98,6 +98,14 @@ namespace Zitulmyth
 
 			for (int i = 0; i < Item.lstItemData.Count; i++)
 			{
+				var _imgItem = new Image
+				{
+					Source = ImageData.ImageSourceSelector(CategoryName.Item, Item.lstItemData[i].sprite),
+					Width = Item.lstItemData[i].size.X,
+					Height = Item.lstItemData[i].size.Y,
+				};
+
+				Item.lstItemData[i].imgItem = _imgItem;
 				canvas.Children.Add(Item.lstItemData[i].imgItem);
 				Canvas.SetLeft(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.X);
 				Canvas.SetTop(Item.lstItemData[i].imgItem, Item.lstItemData[i].position.Y);
@@ -106,7 +114,14 @@ namespace Zitulmyth
 
 			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{
+				var _imgEnemy = new Image
+				{
+					Source = ImageData.ImageSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteIdleL),
+					Width = SpawnEnemy.lstEnemyData[i].size.X,
+					Height = SpawnEnemy.lstEnemyData[i].size.Y,
+				};
 
+				SpawnEnemy.lstEnemyData[i].imgEnemy = _imgEnemy;
 				canvas.Children.Add(SpawnEnemy.lstEnemyData[i].imgEnemy);
 				Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.X);
 				Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.Y);

@@ -47,6 +47,7 @@ namespace Zitulmyth
 	public class DatabaseEnemy
 	{
 		public string name { get; set; }
+		public Vector size { get; set; }
 
 		public string spriteIdleL { get; set; }
 		public string spriteIdleR { get; set; }
@@ -112,6 +113,7 @@ namespace Zitulmyth
 	{
 		public string name { get; set; }
 		public string sprite { get; set; }
+		public Vector size { get; set; }
 		
 		public ItemAttribute attribute { get; set; }
 		public int weight { get; set; }
@@ -125,7 +127,7 @@ namespace Zitulmyth
 		public int meleeSpeed { get; set; }
 		public int defense { get; set; }
 
-		public int damageInterbal { get; set; }
+		public int damageInterval { get; set; }
 		public bool invincible { get; set; }
 		public bool knockback { get; set; }
 
@@ -1273,7 +1275,7 @@ namespace Zitulmyth
 				txbItemMeleeSpeed.Text = lstViewDbItem[index].meleeSpeed.ToString();
 				txbItemDefense.Text = lstViewDbItem[index].defense.ToString();
 
-				txbItemDamageInvincible.Text = lstViewDbItem[index].damageInterbal.ToString();
+				txbItemDamageInvincible.Text = lstViewDbItem[index].damageInterval.ToString();
 				ckbItemInvincible.IsChecked = lstViewDbItem[index].invincible;
 				ckbItemKnockback.IsChecked = lstViewDbItem[index].knockback;
 
@@ -1825,7 +1827,7 @@ namespace Zitulmyth
 					{
 						int index = lsbItem.SelectedIndex;
 
-						lstViewDbItem[index].damageInterbal = int.Parse(txbItemDamageInvincible.Text);
+						lstViewDbItem[index].damageInterval = int.Parse(txbItemDamageInvincible.Text);
 
 					}
 					else

@@ -18,15 +18,6 @@ using Zitulmyth.Data;
 
 namespace Zitulmyth
 {
-	public enum ItemName
-	{
-		Coin,
-		Apple,
-		StarFruit,
-		TreeBranch,
-		BoarMeat,
-	}
-
 	public enum ItemAttribute
 	{
 		Consumable = 0,
@@ -38,12 +29,41 @@ namespace Zitulmyth
 	public class ItemData
 	{
 
-		public ItemName itemName;
+		public string itemName;
+		public string sprite;
+		public ItemAttribute attribute;
 		public Image imgItem;
+
 		public Vector position;
-		public int width;
-		public int height;
+		public Vector size;
+
 		public int weight;
+
+		public int maxLife;
+		public int nowLife;
+		public int maxMana;
+		public int nowMana;
+
+		public int offense;
+		public int meleespeed;
+		public int defense;
+
+		public int damageInterval;
+		public bool invinsible;
+		public bool knockback;
+
+		public int speed;
+		public int jumpMaxHeight;
+		public int jumpCount;
+		public int addingWeight;
+
+		public int score;
+		public int money;
+		public int timeLimit;
+		public int switchId;
+		public bool timeStop;
+		public bool bomb;
+
 		public int expirationTime;
 		public int totalTime;
 
@@ -57,73 +77,56 @@ namespace Zitulmyth
 
 		public static List<ItemData> lstItemData = new List<ItemData>();
 
-		public static  ItemData SetItemData(ItemName name,Vector targetpos)
+		public static int DatabaseItemNameSearch(int target)
 		{
-			var item = new ItemData();
+			int index;
 
-			switch (name)
+			for (int i = 0; i < StageData.lstDbItem.Count; i++)
 			{
-				case ItemName.Coin:
-
-					item = new ItemData
-						{
-							itemName = ItemName.Coin,
-							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item,"Coin"), Width = 32, Height = 32 },
-							position = targetpos,
-							weight = 160,	width = 1,height = 1,expirationTime = 1000,totalTime = 0,
-						};
-
-					break;
-
-				case ItemName.Apple:
-
-					item = new ItemData
-						{
-							itemName = ItemName.Apple,
-							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "Apple"), Width = 32, Height = 32 },
-							position = targetpos,
-							weight = 160,width = 1,height = 1,expirationTime = 1000,totalTime = 0
-						};
-
-					break;
-
-				case ItemName.StarFruit:
-					item = new ItemData
-						{
-							itemName = ItemName.StarFruit,
-							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "StarFruit"), Width = 32, Height = 32 },
-							position = targetpos,
-							weight = 160,width= 1,height=1,	expirationTime = 1000,	totalTime = 0
-						};
-					break;
-
-				case ItemName.TreeBranch:
-					item = new ItemData
-						{
-							itemName = ItemName.TreeBranch,
-							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "TreeBranch"), Width = 64, Height = 32 },
-							position = targetpos,
-							weight = 160,width= 2,height=1,expirationTime = 1000,totalTime = 0
-						};
-					break;
-
-				case ItemName.BoarMeat:
-					item = new ItemData
-						{
-							itemName = ItemName.BoarMeat,
-							imgItem = new Image { Source = ImageData.ImageSourceSelector(CategoryName.Item, "BoarMeat"), Width = 32, Height = 32 },
-							position = targetpos,
-							weight = 160,width= 2,height=1,expirationTime = 1000,totalTime = 0
-						};
-					break;
-
+				if (lstItemData[target].itemName == StageData.lstDbItem[i].name)
+				{
+					return index = i;
+				}
 			}
-			return item;
+
+			return index = -1;
 		}
 
-		public static void ItemGenerate(Canvas canvas,ItemName name,Vector targetpos)
+		public static void ItemGenerate(Canvas canvas,int itemid,Vector targetpos)
 		{
-			lstItemData.Add(SetItemData(name, targetpos));
+			lstItemData.Add(new ItemData {
+				itemName = StageData.lstDbItem[itemid].name,
+				sprite = StageData.lstDbItem[itemid].sprite,
+				attribute = StageData.lstDbItem[itemid].attribute,
+				imgItem = new Image {
+					Source = ImageData.ImageSourceSelector(CategoryName.Item, StageData.lstDbItem[itemid].sprite),
+					Width = StageData.lstDbItem[itemid].size.X,
+					Height = StageData.lstDbItem[itemid].size.Y,
+				},
+				position = targetpos,
+				size = StageData.lstDbItem[itemid].size,
+				weight = StageData.lstDbItem[itemid].weight,
+				maxLife = StageData.lstDbItem[itemid].maxLife,
+				nowLife = StageData.lstDbItem[itemid].nowLife,
+				maxMana = StageData.lstDbItem[itemid].maxMana,
+				nowMana = StageData.lstDbItem[itemid].nowMana,
+				offense = StageData.lstDbItem[itemid].offense,
+				meleespeed = StageData.lstDbItem[itemid].meleeSpeed,
+				defense = StageData.lstDbItem[itemid].defense,
+				damageInterval = StageData.lstDbItem[itemid].damageInterval,
+				invinsible = StageData.lstDbItem[itemid].invincible,
+				knockback = StageData.lstDbItem[itemid].knockback,
+				speed = StageData.lstDbItem[itemid].speed,
+				jumpMaxHeight = StageData.lstDbItem[itemid].jumpMaxHeight,
+				jumpCount = StageData.lstDbItem[itemid].jumpCount,
+				addingWeight = StageData.lstDbItem[itemid].addingWeight,
+				score =  StageData.lstDbItem[itemid].score,
+				money = StageData.lstDbItem[itemid].money,
+				timeLimit = StageData.lstDbItem[itemid].timeLimit,
+				switchId = StageData.lstDbItem[itemid].switchId,
+				timeStop = StageData.lstDbItem[itemid].timeStop,
+				bomb = StageData.lstDbItem[itemid].bomb
+			});
 			
 			int index = lstItemData.Count - 1;
 
@@ -141,7 +144,7 @@ namespace Zitulmyth
 				double posX = Canvas.GetLeft(lstItemData[i].imgItem);
 				double posY = Canvas.GetTop(lstItemData[i].imgItem);
 
-				if (!BlockCheck.BlockCheckBottom(posX, posY,lstItemData[i].width*32 ,lstItemData[i].height * 32, lstItemData[i].weight))
+				if (!BlockCheck.BlockCheckBottom(posX, posY,(int)lstItemData[i].size.X ,(int)lstItemData[i].size.Y, lstItemData[i].weight))
 				{
 					
 					posY += SystemOperator.PixelPerSecond(lstItemData[i].weight);

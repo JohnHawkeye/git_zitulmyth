@@ -179,6 +179,9 @@ namespace Zitulmyth
 						EnemySpriteAddressSelector(Convert.ToInt32(MainWindow.databaseWindow.ctlRefSpriteEnemy.Tag));
 						
 						MainWindow.databaseWindow.ctlRefSpriteEnemy.Source = ImageData.spriteEnemy[index].patternSource.croppedBitmap[0];
+						MainWindow.databaseWindow.lstViewDbEnemy[MainWindow.databaseWindow.selectedIndex].size =
+								new Vector(ImageData.spriteEnemy[index].patternSource.croppedBitmap[0].PixelWidth,
+											ImageData.spriteEnemy[index].patternSource.croppedBitmap[0].PixelHeight);
 
 						break;
 
@@ -210,6 +213,9 @@ namespace Zitulmyth
 							lsbSprite.SelectedItem.ToString();
 						MainWindow.databaseWindow.imgItem.Source = ImageData.spriteItem[index].patternSource.croppedBitmap[0];
 
+						MainWindow.databaseWindow.lstViewDbItem[MainWindow.databaseWindow.selectedIndex].size =
+								new Vector(ImageData.spriteItem[index].patternSource.croppedBitmap[0].PixelWidth,
+											ImageData.spriteItem[index].patternSource.croppedBitmap[0].PixelHeight);
 						break;
 				}
 

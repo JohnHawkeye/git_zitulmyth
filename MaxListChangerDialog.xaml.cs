@@ -88,6 +88,7 @@ namespace Zitulmyth
 								{
 									dbe.Add(new DatabaseEnemy {
 										name = "エネミー " + i,
+										size = new Vector(32,32),
 										life = 0, offense = 0,
 										speed = 0, weight = 0, jumpMaxHeight = 0,
 										triggerAreaOffset = new Vector(0,0),
@@ -153,11 +154,12 @@ namespace Zitulmyth
 								else
 								{
 									dbi.Add(new DatabaseItem { name = "アイテム " + i,
+										size = new Vector(32,32),
 										attribute = ItemAttribute.Consumable,
 										weight = 0,
 										maxLife = 0, nowLife = 0, maxMana = 0, nowMana = 0,
 										offense = 0, meleeSpeed = 0, defense = 0,
-										damageInterbal = 0,
+										damageInterval = 0,
 										speed = 0, jumpMaxHeight = 0, jumpCount = 0, addingWeight = 0,
 										score = 0, money = 0, timeLimit = 0, switchId = 0
 

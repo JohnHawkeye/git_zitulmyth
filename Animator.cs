@@ -28,88 +28,19 @@ namespace Zitulmyth
 		Damage,
 		Death,
 	}
-
-	public class CBEnemyData
-	{
-		public EnemyName name;
-
-		public List<CroppedBitmap> idleL = new List<CroppedBitmap>();
-		public List<CroppedBitmap> spawnL = new List<CroppedBitmap>();
-		public List<CroppedBitmap> moveL = new List<CroppedBitmap>();
-		public List<CroppedBitmap> attackL = new List<CroppedBitmap>();
-		public List<CroppedBitmap> damageL = new List<CroppedBitmap>();
-		public List<CroppedBitmap> deathL = new List<CroppedBitmap>();
-
-		public List<CroppedBitmap> idleR = new List<CroppedBitmap>();
-		public List<CroppedBitmap> spawnR = new List<CroppedBitmap>();
-		public List<CroppedBitmap> moveR = new List<CroppedBitmap>();
-		public List<CroppedBitmap> attackR = new List<CroppedBitmap>();
-		public List<CroppedBitmap> damageR = new List<CroppedBitmap>();
-		public List<CroppedBitmap> deathR = new List<CroppedBitmap>();
-
-	}
-
+	
 	public class Animator
 	{
 		private static int keyFlameTime = 800;
-
-		private static CBEnemyData cbDataZigitu = new CBEnemyData();
-		private static CBEnemyData cbDataBoar = new CBEnemyData();
-
-		private static List<CroppedBitmap> cbDataCoin = new List<CroppedBitmap>();
-		private static List<CroppedBitmap> cbDataBoarMeat = new List<CroppedBitmap>();
-
-		public static void CBDataSettings()
-		{
-
-			cbDataZigitu.idleL = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
-			cbDataZigitu.spawnL = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
-			cbDataZigitu.moveL = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
-			cbDataZigitu.attackL = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
-			cbDataZigitu.damageL = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
-			cbDataZigitu.deathL = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
-			cbDataZigitu.idleR = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
-			cbDataZigitu.spawnR = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
-			cbDataZigitu.moveR = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
-			cbDataZigitu.attackR = AnimationSourceSelector(CategoryName.Enemy, "ZigituIdle");
-			cbDataZigitu.damageR = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
-			cbDataZigitu.deathR = AnimationSourceSelector(CategoryName.Enemy, "ZigituSpawn");
-
-			cbDataBoar.idleL = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleL");
-			cbDataBoar.spawnL = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleL");
-			cbDataBoar.moveL = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleL");
-			cbDataBoar.attackL = AnimationSourceSelector(CategoryName.Enemy, "BoarDashL");
-			cbDataBoar.damageL = AnimationSourceSelector(CategoryName.Enemy, "BoarDamageL");
-			cbDataBoar.deathL = AnimationSourceSelector(CategoryName.Enemy, "BoarDeathL");
-			cbDataBoar.idleR = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleR");
-			cbDataBoar.spawnR = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleR");
-			cbDataBoar.moveR = AnimationSourceSelector(CategoryName.Enemy, "BoarIdleR");
-			cbDataBoar.attackR = AnimationSourceSelector(CategoryName.Enemy, "BoarDashR");
-			cbDataBoar.damageR = AnimationSourceSelector(CategoryName.Enemy, "BoarDamageR");
-			cbDataBoar.deathR = AnimationSourceSelector(CategoryName.Enemy, "BoarDeathR");
-
-			cbDataCoin = AnimationSourceSelector(CategoryName.Item, "Coin");
-			cbDataBoarMeat = AnimationSourceSelector(CategoryName.Item, "BoarMeat");
-
-		}
 
 		public static void AnimationEnemy()
 		{
 			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{
 				int keyFlameNum = 0;
-				CBEnemyData animationCells = new CBEnemyData();
+				List<CroppedBitmap> animationCells = new List<CroppedBitmap>();
 
-				switch (SpawnEnemy.lstEnemyData[i].name)
-				{
-					case EnemyName.Zigitu01:
-						animationCells = cbDataZigitu;
-						break;
-
-					case EnemyName.Boar:
-						animationCells = cbDataBoar;
-						break;
-				}
+				
 
 				if (SpawnEnemy.lstEnemyData[i].totalAnimTime < keyFlameTime)
 				{
@@ -126,30 +57,34 @@ namespace Zitulmyth
 					{
 						if (!SpawnEnemy.lstEnemyData[i].direction)
 						{
-							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.deathL.Count);
-							cbAnimEnemyCell = animationCells.deathL[SpawnEnemy.lstEnemyData[i].keyFlame];
-							keyFlameNum = animationCells.deathL.Count;
+							animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteDeathL);
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+							cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.Count;
 						}
 						else
 						{
-							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.deathR.Count);
-							cbAnimEnemyCell = animationCells.deathR[SpawnEnemy.lstEnemyData[i].keyFlame];
-							keyFlameNum = animationCells.deathR.Count;
+							animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteDeathR);
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+							cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.Count;
 						}
 					}
 					else
 					{
 						if (!SpawnEnemy.lstEnemyData[i].direction)
 						{
-							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.idleL.Count);
-							cbAnimEnemyCell = animationCells.idleL[SpawnEnemy.lstEnemyData[i].keyFlame];
-							keyFlameNum = animationCells.idleL.Count;
+							animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteIdleL);
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+							cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.Count;
 						}
 						else
 						{
-							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.idleR.Count);
-							cbAnimEnemyCell = animationCells.idleR[SpawnEnemy.lstEnemyData[i].keyFlame];
-							keyFlameNum = animationCells.idleR.Count;
+							animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteIdleR);
+							SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+							cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+							keyFlameNum = animationCells.Count;
 						}
 
 
@@ -157,15 +92,17 @@ namespace Zitulmyth
 						{
 							if (!SpawnEnemy.lstEnemyData[i].direction)
 							{
-								SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageL.Count);
-								cbAnimEnemyCell = animationCells.damageL[SpawnEnemy.lstEnemyData[i].keyFlame];
-								keyFlameNum = animationCells.damageL.Count;
+								animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteDamageL);
+								SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+								cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+								keyFlameNum = animationCells.Count;
 							}
 							else
 							{
-								SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageR.Count);
-								cbAnimEnemyCell = animationCells.damageR[SpawnEnemy.lstEnemyData[i].keyFlame];
-								keyFlameNum = animationCells.damageR.Count;
+								animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteDamageR);
+								SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+								cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+								keyFlameNum = animationCells.Count;
 							}
 
 						}
@@ -175,15 +112,17 @@ namespace Zitulmyth
 							{
 								if (!SpawnEnemy.lstEnemyData[i].direction)
 								{
-									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageL.Count);
-									cbAnimEnemyCell = animationCells.damageL[SpawnEnemy.lstEnemyData[i].keyFlame];
-									keyFlameNum = animationCells.damageL.Count;
+									animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteIdleL);
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+									cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.Count;
 								}
 								else
 								{
-									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.damageR.Count);
-									cbAnimEnemyCell = animationCells.damageR[SpawnEnemy.lstEnemyData[i].keyFlame];
-									keyFlameNum = animationCells.damageR.Count;
+									animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteIdleR);
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+									cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.Count;
 								}
 
 
@@ -193,15 +132,17 @@ namespace Zitulmyth
 							{
 								if (!SpawnEnemy.lstEnemyData[i].direction)
 								{
-									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.attackL.Count);
-									cbAnimEnemyCell = animationCells.attackL[SpawnEnemy.lstEnemyData[i].keyFlame];
-									keyFlameNum = animationCells.attackL.Count;
+									animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteAttackL);
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+									cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.Count;
 								}
 								else
 								{
-									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.attackR.Count);
-									cbAnimEnemyCell = animationCells.attackR[SpawnEnemy.lstEnemyData[i].keyFlame];
-									keyFlameNum = animationCells.attackR.Count;
+									animationCells = AnimationSourceSelector(CategoryName.Enemy, SpawnEnemy.lstEnemyData[i].spriteAttackR);
+									SpawnEnemy.lstEnemyData[i].keyFlame = CellNumCheck(SpawnEnemy.lstEnemyData[i].keyFlame, animationCells.Count);
+									cbAnimEnemyCell = animationCells[SpawnEnemy.lstEnemyData[i].keyFlame];
+									keyFlameNum = animationCells.Count;
 								}
 
 
@@ -237,20 +178,7 @@ namespace Zitulmyth
 				List<CroppedBitmap> animationCells = new List<CroppedBitmap>();
 				bool noAnim = false;
 
-				switch (Item.lstItemData[i].itemName)
-				{
-					case ItemName.Coin:
-						animationCells = cbDataCoin;
-						break;
-
-					case ItemName.BoarMeat:
-						animationCells = cbDataBoarMeat;
-						break;
-
-					default:
-						noAnim = true;
-						break;
-				}
+				animationCells = AnimationSourceSelector(CategoryName.Item, Item.lstItemData[i].sprite);
 
 				if (!noAnim)
 				{
@@ -343,8 +271,6 @@ namespace Zitulmyth
 
 					}
 				}
-
-
 
 			}
 		}

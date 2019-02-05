@@ -44,6 +44,18 @@ namespace Zitulmyth
 		
 	}
 
+	public class EventCommandTask{
+
+		public EventCommandEnum name;
+		public TargetType targetType;
+		public int targetID;
+		public Image targetImage;
+
+		public Vector moveTotal = new Vector(0,0);
+		public Vector moveDistance = new Vector(0,0);
+		public bool direction;
+	}
+
 	public class GameTransition
 	{
 		public static GameTransitionType gameTransition = GameTransitionType.Title;
@@ -76,6 +88,8 @@ namespace Zitulmyth
 		public static int eventCharaMoveSpd;
 		public static int charaMoveIndex = 0;
 		public static bool charaMoveStart;
+
+		public static List<EventCommandTask> lstEventTask = new List<EventCommandTask>(); 
 
 		public static bool stageTestPlay = false;
 
@@ -231,7 +245,7 @@ namespace Zitulmyth
 					{
 						if (growthEnemy)
 						{	
-							SpawnEnemy.SpawnSelect(canvas, EnemyName.Zigitu01);
+							SpawnEnemy.SpawnSelect(canvas, "");
 							growthEnemy = false;
 						}
 					}
@@ -268,6 +282,7 @@ namespace Zitulmyth
 						StageInit.StageEnemyRemove(canvas);
 						growthEnemy = false;
 						StageInit.StageItemRemove(canvas);
+						MainWindow.canScreenFade.Visibility = Visibility.Hidden;
 
 						StageManager.lstClearCondition.Clear();
 						StageManager.clearFlag = false;
@@ -281,6 +296,7 @@ namespace Zitulmyth
 						gameTransition = GameTransitionType.EditMode;
 						stageTestPlay = false;
 						StageManager.clearFlag = false;
+						MainWindow.canScreenFade.Visibility = Visibility.Hidden;
 
 						MainWindow.stageEditor.StageLoad();
 
@@ -309,7 +325,7 @@ namespace Zitulmyth
 
 			if(eventCount != StageEvent.listEvent.Count)
 			{
-				if (!eventWaiting && !screenFadeStart && !charaMoveStart)
+				if (!eventWaiting && !screenFadeStart)
 				{
 					switch (StageEvent.listEvent[eventCount].eventType)
 					{
@@ -331,7 +347,7 @@ namespace Zitulmyth
 
 							if (StageEvent.listEvent[eventCount].targetImgType == TargetType.Object)
 							{
-								eventTargetImage = SelectObjectImage();
+								eventTargetImage = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
 							}
 
 							
@@ -361,14 +377,24 @@ namespace Zitulmyth
 
 						case EventCommandEnum.Move:
 
+							lstEventTask.Add(new EventCommandTask {	name = EventCommandEnum.Move });
 
+							if(StageEvent.listEvent[eventCount].targetImgType == TargetType.Player)
+							{
+								lstEventTask[lstEventTask.Count - 1].targetType = TargetType.Player;
+								lstEventTask[lstEventTask.Count - 1].targetImage = ImageData.imgPlayer;
+								lstEventTask[lstEventTask.Count - 1].moveDistance = StageEvent.listEvent[eventCount].moveDistance;
+							} else
 
 							if(StageEvent.listEvent[eventCount].targetImgType == TargetType.Object)
 							{
-								eventTargetImage = SelectObjectImage();
+								lstEventTask[lstEventTask.Count - 1].targetType = TargetType.Object;
+								lstEventTask[lstEventTask.Count - 1].targetImage = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
+								lstEventTask[lstEventTask.Count - 1].targetID = StageEvent.listEvent[eventCount].targetId;
+								lstEventTask[lstEventTask.Count - 1].moveDistance = StageEvent.listEvent[eventCount].moveDistance;
 							}
+							lstEventTask[lstEventTask.Count - 1].direction = StageEvent.listEvent[eventCount].direction;
 
-							charaMoveIndex = eventCount;
 							charaMoveStart = true;
 
 							break;
@@ -420,8 +446,7 @@ namespace Zitulmyth
 																		StageEvent.listEvent[eventCount].patternName);
 									break;
 								case TargetType.Object:
-
-									SelectObjectImage().Source =
+									ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject.Source =
 
 										ImageData.ImageSourceSelector(StageEvent.listEvent[eventCount].categoryName,
 																		StageEvent.listEvent[eventCount].patternName);
@@ -467,7 +492,7 @@ namespace Zitulmyth
 
 						case EventCommandEnum.GenerateEnemy:
 
-							SpawnEnemy.GenerateEnemy(canvas,StageEvent.listEvent[eventCount].setPosition);
+							SpawnEnemy.GenerateEnemy(canvas,0,StageEvent.listEvent[eventCount].setPosition);
 
 							break;
 
@@ -476,7 +501,7 @@ namespace Zitulmyth
 							duringTransition = false;
 							eventStart = false;
 
-							if(gameTransition == GameTransitionType.StageStart)
+							if (gameTransition == GameTransitionType.StageStart)
 							{
 								if (!StageEvent.listEvent[eventCount].eventOnly)
 								{
@@ -488,9 +513,9 @@ namespace Zitulmyth
 									MainWindow.lblMode.Content = "ゲームモード：ステージ初期化";
 									gameTransition = GameTransitionType.StageNext;
 								}
-								
+
 							}
-							else if(gameTransition == GameTransitionType.StageEnd)
+							else if (gameTransition == GameTransitionType.StageEnd)
 							{
 								MainWindow.lblMode.Content = "ゲームモード：ステージ初期化";
 								gameTransition = GameTransitionType.StageNext;
@@ -530,6 +555,19 @@ namespace Zitulmyth
 
 				eventTimer.Start();
 
+			}
+		}
+
+		public static void EventTaskCommander()
+		{
+			for(int i = 0; i < lstEventTask.Count; i++)
+			{
+				switch (lstEventTask[i].name)
+				{
+					case EventCommandEnum.Move:
+						CharaMove(i);
+						break;
+				}
 			}
 		}
 
@@ -597,68 +635,36 @@ namespace Zitulmyth
 
 		}
 
-		public static void CharaMove()
+		public static void CharaMove(int index)
 		{
-			if(StageEvent.listEvent[charaMoveIndex].moveTotal.X < StageEvent.listEvent[charaMoveIndex].moveDistance.X)
+			if(lstEventTask[index].moveTotal.X < lstEventTask[index].moveDistance.X)
 			{
 
-				double x = Canvas.GetLeft(eventTargetImage);
+				double x = Canvas.GetLeft(lstEventTask[index].targetImage);
 				double dis = 0;
 				double ac = StageEvent.listEvent[charaMoveIndex].moveSpeed;
 
-				dis = (double)PlayerStatus.moveSpeed * MainWindow.elapsedTime * 0.01 * ac;
+				dis = 2;
 
-				if (!StageEvent.listEvent[charaMoveIndex].direction)
+				if (!lstEventTask[index].direction)
 				{
-					Canvas.SetLeft(eventTargetImage, x - dis);
+					Canvas.SetLeft(lstEventTask[index].targetImage, x - dis);
 				}
 				else
 				{
-					Canvas.SetLeft(eventTargetImage, x + dis);
+					Canvas.SetLeft(lstEventTask[index].targetImage, x + dis);
 				}
 
-				StageEvent.listEvent[charaMoveIndex].moveTotal.X += dis;
+				lstEventTask[index].moveTotal.X += dis;
 
 			}
 			else
 			{
-				charaMoveStart = false;
+				lstEventTask.RemoveAt(index);
 			}
 
 		}
-
-		public static Image SelectObjectImage()
-		{
-			Image temp = new Image();
-
-			switch (StageEvent.listEvent[eventCount].eventType)
-			{
-				case EventCommandEnum.CharaImageChange:
-
-					temp = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
-
-					break;
-
-				case EventCommandEnum.Move:
-
-					temp = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
-
-					break;
-
-				case EventCommandEnum.Balloon:
-
-					temp = ObjectChecker.lstObject[StageEvent.listEvent[eventCount].targetId].imgObject;
-
-					break;
-
-			}
-
-			return temp;
-
-		}
-
 
 	}
-
 
 }

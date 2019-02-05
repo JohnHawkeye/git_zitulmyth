@@ -29,7 +29,7 @@ namespace Zitulmyth
 			for (int i = 0; i < lstEnemyData.Count; i++)
 			{
 
-				EnemyTriggerAreaSetting(i);	//DebugView
+				EnemyTriggerAreaSetting(i); //DebugView
 
 				if (lstEnemyData[i].isDamage)
 				{
@@ -38,19 +38,20 @@ namespace Zitulmyth
 					if (lstEnemyData[i].isKnockBack)
 					{
 
-						SystemOperator.BoundObject(ref lstEnemyData[i].position,SystemOperator.FaceEachOther(lstEnemyData[i].position.X,PlayerStatus.playerPos.X),
-							ref lstEnemyData[i].totalDistance,lstEnemyData[i].targetDistance,ref lstEnemyData[i].bps,
-							ref lstEnemyData[i].coefficient,ref lstEnemyData[i].boundDirection,
+						SystemOperator.BoundObject(ref lstEnemyData[i].position, SystemOperator.FaceEachOther(lstEnemyData[i].position.X, PlayerStatus.playerPos.X),
+							ref lstEnemyData[i].totalDistance, lstEnemyData[i].targetDistance, ref lstEnemyData[i].bps,
+							ref lstEnemyData[i].coefficient, ref lstEnemyData[i].boundDirection,
 							lstEnemyData[i].weight, lstEnemyData[i].speed, lstEnemyData[i].jumpPower,
-							lstEnemyData[i].pixSize, ref lstEnemyData[i].isKnockBack);
+							lstEnemyData[i].size, ref lstEnemyData[i].isKnockBack);
 					}
 				}
 
-				if (!lstEnemyData[i].isKnockBack) {
+				if (!lstEnemyData[i].isKnockBack)
+				{
 					EnemyFalling(i, lstEnemyData[i].direction, lstEnemyData[i].position,
-									lstEnemyData[i].pixSize,lstEnemyData[i].speed, lstEnemyData[i].targetDistance);
+									lstEnemyData[i].size, lstEnemyData[i].speed, lstEnemyData[i].targetDistance);
 				}
-				
+
 
 				switch (lstEnemyData[i].state)
 				{
@@ -61,7 +62,7 @@ namespace Zitulmyth
 					case EnemyState.Idle:
 
 						EnemyIdle(i);
-						
+
 						break;
 
 					case EnemyState.Normal:
@@ -71,9 +72,9 @@ namespace Zitulmyth
 						break;
 
 					case EnemyState.Active:
-					
+
 						EnemyActiv(i);
-						
+
 						break;
 
 					case EnemyState.Death:
@@ -83,14 +84,14 @@ namespace Zitulmyth
 							lstEnemyData[i].totalWaitTime = 0;
 							lstEnemyData[i].targetWaitTime = 2000;
 							lstEnemyData[i].isWaiting = true;
-							
+
 						}
 						else
 						{
 							EnemyWaiting(i);
 						}
-						
-						
+
+
 
 						break;
 				}
@@ -107,7 +108,7 @@ namespace Zitulmyth
 
 			bool radDir;
 			int num;
-	
+
 			SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
 
 			num = SystemOperator.randomNum.Next(1, 3);
@@ -119,7 +120,7 @@ namespace Zitulmyth
 			lstEnemyData[index].targetDistance = new Vector(SystemOperator.randomNum.Next(32, 96), 0);
 
 
-			if(lstEnemyData[index].state == EnemyState.Active)
+			if (lstEnemyData[index].state == EnemyState.Active)
 			{
 				SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
 				lstEnemyData[index].acceleration = 2;
@@ -140,12 +141,12 @@ namespace Zitulmyth
 			else
 			{
 
-				if (SystemOperator.moveCommonAmountX !=0 || SystemOperator.moveCommonAmountY !=0)
+				if (SystemOperator.moveCommonAmountX != 0 || SystemOperator.moveCommonAmountY != 0)
 				{
 
 					if (!EnemyTriggerCollisionCheck(index))
 					{
-						
+
 						lstEnemyData[index].state = EnemyState.Normal;
 					}
 					else
@@ -161,15 +162,10 @@ namespace Zitulmyth
 
 		public static void EnemyNormal(int index)
 		{
-			switch (lstEnemyData[index].name)
-			{
-				case EnemyName.Boar:
-					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
-										lstEnemyData[index].pixSize,lstEnemyData[index].speed, true);
 
-					break;
+			EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
+								lstEnemyData[index].size, lstEnemyData[index].speed, true);
 
-			}
 
 			lstEnemyData[index].state = EnemyState.Idle;
 
@@ -177,24 +173,16 @@ namespace Zitulmyth
 
 		public static void EnemyActiv(int index)
 		{
-		
-			switch (lstEnemyData[index].name)
-			{
-				case EnemyName.Boar:
-					EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
-										lstEnemyData[index].pixSize,lstEnemyData[index].speed * lstEnemyData[index].acceleration,false);
-					
 
-					break;
-
-			}
+			EnemyHorizontalMove(index, lstEnemyData[index].direction, lstEnemyData[index].position,
+								lstEnemyData[index].size, lstEnemyData[index].speed * lstEnemyData[index].acceleration, false);
 
 			lstEnemyData[index].state = EnemyState.Idle;
 		}
 
 
-		private static void EnemyHorizontalMove(int index, bool direction,Vector pos,Vector size,
-			int speed,bool wait)
+		private static void EnemyHorizontalMove(int index, bool direction, Vector pos, Vector size,
+			int speed, bool wait)
 		{
 
 			if (!lstEnemyData[index].valueSetComp)
@@ -202,13 +190,13 @@ namespace Zitulmyth
 				EnemyBehaviorValuesSetup(index);
 			}
 
-			if (lstEnemyData[index].totalDistance.X < lstEnemyData[index].targetDistance.X )
+			if (lstEnemyData[index].totalDistance.X < lstEnemyData[index].targetDistance.X)
 			{
 
 				if (!direction)
 				{
-					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y, (int)size.Y, speed)&&
-						pos.X>0)
+					if (!BlockCheck.BlockCheckLeft(pos.X, pos.Y, (int)size.Y, speed) &&
+						pos.X > 0)
 					{
 						if (pos.X - SystemOperator.PixelPerSecond(speed) > 0)
 						{
@@ -226,8 +214,8 @@ namespace Zitulmyth
 				else
 				{
 
-					if (!BlockCheck.BlockCheckRight(pos.X, pos.Y,(int)size.X,(int)size.Y, speed)&&
-						pos.X + size.X < 1024 - lstEnemyData[index].widthblock * 32)
+					if (!BlockCheck.BlockCheckRight(pos.X, pos.Y, (int)size.X, (int)size.Y, speed) &&
+						pos.X + size.X < 1024 - lstEnemyData[index].size.X)
 					{
 
 						if (pos.X + SystemOperator.PixelPerSecond(speed) < 992)
@@ -266,7 +254,7 @@ namespace Zitulmyth
 
 		private static void EnemyWaiting(int index)
 		{
-			if(lstEnemyData[index].totalWaitTime< lstEnemyData[index].targetWaitTime)
+			if (lstEnemyData[index].totalWaitTime < lstEnemyData[index].targetWaitTime)
 			{
 				lstEnemyData[index].totalWaitTime += MainWindow.elapsedTime;
 			}
@@ -275,7 +263,7 @@ namespace Zitulmyth
 				lstEnemyData[index].isWaiting = false;
 				lstEnemyData[index].perceive = false;
 
-				if(lstEnemyData[index].state == EnemyState.Death)
+				if (lstEnemyData[index].state == EnemyState.Death)
 				{
 					lstEnemyData[index].isDeath = true;
 				}
@@ -285,7 +273,7 @@ namespace Zitulmyth
 		public void EnemyJumping(int index, bool direction, Vector pos, int width, int jumpPower, Vector target)
 		{
 
-			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y,width,jumpPower))
+			if (!BlockCheck.BlockCheckTop(pos.X, pos.Y, width, jumpPower))
 			{
 				if (pos.Y - SystemOperator.PixelPerSecond(jumpPower) > 0)
 				{
@@ -317,11 +305,11 @@ namespace Zitulmyth
 
 			if (!lstEnemyData[index].isLadder)
 			{
-				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y,(int)size.X,(int)size.Y, lstEnemyData[index].weight)))
+				if ((!BlockCheck.BlockCheckBottom(pos.X, pos.Y, (int)size.X, (int)size.Y, lstEnemyData[index].weight)))
 				{
-					
+
 					lstEnemyData[index].position.Y += SystemOperator.PixelPerSecond(lstEnemyData[index].weight);
-					
+
 					if (!lstEnemyData[index].isFalling)
 					{
 						lstEnemyData[index].fallingStartPoint = pos.Y;
@@ -358,7 +346,7 @@ namespace Zitulmyth
 
 		public static void EnemyInvincibleTimeCount(int index)
 		{
-			if(lstEnemyData[index].totalInvincibleTime < 1000)
+			if (lstEnemyData[index].totalInvincibleTime < 1000)
 			{
 				lstEnemyData[index].totalInvincibleTime += MainWindow.elapsedTime;
 				lstEnemyData[index].imgEnemy.Opacity = 0.5;
@@ -378,7 +366,7 @@ namespace Zitulmyth
 
 			Vector p2 = lstEnemyData[index].triggerAreaPos;
 
-			Vector size2 = new Vector(lstEnemyData[index].triggerAreaOffset.X + lstEnemyData[index].triggerAreaSize.X * 32, lstEnemyData[index].triggerAreaSize.Y* 32);
+			Vector size2 = new Vector(lstEnemyData[index].triggerAreaOffset.X + lstEnemyData[index].triggerAreaSize.X * 32, lstEnemyData[index].triggerAreaSize.Y * 32);
 
 			if (!lstEnemyData[index].direction)
 			{
@@ -393,7 +381,7 @@ namespace Zitulmyth
 			}
 			else
 			{
-				size2.X += lstEnemyData[index].pixSize.X;
+				size2.X += lstEnemyData[index].size.X;
 
 				if (CollisionCheck.Collision(p1, p2, size1, size2))
 				{
@@ -405,7 +393,7 @@ namespace Zitulmyth
 				}
 			}
 
-			
+
 		}
 	}
 
@@ -416,46 +404,99 @@ namespace Zitulmyth
 		public static List<EnemyData> lstEnemyData = new List<EnemyData>();
 
 
-		public static void SpawnSelect(Canvas canvas,EnemyName name){
+		public static int DatabaseEnemyNameSearch(int target)
+		{
+			int index;
+
+			for (int i = 0; i < StageData.lstDbEnemy.Count; i++)
+			{
+				if (lstEnemyData[target].name == StageData.lstDbEnemy[i].name)
+				{
+					return index = i;
+				}
+			}
+
+			return index = -1;
+		}
+
+		public static void SpawnSelect(Canvas canvas, string name)
+		{
 
 			int seed = Environment.TickCount;
 
 			Random rnd = new Random(seed++);
 
-			switch (name)
+
+			rnd = new Random(seed++);
+
+			int ranDir = rnd.Next(0, 2);
+			int ranPosX;
+
+			Console.WriteLine(ranDir);
+			rnd = new Random(seed++);
+
+			if (ranDir == 1)
 			{
-				case EnemyName.Zigitu01:
-
-					rnd = new Random(seed++);
-
-					int ranDir = rnd.Next(0,2);
-					int ranPosX;
-
-					Console.WriteLine(ranDir);
-					rnd = new Random(seed++);
-
-					if (ranDir == 1)
-					{
-						ranPosX = rnd.Next(200,400);
-					}
-					else
-					{
-						ranPosX = rnd.Next(600, 800);
-					}
-
-					Vector pos = new Vector(ranPosX, 671);
-
-					GenerateEnemy(canvas,pos);
-
-					break;
+				ranPosX = rnd.Next(200, 400);
 			}
+			else
+			{
+				ranPosX = rnd.Next(600, 800);
+			}
+
+			Vector pos = new Vector(ranPosX, 671);
+
+			GenerateEnemy(canvas, 1, pos);
+
+
 		}
 
 		//Generaters
-		public static void GenerateEnemy(Canvas canvas, Vector setpos)
+		public static void GenerateEnemy(Canvas canvas, int enemyid, Vector setpos)
 		{
 
-			lstEnemyData.Add(SetEnemyData(EnemyName.Zigitu01, setpos,false));
+			lstEnemyData.Add(new EnemyData
+			{
+				name = StageData.lstDbEnemy[enemyid].name,
+				imgEnemy = new Image
+				{
+					Source = ImageData.ImageSourceSelector(CategoryName.Enemy, StageData.lstDbEnemy[enemyid].spriteIdleL),
+					Width = StageData.lstDbEnemy[enemyid].size.X,
+					Height = StageData.lstDbEnemy[enemyid].size.Y,
+				},
+				spriteIdleL = StageData.lstDbEnemy[enemyid].spriteIdleL,
+				spriteIdleR = StageData.lstDbEnemy[enemyid].spriteIdleR,
+				spriteSpawnL = StageData.lstDbEnemy[enemyid].spriteSpawnL,
+				spriteSpawnR = StageData.lstDbEnemy[enemyid].spriteSpawnR,
+				spriteMoveL = StageData.lstDbEnemy[enemyid].spriteMoveL,
+				spriteMoveR = StageData.lstDbEnemy[enemyid].spriteMoveR,
+				spriteAttackL = StageData.lstDbEnemy[enemyid].spriteAttackL,
+				spriteAttackR = StageData.lstDbEnemy[enemyid].spriteAttackR,
+				spriteDamageL = StageData.lstDbEnemy[enemyid].spriteDamageL,
+				spriteDamageR = StageData.lstDbEnemy[enemyid].spriteDamageR,
+				spriteDeathL = StageData.lstDbEnemy[enemyid].spriteDeathL,
+				spriteDeathR = StageData.lstDbEnemy[enemyid].spriteDeathR,
+
+				position = setpos,
+				size = StageData.lstDbEnemy[enemyid].size,
+
+
+				life = StageData.lstDbEnemy[enemyid].life,
+				ofepower = StageData.lstDbEnemy[enemyid].offense,
+				speed = StageData.lstDbEnemy[enemyid].speed,
+				weight = StageData.lstDbEnemy[enemyid].weight,
+				jumpMaxHeight = StageData.lstDbEnemy[enemyid].jumpMaxHeight,
+
+				triggerAreaOffset = StageData.lstDbEnemy[enemyid].triggerAreaOffset,
+				triggerAreaPos = StageData.lstDbEnemy[enemyid].triggerAreaPos,
+				triggerAreaSize = StageData.lstDbEnemy[enemyid].triggerAreaSize,
+
+				floating = StageData.lstDbEnemy[enemyid].floating,
+				slipThrogh = StageData.lstDbEnemy[enemyid].slipThrough,
+				useLadder = StageData.lstDbEnemy[enemyid].useLadder,
+				dropItem = StageData.lstDbEnemy[enemyid].dropItem,
+				dropItemId = StageData.lstDbEnemy[enemyid].dropItemID
+			});
 
 			int index = lstEnemyData.Count - 1;
 
@@ -463,15 +504,16 @@ namespace Zitulmyth
 
 			Canvas.SetLeft(lstEnemyData[index].imgEnemy, lstEnemyData[index].position.X);
 			Canvas.SetTop(lstEnemyData[index].imgEnemy, lstEnemyData[index].position.Y);
+			Canvas.SetZIndex(SpawnEnemy.lstEnemyData[index].imgEnemy, ImageZindex.enemy);
 		}
 
 		public static void RemoveEnemy(Canvas canvas)
 		{
-			for(int i = 0; i < lstEnemyData.Count; i++)
+			for (int i = 0; i < lstEnemyData.Count; i++)
 			{
-				if(lstEnemyData[i].isDeath)
+				if (lstEnemyData[i].isDeath)
 				{
-					if (lstEnemyData[i].name == EnemyName.Zigitu01)
+					if (i == 0)
 					{
 						GameTransition.growthEnemy = true;
 
@@ -487,52 +529,6 @@ namespace Zitulmyth
 
 		}
 
-		public static EnemyData SetEnemyData(EnemyName name, Vector setpos,bool dir)
-		{
-			var enemy = new EnemyData();
-			
-			switch (name)
-			{
-				case EnemyName.Zigitu01:
-
-					enemy = new EnemyData
-					{
-						name = EnemyName.Zigitu01,
-						speed = 4, life = 1, ofepower = 1, defpower = 0, weight = 160, direction = dir,
-						state = EnemyState.Spawn,
-						pixSize = new Vector(32, 64), position = setpos,
-						triggerAreaPos = new Vector(32, 64),triggerAreaSize = new Vector(0,0),triggerAreaOffset = new Vector(0, 0),
-						widthblock = 1,heightblock = 2,
-						imgEnemy = new Image(){ Source = ImageData.ImageSourceSelector(CategoryName.Enemy, "ZigituIdle"),
-												Width = 32,Height = 64},
-						deathEvent = EnemyDeathEvent.Pop,
-					};
-
-					break;
-
-				case EnemyName.Boar:
-
-					enemy = new EnemyData
-					{
-						name = EnemyName.Boar,
-						speed = 128, life = 5, ofepower = 1, defpower = 0, weight = 160, direction = dir,
-						state = EnemyState.Spawn,
-						pixSize = new Vector(64, 32), position = setpos,
-						triggerAreaPos = new Vector(64, 32), triggerAreaSize = new Vector(5, 1), triggerAreaOffset = new Vector(0, 0),
-						widthblock = 2, heightblock = 1,
-						imgEnemy = new Image() { Source = (!dir) ? ImageData.ImageSourceSelector(CategoryName.Enemy, "BoarIdleL") :
-																	ImageData.ImageSourceSelector(CategoryName.Enemy, "BoarIdleR"),
-												Width = 64, Height = 32 },
-						deathEvent = EnemyDeathEvent.Pop,
-
-					};
-
-					break;
-			}
-			
-			return enemy;
-		}
-
 		public static void EnemyTriggerAreaSetting(int index)
 		{
 
@@ -545,9 +541,8 @@ namespace Zitulmyth
 			else
 			{
 
-				lstEnemyData[index].triggerAreaPos.X = lstEnemyData[index].position.X + lstEnemyData[index].pixSize.X;
+				lstEnemyData[index].triggerAreaPos.X = lstEnemyData[index].position.X + lstEnemyData[index].size.X;
 
-					//(lstEnemyData[index].position.X + lstEnemyData[index].pixSize.X + lstEnemyData[index].triggerAreaOffset.X) + lstEnemyData[index].triggerAreaSize.X * 32;
 			}
 
 			lstEnemyData[index].triggerAreaPos.Y = lstEnemyData[index].position.Y;
@@ -557,41 +552,23 @@ namespace Zitulmyth
 				lstEnemyData[index].triggerAreaOffset.Y + lstEnemyData[index].triggerAreaSize.Y * 32);
 		}
 
-		public static void EnemyDeathItemDrop(Canvas canvas,EnemyName name,Vector position)
+		public static void EnemyDeathItemDrop(Canvas canvas, Vector position)
 		{
-
-
-			switch (name)
-			{
-				case EnemyName.Boar:
-
-					Item.ItemGenerate(canvas, ItemName.BoarMeat, position);
-					break;
-				
-			}
+			
 		}
 
 		public static void ReSpawnEnemy(Canvas canvas)
 		{
-			if(StageManager.respawnEnemy && lstEnemyData.Count == 0)
+			if (StageManager.respawnEnemy && lstEnemyData.Count == 0)
 			{
 				SystemOperator.randomNum = new Random(SystemOperator.timeSeed++);
 
 				Vector setpos = new Vector(SystemOperator.randomNum.Next(96, 672), SystemOperator.randomNum.Next(448, 704));
-				lstEnemyData.Add(SetEnemyData(EnemyName.Boar, setpos, true));
+				GenerateEnemy(canvas, 1, setpos);
 
 				setpos = new Vector(SystemOperator.randomNum.Next(96, 672), SystemOperator.randomNum.Next(448, 704));
-				lstEnemyData.Add(SetEnemyData(EnemyName.Boar, setpos, true));
+				GenerateEnemy(canvas, 1, setpos);
 
-				for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
-				{
-
-					canvas.Children.Add(SpawnEnemy.lstEnemyData[i].imgEnemy);
-					Canvas.SetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.X);
-					Canvas.SetTop(SpawnEnemy.lstEnemyData[i].imgEnemy, SpawnEnemy.lstEnemyData[i].position.Y);
-					Canvas.SetZIndex(SpawnEnemy.lstEnemyData[i].imgEnemy, ImageZindex.enemy);
-
-				}
 			}
 		}
 	}

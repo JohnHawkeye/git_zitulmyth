@@ -174,7 +174,7 @@ namespace Zitulmyth
 						Vector size1 = new Vector(32, 32);
 
 						Vector p2 = new Vector(SpawnEnemy.lstEnemyData[j].position.X, SpawnEnemy.lstEnemyData[j].position.Y);
-						Vector size2 = new Vector(SpawnEnemy.lstEnemyData[j].pixSize.X, SpawnEnemy.lstEnemyData[j].pixSize.Y);
+						Vector size2 = new Vector(SpawnEnemy.lstEnemyData[j].size.X, SpawnEnemy.lstEnemyData[j].size.Y);
 
 						if (CollisionCheck.Collision(p1, p2, size1, size2)&&
 							SpawnEnemy.lstEnemyData[j].state != EnemyState.Death)
@@ -205,7 +205,7 @@ namespace Zitulmyth
 								SpawnEnemy.lstEnemyData[j].isWaiting = false;
 								SpawnEnemy.lstEnemyData[j].state = EnemyState.Death;
 
-								SpawnEnemy.EnemyDeathItemDrop(canvas, SpawnEnemy.lstEnemyData[j].name, SpawnEnemy.lstEnemyData[j].position);
+								SpawnEnemy.EnemyDeathItemDrop(canvas, SpawnEnemy.lstEnemyData[j].position);
 							}
 
 						}
@@ -306,7 +306,7 @@ namespace Zitulmyth
 					Vector size1 = new Vector(32, 32);
 
 					Vector p2 = new Vector(Canvas.GetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy), Canvas.GetTop(SpawnEnemy.lstEnemyData[i].imgEnemy));
-					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].pixSize.X, SpawnEnemy.lstEnemyData[i].pixSize.Y);
+					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].size.X, SpawnEnemy.lstEnemyData[i].size.Y);
 
 					if (CollisionCheck.Collision(p1, p2, size1, size2)&&
 						SpawnEnemy.lstEnemyData[i].state != EnemyState.Death)
@@ -331,7 +331,7 @@ namespace Zitulmyth
 							SpawnEnemy.lstEnemyData[i].isWaiting = false;
 							SpawnEnemy.lstEnemyData[i].state = EnemyState.Death;
 
-							SpawnEnemy.EnemyDeathItemDrop(canvas, SpawnEnemy.lstEnemyData[i].name, SpawnEnemy.lstEnemyData[i].position);
+							SpawnEnemy.EnemyDeathItemDrop(canvas,  SpawnEnemy.lstEnemyData[i].position);
 							
 							
 						}

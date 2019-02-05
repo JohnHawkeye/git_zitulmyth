@@ -110,8 +110,6 @@ namespace Zitulmyth
 			ImageData.SystemImagesReading();
 			Sound.SoundEffectLoad(Canvas);
 			
-			Animator.CBDataSettings();
-
 			SplashLogoOpen();
 
 
@@ -235,8 +233,18 @@ namespace Zitulmyth
 					}
 
 					//EventAction
+
+					
+
+
 					if (GameTransition.eventStart)
 					{
+						if (GameTransition.lstEventTask.Count > 0)
+						{
+							GameTransition.EventTaskCommander();
+						}
+
+
 						if (GameTransition.charaRenderStart)
 						{
 							GameTransition.CharaRender();
@@ -246,12 +254,7 @@ namespace Zitulmyth
 						{
 							GameTransition.ScreenFade(Canvas);
 						}
-
-						if (GameTransition.charaMoveStart)
-						{
-							GameTransition.CharaMove();
-						}
-
+						
 						if (!GameTransition.eventBalloonIsOpen)
 						{
 							if (GameTransition.eventCount < StageEvent.listEvent.Count)

@@ -247,6 +247,7 @@ namespace Zitulmyth
 				{
 					enemyName = stageEditorData.enemyName[i],
 					enemyPosition = stageEditorData.enemyPosition[i],
+					enemySize = stageEditorData.enemySize[i],
 					enemyDirection = stageEditorData.enemyDirection[i],
 
 				});
@@ -263,14 +264,16 @@ namespace Zitulmyth
 
 			int arynum = StageEditorOperator.lstEnemyDataConvert.Count;
 
-			stageEditorData.enemyName = new EnemyName[arynum];
+			stageEditorData.enemyName = new string[arynum];
 			stageEditorData.enemyPosition = new Vector[arynum];
+			stageEditorData.enemySize = new Vector[arynum];
 			stageEditorData.enemyDirection = new bool[arynum];
 
 			for (int i = 0; i < stageEditorData.enemyName.Length; i++)
 			{
 				stageEditorData.enemyName[i] = StageEditorOperator.lstEnemyDataConvert[i].enemyName;
 				stageEditorData.enemyPosition[i] = StageEditorOperator.lstEnemyDataConvert[i].enemyPosition;
+				stageEditorData.enemySize[i] = StageEditorOperator.lstEnemyDataConvert[i].enemySize;
 				stageEditorData.enemyDirection[i] = StageEditorOperator.lstEnemyDataConvert[i].enemyDirection;
 			}
 
@@ -287,6 +290,7 @@ namespace Zitulmyth
 				{
 					itemName = stageEditorData.itemName[i],
 					itemPosition = stageEditorData.itemPosition[i],
+					itemSize = stageEditorData.itemSize[i]
 
 				});
 			}
@@ -302,13 +306,15 @@ namespace Zitulmyth
 
 			int arynum = StageEditorOperator.lstItemDataConvert.Count;
 
-			stageEditorData.itemName = new ItemName[arynum];
+			stageEditorData.itemName = new string[arynum];
 			stageEditorData.itemPosition = new Vector[arynum];
+			stageEditorData.itemSize = new Vector[arynum];
 
 			for (int i = 0; i < stageEditorData.itemName.Length; i++)
 			{
 				stageEditorData.itemName[i] = StageEditorOperator.lstItemDataConvert[i].itemName;
 				stageEditorData.itemPosition[i] = StageEditorOperator.lstItemDataConvert[i].itemPosition;
+				stageEditorData.itemSize[i] = StageEditorOperator.lstItemDataConvert[i].itemSize;
 			}
 
 		}
@@ -319,7 +325,7 @@ namespace Zitulmyth
 
 			return double.TryParse(
 				stTarget,
-				System.Globalization.NumberStyles.Any,
+				System.Globalization.NumberStyles.AllowLeadingSign,
 				null,
 				out dNullable
 			);

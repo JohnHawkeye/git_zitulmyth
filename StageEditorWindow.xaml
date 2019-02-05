@@ -143,7 +143,6 @@
 						<RowDefinition Height="314*"/>
 						<RowDefinition Height="271*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavEnemyPalette" Height="240" Margin="57,32,57,0" Width="512" HorizontalAlignment="Center" VerticalAlignment="Top" Background="White"/>
 					<ListView x:Name="lsvEnemyList" HorizontalAlignment="Left" Height="128" Margin="57,14,0,0" Grid.Row="1" VerticalAlignment="Top" Width="440">
 						<ListView.View>
 							<GridView>
@@ -155,6 +154,9 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
+					<ScrollViewer HorizontalAlignment="Left" Height="294" Margin="10,10,0,0" VerticalAlignment="Top" Width="606">
+						<Canvas x:Name="cavEnemyPalette" Height="600" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Background="White"/>
+					</ScrollViewer>
 				</Grid>
 			</TabItem>
 			<TabItem Header="アイテム">
@@ -163,7 +165,6 @@
 						<RowDefinition Height="314*"/>
 						<RowDefinition Height="271*"/>
 					</Grid.RowDefinitions>
-					<Canvas x:Name="cavItemPalette" Height="240" Margin="57,32,57,0" Width="512" HorizontalAlignment="Center" VerticalAlignment="Top" Background="White"/>
 					<ListView x:Name="lsvItemList" HorizontalAlignment="Left" Height="128" Margin="57,14,0,0" Grid.Row="1" VerticalAlignment="Top" Width="440">
 						<ListView.View>
 							<GridView>
@@ -174,6 +175,9 @@
 							</GridView>
 						</ListView.View>
 					</ListView>
+					<ScrollViewer HorizontalAlignment="Left" Height="294" Margin="10,10,0,0" VerticalAlignment="Top" Width="606">
+						<Canvas x:Name="cavItemPalette" Height="600" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top" Background="White"/>
+					</ScrollViewer>
 				</Grid>
 			</TabItem>
 		</TabControl>

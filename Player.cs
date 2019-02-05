@@ -390,7 +390,7 @@ namespace Zitulmyth
 
 					Vector p2 = new Vector(Canvas.GetLeft(SpawnEnemy.lstEnemyData[i].imgEnemy),
 											Canvas.GetTop(SpawnEnemy.lstEnemyData[i].imgEnemy));
-					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].pixSize.X, SpawnEnemy.lstEnemyData[i].pixSize.Y);
+					Vector size2 = new Vector(SpawnEnemy.lstEnemyData[i].size.X, SpawnEnemy.lstEnemyData[i].size.Y);
 
 					if (CollisionCheck.Collision(p1, p2, size1, size2))
 					{
@@ -449,7 +449,7 @@ namespace Zitulmyth
 					Vector size1 = new Vector(playerSize.X, playerSize.Y);
 
 					Vector p2 = new Vector(Canvas.GetLeft(Item.lstItemData[i].imgItem), Canvas.GetTop(Item.lstItemData[i].imgItem));
-					Vector size2 = new Vector(Item.lstItemData[i].width * 32, Item.lstItemData[i].height * 32);
+					Vector size2 = new Vector(Item.lstItemData[i].size.X, Item.lstItemData[i].size.Y);
 
 					if (CollisionCheck.Collision(p1, p2, size1, size2))
 					{
@@ -477,42 +477,16 @@ namespace Zitulmyth
 
 		private static void ItemGetSelector(int index)
 		{
-			switch (Item.lstItemData[index].itemName)
+
+			playerNowHp += Item.lstItemData[index].nowLife;
+			playerNowMana += Item.lstItemData[index].nowMana;
+
+			if(Item.lstItemData[index].attribute == ItemAttribute.Equipment)
 			{
-				case ItemName.Apple:
-
-					if (playerNowHp < playerMaxHp)
-					{
-						playerNowHp++;
-					}
-
-					break;
-
-				case ItemName.BoarMeat:
-
-					if (playerNowHp < playerMaxHp)
-					{
-						playerNowHp++;
-					}
-					break;
-
-				case ItemName.Coin:
-					break;
-
-				case ItemName.StarFruit:
-
-					if (playerNowMana < playerMaxMana)
-					{
-						playerNowMana++;
-					}
-					break;
-
-				case ItemName.TreeBranch:
-					equipWeapon = EquipWeaponName.TreeBranch;
-					MainWeapon.SetMainWeapon();
-					break;
-
+				equipWeapon = EquipWeaponName.TreeBranch;
+				MainWeapon.SetMainWeapon();
 			}
+
 		}
 
 	}

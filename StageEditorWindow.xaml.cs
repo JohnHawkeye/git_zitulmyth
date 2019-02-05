@@ -59,16 +59,20 @@ namespace Zitulmyth
 		public int[] objectTalkID;
 
 		[DataMember]
-		public EnemyName[] enemyName;
+		public string[] enemyName;
 		[DataMember]
 		public Vector[] enemyPosition;
+		[DataMember]
+		public Vector[] enemySize;
 		[DataMember]
 		public bool[] enemyDirection;
 
 		[DataMember]
-		public ItemName[] itemName;
+		public string[] itemName;
 		[DataMember]
 		public Vector[] itemPosition;
+		[DataMember]
+		public Vector[] itemSize;
 	}
 
 	public partial class StageEditorWindow : Window
@@ -156,11 +160,11 @@ namespace Zitulmyth
 			sed.objectTargetId = new int[] { };
 			sed.objectTalkID = new int[] { };
 
-			sed.enemyName = new EnemyName[] { };
+			sed.enemyName = new string[] { };
 			sed.enemyPosition = new Vector[] { };
 			sed.enemyDirection = new bool[] { };
 					   		
-			sed.itemName = new ItemName[] { };
+			sed.itemName = new string[] { };
 			sed.itemPosition = new Vector[] { };
 
 		}
@@ -302,26 +306,30 @@ namespace Zitulmyth
 
 			ListViewObjectDataUpdate();
 
-			stageEditorData.enemyName = new EnemyName[SpawnEnemy.lstEnemyData.Count];
+			stageEditorData.enemyName = new string[SpawnEnemy.lstEnemyData.Count];
 			stageEditorData.enemyPosition = new Vector[SpawnEnemy.lstEnemyData.Count];
+			stageEditorData.enemySize = new Vector[SpawnEnemy.lstEnemyData.Count];
 			stageEditorData.enemyDirection = new bool[SpawnEnemy.lstEnemyData.Count];
 
 			for (int i = 0; i < SpawnEnemy.lstEnemyData.Count; i++)
 			{
 				stageEditorData.enemyName[i] = SpawnEnemy.lstEnemyData[i].name;
 				stageEditorData.enemyPosition[i] = SpawnEnemy.lstEnemyData[i].position;
+				stageEditorData.enemySize[i] = SpawnEnemy.lstEnemyData[i].size;
 				stageEditorData.enemyDirection[i] = SpawnEnemy.lstEnemyData[i].direction;
 			}
 
 			ListViewEnemyDataUpdate();
 
-			stageEditorData.itemName = new ItemName[Item.lstItemData.Count];
+			stageEditorData.itemName = new string[Item.lstItemData.Count];
 			stageEditorData.itemPosition = new Vector[Item.lstItemData.Count];
+			stageEditorData.itemSize = new Vector[Item.lstItemData.Count];
 
 			for (int i = 0; i < Item.lstItemData.Count; i++)
 			{
 				stageEditorData.itemName[i] = Item.lstItemData[i].itemName;
 				stageEditorData.itemPosition[i] = Item.lstItemData[i].position;
+				stageEditorData.itemSize[i] = Item.lstItemData[i].size;
 			}
 
 			ListViewItemDataUpdate();

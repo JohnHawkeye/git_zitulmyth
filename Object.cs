@@ -197,14 +197,8 @@ namespace Zitulmyth
 						Vector move1 = new Vector(0,0);
 						Vector move2 = new Vector(0, 0);
 
-						if (!PlayerStatus.playerDirection)
-						{
-							move1.X = -PlayerStatus.moveSpeed;
-						}
-						else
-						{
-							move1.X = PlayerStatus.moveSpeed;
-						}
+						move1.X = PlayerStatus.moveSpeed;
+						
 
 						if (PlayerStatus.jumping)
 						{
